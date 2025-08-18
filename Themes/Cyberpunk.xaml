@@ -1,0 +1,198 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Color Palette -->
+    <Color x:Key="CyberBlack">#000000</Color>
+    <Color x:Key="CyberDarkGray">#0a0a0a</Color>
+    <Color x:Key="CyberGray">#1a1a1a</Color>
+    <Color x:Key="CyberLightGray">#2a2a2a</Color>
+    <Color x:Key="CyberNeonGreen">#00ff00</Color>
+    <Color x:Key="CyberNeonCyan">#00ffff</Color>
+    <Color x:Key="CyberNeonMagenta">#ff00ff</Color>
+    <Color x:Key="CyberNeonYellow">#ffff00</Color>
+    <Color x:Key="CyberNeonOrange">#ff8000</Color>
+    <Color x:Key="CyberNeonBlue">#0080ff</Color>
+    <Color x:Key="CyberDimGreen">#008000</Color>
+    <Color x:Key="CyberDimCyan">#008080</Color>
+    <Color x:Key="CyberDimMagenta">#800080</Color>
+
+    <!-- Brushes -->
+    <SolidColorBrush x:Key="CyberBackgroundBrush" Color="{StaticResource CyberBlack}"/>
+    <SolidColorBrush x:Key="CyberPanelBrush" Color="{StaticResource CyberDarkGray}"/>
+    <SolidColorBrush x:Key="CyberControlBrush" Color="{StaticResource CyberGray}"/>
+    <SolidColorBrush x:Key="CyberHoverBrush" Color="{StaticResource CyberLightGray}"/>
+    <SolidColorBrush x:Key="CyberTextBrush" Color="{StaticResource CyberNeonGreen}"/>
+    <SolidColorBrush x:Key="CyberAccentBrush" Color="{StaticResource CyberNeonCyan}"/>
+    <SolidColorBrush x:Key="CyberSelectionBrush" Color="{StaticResource CyberNeonMagenta}"/>
+    <SolidColorBrush x:Key="CyberWarningBrush" Color="{StaticResource CyberNeonYellow}"/>
+    <SolidColorBrush x:Key="CyberErrorBrush" Color="{StaticResource CyberNeonOrange}"/>
+    <SolidColorBrush x:Key="CyberInfoBrush" Color="{StaticResource CyberNeonBlue}"/>
+    <SolidColorBrush x:Key="CyberBorderBrush" Color="{StaticResource CyberDimCyan}"/>
+    <SolidColorBrush x:Key="CyberHighlightBrush" Color="{StaticResource CyberDimMagenta}"/>
+    <SolidColorBrush x:Key="CyberDimCyanBrush" Color="{StaticResource CyberDimCyan}"/>
+
+    <!-- Glow Effects -->
+    <DropShadowEffect x:Key="CyberGlowEffect" 
+                      Color="{StaticResource CyberNeonCyan}" 
+                      BlurRadius="8" 
+                      ShadowDepth="0" 
+                      Opacity="0.8"/>
+    
+    <DropShadowEffect x:Key="CyberSelectionGlow" 
+                      Color="{StaticResource CyberNeonMagenta}" 
+                      BlurRadius="6" 
+                      ShadowDepth="0" 
+                      Opacity="0.9"/>
+
+    <DropShadowEffect x:Key="CyberTextGlow" 
+                      Color="{StaticResource CyberNeonGreen}" 
+                      BlurRadius="4" 
+                      ShadowDepth="0" 
+                      Opacity="0.6"/>
+
+    <!-- Window Style -->
+    <Style TargetType="Window">
+        <Setter Property="Background" Value="{StaticResource CyberBackgroundBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource CyberTextBrush}"/>
+        <Setter Property="FontFamily" Value="Consolas, Courier New, monospace"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="BorderBrush" Value="{StaticResource CyberBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="Effect" Value="{StaticResource CyberGlowEffect}"/>
+        <Setter Property="WindowStyle" Value="SingleBorderWindow"/>
+        <Setter Property="ResizeMode" Value="CanResize"/>
+    </Style>
+
+    <!-- TextBlock Style -->
+    <Style TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource CyberTextBrush}"/>
+        <Setter Property="FontFamily" Value="Consolas, Courier New, monospace"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Effect" Value="{StaticResource CyberTextGlow}"/>
+    </Style>
+
+    <!-- TextBox Style -->
+    <Style TargetType="TextBox">
+        <Setter Property="Background" Value="{StaticResource CyberControlBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource CyberTextBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource CyberBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="FontFamily" Value="Consolas, Courier New, monospace"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Padding" Value="4,2"/>
+        <Setter Property="SelectionBrush" Value="{StaticResource CyberSelectionBrush}"/>
+        <Setter Property="CaretBrush" Value="{StaticResource CyberAccentBrush}"/>
+        <Setter Property="Effect" Value="{StaticResource CyberTextGlow}"/>
+        <Style.Triggers>
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="BorderBrush" Value="{StaticResource CyberAccentBrush}"/>
+                <Setter Property="Effect" Value="{StaticResource CyberGlowEffect}"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource CyberHoverBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- TreeView Style -->
+    <Style TargetType="TreeView">
+        <Setter Property="Background" Value="{StaticResource CyberPanelBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource CyberTextBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource CyberBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="FontFamily" Value="Consolas, Courier New, monospace"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Padding" Value="4"/>
+        <Setter Property="Effect" Value="{StaticResource CyberGlowEffect}"/>
+    </Style>
+
+    <!-- TreeViewItem Style -->
+    <Style TargetType="TreeViewItem">
+        <Setter Property="Foreground" Value="{StaticResource CyberTextBrush}"/>
+        <Setter Property="FontFamily" Value="Consolas, Courier New, monospace"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Padding" Value="2"/>
+        <Setter Property="Margin" Value="0,1"/>
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="{StaticResource CyberHighlightBrush}"/>
+                <Setter Property="Foreground" Value="{StaticResource CyberSelectionBrush}"/>
+                <Setter Property="Effect" Value="{StaticResource CyberSelectionGlow}"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource CyberHoverBrush}"/>
+                <Setter Property="Foreground" Value="{StaticResource CyberAccentBrush}"/>
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="True"/>
+                    <Condition Property="IsSelectionActive" Value="False"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" Value="{StaticResource CyberControlBrush}"/>
+                <Setter Property="Foreground" Value="{StaticResource CyberDimCyan}"/>
+            </MultiTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- StatusBar Style -->
+    <Style TargetType="StatusBar">
+        <Setter Property="Background" Value="{StaticResource CyberControlBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource CyberTextBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource CyberBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="0,1,0,0"/>
+        <Setter Property="FontFamily" Value="Consolas, Courier New, monospace"/>
+        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="Effect" Value="{StaticResource CyberTextGlow}"/>
+    </Style>
+
+    <!-- StatusBarItem Style -->
+    <Style TargetType="StatusBarItem">
+        <Setter Property="Foreground" Value="{StaticResource CyberAccentBrush}"/>
+        <Setter Property="FontFamily" Value="Consolas, Courier New, monospace"/>
+        <Setter Property="FontSize" Value="10"/>
+    </Style>
+
+    <!-- Grid Style -->
+    <Style TargetType="Grid">
+        <Setter Property="Background" Value="{StaticResource CyberBackgroundBrush}"/>
+    </Style>
+
+    <!-- UserControl Style -->
+    <Style TargetType="UserControl">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource CyberTextBrush}"/>
+        <Setter Property="FontFamily" Value="Consolas, Courier New, monospace"/>
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
+
+    <!-- Priority-specific colors -->
+    <Style x:Key="HighPriorityText" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+        <Setter Property="Foreground" Value="{StaticResource CyberErrorBrush}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
+
+    <Style x:Key="MediumPriorityText" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+        <Setter Property="Foreground" Value="{StaticResource CyberWarningBrush}"/>
+    </Style>
+
+    <Style x:Key="LowPriorityText" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+        <Setter Property="Foreground" Value="{StaticResource CyberInfoBrush}"/>
+    </Style>
+
+    <!-- Header Text Style -->
+    <Style x:Key="CyberHeaderText" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{StaticResource CyberAccentBrush}"/>
+        <Setter Property="Effect" Value="{StaticResource CyberGlowEffect}"/>
+        <Setter Property="TextAlignment" Value="Center"/>
+    </Style>
+
+    <!-- ID Text Style (dimmed) -->
+    <Style x:Key="CyberIdText" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+        <Setter Property="Foreground" Value="{StaticResource CyberDimCyan}"/>
+        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="Opacity" Value="0.7"/>
+    </Style>
+
+</ResourceDictionary>

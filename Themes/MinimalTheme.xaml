@@ -1,0 +1,49 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Simple, safe brushes -->
+    <SolidColorBrush x:Key="CyberBackgroundBrush" Color="Black"/>
+    <SolidColorBrush x:Key="CyberTextBrush" Color="Lime"/>
+    <SolidColorBrush x:Key="CyberAccentBrush" Color="Cyan"/>
+    <SolidColorBrush x:Key="CyberBorderBrush" Color="Gray"/>
+    <SolidColorBrush x:Key="CyberControlBrush" Color="#1a1a1a"/>
+    <SolidColorBrush x:Key="CyberHoverBrush" Color="#2a2a2a"/>
+    <SolidColorBrush x:Key="CyberSelectionBrush" Color="Magenta"/>
+    <SolidColorBrush x:Key="CyberWarningBrush" Color="Yellow"/>
+    <SolidColorBrush x:Key="CyberErrorBrush" Color="Red"/>
+    <SolidColorBrush x:Key="CyberInfoBrush" Color="Blue"/>
+    <SolidColorBrush x:Key="CyberHighlightBrush" Color="Purple"/>
+    <SolidColorBrush x:Key="CyberDimCyan" Color="DarkCyan"/>
+
+    <!-- Simple Window Style - NO EFFECTS -->
+    <Style TargetType="Window">
+        <Setter Property="Background" Value="{StaticResource CyberBackgroundBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource CyberTextBrush}"/>
+        <Setter Property="FontFamily" Value="Consolas"/>
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
+
+    <!-- Simple TextBlock Style -->
+    <Style TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource CyberTextBrush}"/>
+        <Setter Property="FontFamily" Value="Consolas"/>
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
+
+    <!-- Simple TreeView Style -->
+    <Style TargetType="TreeView">
+        <Setter Property="Background" Value="{StaticResource CyberControlBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource CyberTextBrush}"/>
+        <Setter Property="FontFamily" Value="Consolas"/>
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
+
+    <!-- Simple StatusBar Style -->
+    <Style TargetType="StatusBar">
+        <Setter Property="Background" Value="{StaticResource CyberControlBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource CyberTextBrush}"/>
+        <Setter Property="FontFamily" Value="Consolas"/>
+        <Setter Property="FontSize" Value="10"/>
+    </Style>
+
+</ResourceDictionary>

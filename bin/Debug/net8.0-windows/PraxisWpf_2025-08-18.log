@@ -1,0 +1,18 @@
+2025-08-18 16:40:49.075 [T01]INFO     Logger               Logger initialized | Level=Info, StackTrace=False, ThreadId=True, Path=PraxisWpf_2025-08-18.log
+2025-08-18 16:40:49.079 [T01]INFO     AppConfig            Default configuration created at app-config.json
+2025-08-18 16:40:49.079 [T01]INFO     App                  Application starting up
+2025-08-18 16:40:49.079 [T01]INFO     App                  Application startup completed successfully
+2025-08-18 16:40:49.201 [T01]INFO     TaskView             TaskView initialized successfully
+2025-08-18 16:40:49.211 [T01]INFO     JsonDataService      Initialized with data file: data.json
+2025-08-18 16:40:49.213 [T01]WARNING  JsonDataService      Data file not found: data.json
+2025-08-18 16:40:49.213 [T01]INFO     TaskViewModel        Loaded 0 root items
+2025-08-18 16:40:49.213 [T01]INFO     MainWindow           MainWindow initialized successfully
+2025-08-18 16:40:56.090 [T01]INFO     TaskView             N key pressed - creating new task
+2025-08-18 16:40:56.092 [T01]INFO     TaskItem             Edit mode changed: False → True for Id1=1, Name=New Task
+2025-08-18 16:40:56.093 [T01]INFO     TaskViewModel        Adding new task as root item
+2025-08-18 16:40:56.099 [T01]INFO     TaskViewModel        Selection changed: 'null' → 'New Task'
+2025-08-18 16:40:56.099 [T01]INFO     TaskViewModel        New task 'New Task' created and selected
+2025-08-18 16:41:02.767 [T01]INFO     TaskView             Escape pressed in TextBox - canceling edit
+2025-08-18 16:41:02.767 [T01]INFO     TaskItem             Edit mode changed: True → False for Id1=1, Name=New Task
+2025-08-18 16:41:04.862 [T01]INFO     MainWindow           Window closing
+2025-08-18 16:41:04.865 [T01]INFO     App                  Application shutting down with exit code: 0

@@ -1,0 +1,24 @@
+<Application x:Class="PraxisWpf.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:PraxisWpf"
+             xmlns:converters="clr-namespace:PraxisWpf.Converters"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <!-- Merge cyberpunk theme -->
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes/Cyberpunk.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            
+            <!-- Value converters for visibility -->
+            <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            
+            <!-- Inverse boolean to visibility converter -->
+            <local:InverseBooleanToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
+            
+            <!-- Date display converter -->
+            <converters:DateDisplayConverter x:Key="DateDisplayConverter"/>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

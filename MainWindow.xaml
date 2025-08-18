@@ -1,0 +1,34 @@
+<Window x:Class="PraxisWpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:taskViewer="clr-namespace:PraxisWpf.Features.TaskViewer"
+        Title="Praxis WPF Task Manager" Height="600" Width="800">
+    
+    <!-- No Window.InputBindings - all key handling at data level -->
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="{DynamicResource CyberControlBrush}" 
+                BorderBrush="{DynamicResource CyberBorderBrush}" 
+                BorderThickness="0,0,0,2" Padding="10">
+            <TextBlock Text="╔═══ PRAXIS TASK MANAGER ═══╗" 
+                       Style="{DynamicResource CyberHeaderText}"/>
+        </Border>
+
+        <!-- Main content -->
+        <taskViewer:TaskView Grid.Row="1" DataContext="{Binding}"/>
+
+        <!-- Status bar -->
+        <StatusBar Grid.Row="2">
+            <StatusBarItem>
+                <TextBlock Text="N: New | E: Edit | Del: Delete | +/-: Expand/Collapse | Ctrl+S: Save"/>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>
