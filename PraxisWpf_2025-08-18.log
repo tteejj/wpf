@@ -5930,3 +5930,406 @@ Stack:    at System.Windows.Markup.XamlReader.RewrapException(Exception e, IXaml
 2025-08-18 16:44:18.172 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
 2025-08-18 16:44:22.958 [T01]INFO     MainWindow           Window closing
 2025-08-18 16:44:22.961 [T01]INFO     App                  Application shutting down with exit code: 0
+2025-08-18 17:13:18.576 [T01]INFO     Logger               Logger initialized | Level=Info, StackTrace=False, ThreadId=True, Path=PraxisWpf_2025-08-18.log
+2025-08-18 17:13:18.581 [T01]INFO     Logger               Logger initialized | Level=Debug, StackTrace=True, ThreadId=True, Path=PraxisWpf_2025-08-18.log
+2025-08-18 17:13:18.581 [T01]INFO     AppConfig            Configuration loaded from app-config.json
+2025-08-18 17:13:18.581 [T01]INFO     App                  Application starting up
+2025-08-18 17:13:18.581 [T01]DEBUG    App                  Command line args: 
+2025-08-18 17:13:18.582 [T01]INFO     App                  Application startup completed successfully
+2025-08-18 17:13:18.600 [T01]DEBUG    MainWindow           Initializing WPF components
+2025-08-18 17:13:18.671 [T01]DEBUG    TaskView             Initializing XAML components
+2025-08-18 17:13:18.684 [T01]INFO     TaskView             TaskView initialized successfully
+2025-08-18 17:13:18.687 [T01]DEBUG    TaskView.xaml        PERF END: TaskView Constructor | Duration: 13.68ms
+2025-08-18 17:13:18.695 [T01]DEBUG    MainWindow           Creating TaskViewModel
+2025-08-18 17:13:18.696 [T01]INFO     JsonDataService      Initialized with data file: data.json
+2025-08-18 17:13:18.696 [T01]DEBUG    JsonDataService      JSON options configured | WriteIndented=true, CamelCase=true, StringEnumConverter=true
+2025-08-18 17:13:18.696 [T01]DEBUG    TaskViewModel        Data service initialized: JsonDataService
+2025-08-18 17:13:18.697 [T01]DEBUG    JsonDataService      Reading data file: data.json
+2025-08-18 17:13:18.713 [T01]DEBUG    TaskItem             Name changed: '' → 'dit' for Id1=1
+2025-08-18 17:13:18.716 [T01]DEBUG    TaskItem             Priority changed: Medium → High for Id1=1, Name=dit
+2025-08-18 17:13:18.716 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=1, Name=dit
+2025-08-18 17:13:18.716 [T01]DEBUG    TaskItem             Name changed: '' → 'Sub-task A' for Id1=1
+2025-08-18 17:13:18.717 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=1, Name=Sub-task A
+2025-08-18 17:13:18.717 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=1, Name=Sub-task A
+2025-08-18 17:13:18.718 [T01]DEBUG    TaskItem             Name changed: '' → 'Sample Task 2' for Id1=2
+2025-08-18 17:13:18.719 [T01]DEBUG    TaskItem             Priority changed: Medium → Low for Id1=2, Name=Sample Task 2
+2025-08-18 17:13:18.719 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=2, Name=Sample Task 2
+2025-08-18 17:13:18.719 [T01]DEBUG    TaskItem             Name changed: '' → 'New Task' for Id1=3
+2025-08-18 17:13:18.719 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=3, Name=New Task
+2025-08-18 17:13:18.719 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=3, Name=New Task
+2025-08-18 17:13:18.719 [T01]DEBUG    TaskItem             Name changed: '' → 'New Task' for Id1=4
+2025-08-18 17:13:18.719 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=4, Name=New Task
+2025-08-18 17:13:18.719 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=4, Name=New Task
+2025-08-18 17:13:18.719 [T01]DEBUG    TaskItem             Name changed: '' → 'w ' for Id1=5
+2025-08-18 17:13:18.719 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=5, Name=w 
+2025-08-18 17:13:18.719 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=5, Name=w 
+2025-08-18 17:13:18.719 [T01]DEBUG    TaskItem             Name changed: '' → 'New Task' for Id1=6
+2025-08-18 17:13:18.719 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=6, Name=New Task
+2025-08-18 17:13:18.719 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=6, Name=New Task
+2025-08-18 17:13:18.719 [T01]DEBUG    JsonDataService      Deserialized 2 items from JSON
+2025-08-18 17:13:18.719 [T01]INFO     JsonDataService      Successfully loaded 2 root items
+2025-08-18 17:13:18.720 [T01]DEBUG    JsonDataService      PERF END: LoadItems | Duration: 22.28ms
+2025-08-18 17:13:18.720 [T01]INFO     TaskViewModel        Loaded 2 root items
+2025-08-18 17:13:18.720 [T01]INFO     TaskViewModel        Selection changed: 'null' → 'dit'
+2025-08-18 17:13:18.720 [T01]INFO     TaskViewModel        Auto-selected first item: dit
+2025-08-18 17:13:18.720 [T01]DEBUG    TaskViewModel        All commands initialized
+2025-08-18 17:13:18.720 [T01]DEBUG    TaskViewModel        PERF END: TaskViewModel Constructor | Duration: 23.72ms
+2025-08-18 17:13:18.720 [T01]INFO     MainWindow           MainWindow initialized successfully
+2025-08-18 17:13:18.720 [T01]DEBUG    MainWindow.xaml      PERF END: MainWindow Constructor | Duration: 120.06ms
+2025-08-18 17:13:18.770 [T01]DEBUG    TaskView             Applying template and setting foolproof data focus
+2025-08-18 17:13:18.789 [T01]DEBUG    MainWindow           Window source initialized
+2025-08-18 17:13:18.850 [T01]CRITICAL TaskView             🔥 TREEVIEW FOCUS ON LOAD: Success=True, IsFocused=True, IsKeyboardFocused=True
+2025-08-18 17:13:18.850 [T01]CRITICAL TaskView             🔥 WINDOW ACTIVATION HANDLER ATTACHED
+2025-08-18 17:13:18.887 [T01]CRITICAL TaskView             🔥 EDIT TEXTBOX LOADED: Focus=False, IsFocused=False, Text='dit'
+2025-08-18 17:13:18.887 [T01]CRITICAL TaskView             🔥 EDIT TEXTBOX LOADED: Focus=False, IsFocused=False, Text='Sample Task 2'
+2025-08-18 17:13:20.899 [T01]INFO     TaskView             TreeView selection changed to: dit
+2025-08-18 17:13:20.899 [T01]INFO     TaskViewModel        Selection changed: 'dit' → 'dit'
+2025-08-18 17:13:20.899 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:13:20.901 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:13:20.906 [T01]DEBUG    TaskView             Selected item brought into view and selected
+2025-08-18 17:13:23.460 [T01]CRITICAL TaskView             🔥 EDIT TEXTBOX LOADED: Focus=False, IsFocused=False, Text='Sub-task A'
+2025-08-18 17:13:24.677 [T01]INFO     TaskView             TreeView selection changed to: Sub-task A
+2025-08-18 17:13:24.677 [T01]INFO     TaskViewModel        Selection changed: 'dit' → 'Sub-task A'
+2025-08-18 17:13:24.678 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:13:24.678 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:13:24.838 [T01]INFO     TaskView             TreeView selection changed to: Sample Task 2
+2025-08-18 17:13:24.838 [T01]INFO     TaskViewModel        Selection changed: 'Sub-task A' → 'Sample Task 2'
+2025-08-18 17:13:24.838 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:13:24.839 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:13:24.844 [T01]DEBUG    TaskView             Selected item brought into view and selected
+2025-08-18 17:13:25.097 [T01]CRITICAL TaskView             🔥 EDIT TEXTBOX LOADED: Focus=False, IsFocused=False, Text='New Task'
+2025-08-18 17:13:25.097 [T01]CRITICAL TaskView             🔥 EDIT TEXTBOX LOADED: Focus=False, IsFocused=False, Text='New Task'
+2025-08-18 17:13:25.097 [T01]CRITICAL TaskView             🔥 EDIT TEXTBOX LOADED: Focus=False, IsFocused=False, Text='w '
+2025-08-18 17:13:25.906 [T01]INFO     TaskView             TreeView selection changed to: New Task
+2025-08-18 17:13:25.906 [T01]INFO     TaskViewModel        Selection changed: 'Sample Task 2' → 'New Task'
+2025-08-18 17:13:25.906 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:13:25.907 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:13:26.049 [T01]INFO     TaskView             TreeView selection changed to: New Task
+2025-08-18 17:13:26.049 [T01]INFO     TaskViewModel        Selection changed: 'New Task' → 'New Task'
+2025-08-18 17:13:26.049 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:13:26.049 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:13:26.522 [T01]INFO     TaskView             TreeView selection changed to: w 
+2025-08-18 17:13:26.522 [T01]INFO     TaskViewModel        Selection changed: 'New Task' → 'w '
+2025-08-18 17:13:26.522 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:13:26.523 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:13:26.698 [T01]CRITICAL TaskView             🔥 EDIT TEXTBOX LOADED: Focus=False, IsFocused=False, Text='New Task'
+2025-08-18 17:13:27.426 [T01]INFO     TaskView             TreeView selection changed to: New Task
+2025-08-18 17:13:27.426 [T01]INFO     TaskViewModel        Selection changed: 'w ' → 'New Task'
+2025-08-18 17:13:27.426 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:13:27.426 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:13:27.585 [T01]INFO     TaskView             TreeView selection changed to: New Task
+2025-08-18 17:13:27.585 [T01]INFO     TaskViewModel        Selection changed: 'New Task' → 'New Task'
+2025-08-18 17:13:27.585 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:13:27.585 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:13:27.762 [T01]INFO     TaskView             TreeView selection changed to: Sample Task 2
+2025-08-18 17:13:27.762 [T01]INFO     TaskViewModel        Selection changed: 'New Task' → 'Sample Task 2'
+2025-08-18 17:13:27.762 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:13:27.763 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:13:27.777 [T01]DEBUG    TaskView             Selected item brought into view and selected
+2025-08-18 17:13:31.527 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=N, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 17:13:31.527 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: N, IsInEditMode: False
+2025-08-18 17:13:31.527 [T01]CRITICAL TaskView             🔥 N KEY CASE HIT!
+2025-08-18 17:13:31.527 [T01]CRITICAL TaskView             🔥 N KEY - EXECUTING NEW COMMAND
+2025-08-18 17:13:31.528 [T01]DEBUG    TaskViewModel        Creating new task with Id1=7
+2025-08-18 17:13:31.528 [T01]DEBUG    TaskItem             Name changed: '' → 'New Task' for Id1=7
+2025-08-18 17:13:31.528 [T01]INFO     TaskItem             Edit mode changed: False → True for Id1=7, Name=New Task
+2025-08-18 17:13:31.528 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=7, Name=New Task
+2025-08-18 17:13:31.528 [T01]DEBUG    TaskViewModel        New task created: Id1=7, Name=New Task
+2025-08-18 17:13:31.528 [T01]INFO     TaskViewModel        Adding new task as child of 'Sample Task 2'
+2025-08-18 17:13:31.529 [T01]DEBUG    TaskItem             IsExpanded changed: True → True for Id1=2, Name=Sample Task 2
+2025-08-18 17:13:31.529 [T01]INFO     TaskViewModel        Selection changed: 'Sample Task 2' → 'New Task'
+2025-08-18 17:13:31.529 [T01]CRITICAL TaskViewModel        🔥 NEW TASK CREATED: Id1=7, Name='New Task', IsInEditMode=True
+2025-08-18 17:13:31.529 [T01]CRITICAL TaskViewModel        🔥 SELECTED ITEM SET TO: New Task
+2025-08-18 17:13:31.529 [T01]CRITICAL TaskViewModel        🔥 TOTAL ROOT ITEMS: 2
+2025-08-18 17:13:31.529 [T01]CRITICAL TaskViewModel        🔥 SELECTED ITEM CHILDREN: 0
+2025-08-18 17:13:31.529 [T01]CRITICAL TaskViewModel        🔥 SELECTED ITEM EXPANDED: False
+2025-08-18 17:13:31.529 [T01]DEBUG    TaskViewModel        PERF END: ExecuteNew | Duration: 1.04ms
+2025-08-18 17:13:31.529 [T01]CRITICAL TaskView             🔥 N KEY - NEW COMMAND EXECUTED
+2025-08-18 17:13:31.533 [T01]CRITICAL TaskView             🔥 FocusEditTextBoxForSelectedItem: TreeViewItem not found
+2025-08-18 17:13:31.544 [T01]CRITICAL TaskView             🔥 EDIT TEXTBOX LOADED: Focus=True, IsFocused=True, Text='New Task'
+2025-08-18 17:13:35.967 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=S, Handled=False, Source=TreeView, OriginalSource=TextBox
+2025-08-18 17:13:35.967 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: S, IsInEditMode: True
+2025-08-18 17:13:35.967 [T01]CRITICAL TaskView             🔥 IN EDIT MODE - IGNORING KEY: S
+2025-08-18 17:13:35.969 [T01]DEBUG    TaskItem             Name changed: 'New Task' → 's' for Id1=7
+2025-08-18 17:13:38.073 [T01]INFO     TaskView             Escape pressed in TextBox - canceling edit
+2025-08-18 17:13:38.073 [T01]INFO     TaskItem             Edit mode changed: True → False for Id1=7, Name=s
+2025-08-18 17:13:38.075 [T01]DEBUG    TaskView             Focus returned to TreeView after edit cancellation
+2025-08-18 17:13:41.271 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=S, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 17:13:41.272 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: S, IsInEditMode: False
+2025-08-18 17:13:41.272 [T01]CRITICAL TaskView             🔥 S KEY CASE HIT!
+2025-08-18 17:13:41.272 [T01]CRITICAL TaskView             🔥 S KEY WITHOUT CTRL - CREATING SUBTASK
+2025-08-18 17:13:41.272 [T01]CRITICAL TaskView             🔥 S KEY - EXECUTING NEW SUBTASK COMMAND
+2025-08-18 17:13:41.272 [T01]DEBUG    TaskViewModel        Creating new subtask with Id1=8
+2025-08-18 17:13:41.272 [T01]DEBUG    TaskItem             Name changed: '' → 'New Subtask' for Id1=8
+2025-08-18 17:13:41.272 [T01]INFO     TaskItem             Edit mode changed: False → True for Id1=8, Name=New Subtask
+2025-08-18 17:13:41.272 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=8, Name=New Subtask
+2025-08-18 17:13:41.272 [T01]DEBUG    TaskViewModel        New subtask created: Id1=8, Name=New Subtask
+2025-08-18 17:13:41.272 [T01]INFO     TaskViewModel        Adding new subtask as child of 's'
+2025-08-18 17:13:41.272 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=7, Name=s
+2025-08-18 17:13:41.272 [T01]INFO     TaskViewModel        Selection changed: 's' → 'New Subtask'
+2025-08-18 17:13:41.272 [T01]CRITICAL TaskViewModel        🔥 NEW SUBTASK CREATED: Id1=8, Name='New Subtask', IsInEditMode=True
+2025-08-18 17:13:41.272 [T01]CRITICAL TaskViewModel        🔥 SELECTED ITEM SET TO: New Subtask
+2025-08-18 17:13:41.272 [T01]DEBUG    TaskViewModel        PERF END: ExecuteNewSubtask | Duration: 0.24ms
+2025-08-18 17:13:41.272 [T01]CRITICAL TaskView             🔥 S KEY - NEW SUBTASK COMMAND EXECUTED
+2025-08-18 17:13:41.273 [T01]CRITICAL TaskView             🔥 FocusEditTextBoxForSelectedItem: TreeViewItem not found
+2025-08-18 17:13:43.212 [T01]INFO     TaskView             TreeView selection changed to: New Task
+2025-08-18 17:13:43.212 [T01]INFO     TaskViewModel        Selection changed: 'New Subtask' → 'New Task'
+2025-08-18 17:13:43.212 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:13:43.213 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:13:43.383 [T01]INFO     TaskView             TreeView selection changed to: New Task
+2025-08-18 17:13:43.383 [T01]INFO     TaskViewModel        Selection changed: 'New Task' → 'New Task'
+2025-08-18 17:13:43.383 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:13:43.383 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:13:43.565 [T01]INFO     TaskView             TreeView selection changed to: w 
+2025-08-18 17:13:43.565 [T01]INFO     TaskViewModel        Selection changed: 'New Task' → 'w '
+2025-08-18 17:13:43.565 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:13:43.565 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:13:43.699 [T01]INFO     TaskView             TreeView selection changed to: New Task
+2025-08-18 17:13:43.699 [T01]INFO     TaskViewModel        Selection changed: 'w ' → 'New Task'
+2025-08-18 17:13:43.699 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:13:43.699 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:13:43.871 [T01]INFO     TaskView             TreeView selection changed to: s
+2025-08-18 17:13:43.871 [T01]INFO     TaskViewModel        Selection changed: 'New Task' → 's'
+2025-08-18 17:13:43.871 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:13:43.871 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:13:44.458 [T01]CRITICAL TaskView             🔥 EDIT TEXTBOX LOADED: Focus=True, IsFocused=True, Text='New Subtask'
+2025-08-18 17:13:45.726 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=S, Handled=False, Source=TreeView, OriginalSource=TextBox
+2025-08-18 17:13:45.726 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: S, IsInEditMode: True
+2025-08-18 17:13:45.726 [T01]CRITICAL TaskView             🔥 IN EDIT MODE - IGNORING KEY: S
+2025-08-18 17:13:45.726 [T01]DEBUG    TaskItem             Name changed: 'New Subtask' → 's' for Id1=8
+2025-08-18 17:13:46.951 [T01]DEBUG    TaskItem             Name changed: 's' → '' for Id1=8
+2025-08-18 17:13:47.658 [T01]INFO     TaskView             Enter pressed in TextBox - confirming edit
+2025-08-18 17:13:47.658 [T01]INFO     TaskItem             Edit mode changed: False → False for Id1=7, Name=s
+2025-08-18 17:13:47.659 [T01]DEBUG    TaskView             Focus returned to TreeView after edit completion
+2025-08-18 17:13:49.384 [T01]INFO     TaskView             TreeView selection changed to: 
+2025-08-18 17:13:49.384 [T01]INFO     TaskViewModel        Selection changed: 's' → ''
+2025-08-18 17:13:49.384 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:13:49.385 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:13:50.150 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=Right, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 17:13:50.150 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: Right, IsInEditMode: False
+2025-08-18 17:13:53.607 [T01]INFO     TaskView             Escape pressed in TextBox - canceling edit
+2025-08-18 17:13:53.607 [T01]INFO     TaskItem             Edit mode changed: True → False for Id1=8, Name=
+2025-08-18 17:13:53.608 [T01]DEBUG    TaskView             Focus returned to TreeView after edit cancellation
+2025-08-18 17:13:54.339 [T01]INFO     TaskView             TreeView selection changed to: s
+2025-08-18 17:13:54.339 [T01]INFO     TaskViewModel        Selection changed: '' → 's'
+2025-08-18 17:13:54.339 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:13:54.340 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:13:55.109 [T01]INFO     TaskView             TreeView selection changed to: 
+2025-08-18 17:13:55.109 [T01]INFO     TaskViewModel        Selection changed: 's' → ''
+2025-08-18 17:13:55.109 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:13:55.110 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:13:56.749 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=S, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 17:13:56.749 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: S, IsInEditMode: False
+2025-08-18 17:13:56.749 [T01]CRITICAL TaskView             🔥 S KEY CASE HIT!
+2025-08-18 17:13:56.749 [T01]CRITICAL TaskView             🔥 S KEY WITHOUT CTRL - CREATING SUBTASK
+2025-08-18 17:13:56.749 [T01]CRITICAL TaskView             🔥 S KEY - EXECUTING NEW SUBTASK COMMAND
+2025-08-18 17:13:56.749 [T01]DEBUG    TaskViewModel        Creating new subtask with Id1=9
+2025-08-18 17:13:56.749 [T01]DEBUG    TaskItem             Name changed: '' → 'New Subtask' for Id1=9
+2025-08-18 17:13:56.749 [T01]INFO     TaskItem             Edit mode changed: False → True for Id1=9, Name=New Subtask
+2025-08-18 17:13:56.749 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=9, Name=New Subtask
+2025-08-18 17:13:56.749 [T01]DEBUG    TaskViewModel        New subtask created: Id1=9, Name=New Subtask
+2025-08-18 17:13:56.749 [T01]INFO     TaskViewModel        Adding new subtask as child of ''
+2025-08-18 17:13:56.749 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=8, Name=
+2025-08-18 17:13:56.749 [T01]INFO     TaskViewModel        Selection changed: '' → 'New Subtask'
+2025-08-18 17:13:56.749 [T01]CRITICAL TaskViewModel        🔥 NEW SUBTASK CREATED: Id1=9, Name='New Subtask', IsInEditMode=True
+2025-08-18 17:13:56.749 [T01]CRITICAL TaskViewModel        🔥 SELECTED ITEM SET TO: New Subtask
+2025-08-18 17:13:56.749 [T01]DEBUG    TaskViewModel        PERF END: ExecuteNewSubtask | Duration: 0.20ms
+2025-08-18 17:13:56.749 [T01]CRITICAL TaskView             🔥 S KEY - NEW SUBTASK COMMAND EXECUTED
+2025-08-18 17:13:56.749 [T01]CRITICAL TaskView             🔥 FocusEditTextBoxForSelectedItem: TreeViewItem not found
+2025-08-18 17:13:58.816 [T01]CRITICAL TaskView             🔥 EDIT TEXTBOX LOADED: Focus=True, IsFocused=True, Text='New Subtask'
+2025-08-18 17:14:02.158 [T01]INFO     TaskView             Escape pressed in TextBox - canceling edit
+2025-08-18 17:14:02.158 [T01]INFO     TaskItem             Edit mode changed: True → False for Id1=9, Name=New Subtask
+2025-08-18 17:14:02.159 [T01]DEBUG    TaskView             Focus returned to TreeView after edit cancellation
+2025-08-18 17:14:03.037 [T01]INFO     TaskView             TreeView selection changed to: New Subtask
+2025-08-18 17:14:03.037 [T01]INFO     TaskViewModel        Selection changed: 'New Subtask' → 'New Subtask'
+2025-08-18 17:14:03.037 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:14:03.038 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:14:03.475 [T01]INFO     TaskView             TreeView selection changed to: 
+2025-08-18 17:14:03.475 [T01]INFO     TaskViewModel        Selection changed: 'New Subtask' → ''
+2025-08-18 17:14:03.475 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:14:03.476 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:14:03.640 [T01]INFO     TaskView             TreeView selection changed to: s
+2025-08-18 17:14:03.640 [T01]INFO     TaskViewModel        Selection changed: '' → 's'
+2025-08-18 17:14:03.640 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:14:03.640 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:14:03.991 [T01]INFO     TaskView             TreeView selection changed to: New Task
+2025-08-18 17:14:03.991 [T01]INFO     TaskViewModel        Selection changed: 's' → 'New Task'
+2025-08-18 17:14:03.991 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:14:03.992 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:14:04.158 [T01]INFO     TaskView             TreeView selection changed to: w 
+2025-08-18 17:14:04.158 [T01]INFO     TaskViewModel        Selection changed: 'New Task' → 'w '
+2025-08-18 17:14:04.158 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:14:04.159 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:14:04.321 [T01]INFO     TaskView             TreeView selection changed to: New Task
+2025-08-18 17:14:04.321 [T01]INFO     TaskViewModel        Selection changed: 'w ' → 'New Task'
+2025-08-18 17:14:04.321 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:14:04.321 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:14:04.473 [T01]INFO     TaskView             TreeView selection changed to: New Task
+2025-08-18 17:14:04.473 [T01]INFO     TaskViewModel        Selection changed: 'New Task' → 'New Task'
+2025-08-18 17:14:04.473 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:14:04.474 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:14:04.632 [T01]INFO     TaskView             TreeView selection changed to: Sample Task 2
+2025-08-18 17:14:04.632 [T01]INFO     TaskViewModel        Selection changed: 'New Task' → 'Sample Task 2'
+2025-08-18 17:14:04.632 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:14:04.633 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:14:04.635 [T01]DEBUG    TaskView             Selected item brought into view and selected
+2025-08-18 17:14:04.792 [T01]INFO     TaskView             TreeView selection changed to: Sub-task A
+2025-08-18 17:14:04.792 [T01]INFO     TaskViewModel        Selection changed: 'Sample Task 2' → 'Sub-task A'
+2025-08-18 17:14:04.792 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:14:04.793 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:14:05.236 [T01]INFO     TaskView             TreeView selection changed to: dit
+2025-08-18 17:14:05.236 [T01]INFO     TaskViewModel        Selection changed: 'Sub-task A' → 'dit'
+2025-08-18 17:14:05.236 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:14:05.237 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:14:05.253 [T01]DEBUG    TaskView             Selected item brought into view and selected
+2025-08-18 17:14:16.263 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=E, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 17:14:16.263 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: E, IsInEditMode: False
+2025-08-18 17:14:16.263 [T01]CRITICAL TaskView             🔥 E KEY CASE HIT!
+2025-08-18 17:14:16.264 [T01]CRITICAL TaskView             🔥 E KEY - EXECUTING EDIT COMMAND
+2025-08-18 17:14:16.264 [T01]INFO     TaskItem             Edit mode changed: False → True for Id1=1, Name=dit
+2025-08-18 17:14:16.264 [T01]CRITICAL TaskView             🔥 E KEY - EDIT COMMAND EXECUTED
+2025-08-18 17:14:16.266 [T01]CRITICAL TaskView             🔥 FocusEditTextBoxForSelectedItem: Focus=True, IsFocused=True
+2025-08-18 17:14:17.497 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=RightShift, Handled=False, Source=TreeView, OriginalSource=TextBox
+2025-08-18 17:14:17.498 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: RightShift, IsInEditMode: True
+2025-08-18 17:14:17.498 [T01]CRITICAL TaskView             🔥 IN EDIT MODE - IGNORING KEY: RightShift
+2025-08-18 17:14:17.999 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=RightShift, Handled=False, Source=TreeView, OriginalSource=TextBox
+2025-08-18 17:14:17.999 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: RightShift, IsInEditMode: True
+2025-08-18 17:14:17.999 [T01]CRITICAL TaskView             🔥 IN EDIT MODE - IGNORING KEY: RightShift
+2025-08-18 17:14:18.031 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=RightShift, Handled=False, Source=TreeView, OriginalSource=TextBox
+2025-08-18 17:14:18.031 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: RightShift, IsInEditMode: True
+2025-08-18 17:14:18.031 [T01]CRITICAL TaskView             🔥 IN EDIT MODE - IGNORING KEY: RightShift
+2025-08-18 17:14:18.064 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=RightShift, Handled=False, Source=TreeView, OriginalSource=TextBox
+2025-08-18 17:14:18.064 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: RightShift, IsInEditMode: True
+2025-08-18 17:14:18.064 [T01]CRITICAL TaskView             🔥 IN EDIT MODE - IGNORING KEY: RightShift
+2025-08-18 17:14:18.097 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=RightShift, Handled=False, Source=TreeView, OriginalSource=TextBox
+2025-08-18 17:14:18.097 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: RightShift, IsInEditMode: True
+2025-08-18 17:14:18.097 [T01]CRITICAL TaskView             🔥 IN EDIT MODE - IGNORING KEY: RightShift
+2025-08-18 17:14:18.130 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=RightShift, Handled=False, Source=TreeView, OriginalSource=TextBox
+2025-08-18 17:14:18.130 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: RightShift, IsInEditMode: True
+2025-08-18 17:14:18.130 [T01]CRITICAL TaskView             🔥 IN EDIT MODE - IGNORING KEY: RightShift
+2025-08-18 17:14:18.162 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=RightShift, Handled=False, Source=TreeView, OriginalSource=TextBox
+2025-08-18 17:14:18.162 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: RightShift, IsInEditMode: True
+2025-08-18 17:14:18.162 [T01]CRITICAL TaskView             🔥 IN EDIT MODE - IGNORING KEY: RightShift
+2025-08-18 17:14:18.194 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=RightShift, Handled=False, Source=TreeView, OriginalSource=TextBox
+2025-08-18 17:14:18.194 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: RightShift, IsInEditMode: True
+2025-08-18 17:14:18.194 [T01]CRITICAL TaskView             🔥 IN EDIT MODE - IGNORING KEY: RightShift
+2025-08-18 17:14:18.227 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=RightShift, Handled=False, Source=TreeView, OriginalSource=TextBox
+2025-08-18 17:14:18.227 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: RightShift, IsInEditMode: True
+2025-08-18 17:14:18.227 [T01]CRITICAL TaskView             🔥 IN EDIT MODE - IGNORING KEY: RightShift
+2025-08-18 17:14:18.259 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=RightShift, Handled=False, Source=TreeView, OriginalSource=TextBox
+2025-08-18 17:14:18.259 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: RightShift, IsInEditMode: True
+2025-08-18 17:14:18.259 [T01]CRITICAL TaskView             🔥 IN EDIT MODE - IGNORING KEY: RightShift
+2025-08-18 17:14:18.291 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=RightShift, Handled=False, Source=TreeView, OriginalSource=TextBox
+2025-08-18 17:14:18.291 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: RightShift, IsInEditMode: True
+2025-08-18 17:14:18.291 [T01]CRITICAL TaskView             🔥 IN EDIT MODE - IGNORING KEY: RightShift
+2025-08-18 17:14:18.324 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=RightShift, Handled=False, Source=TreeView, OriginalSource=TextBox
+2025-08-18 17:14:18.324 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: RightShift, IsInEditMode: True
+2025-08-18 17:14:18.324 [T01]CRITICAL TaskView             🔥 IN EDIT MODE - IGNORING KEY: RightShift
+2025-08-18 17:14:23.557 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=E, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 17:14:23.557 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: E, IsInEditMode: False
+2025-08-18 17:14:23.557 [T01]CRITICAL TaskView             🔥 E KEY CASE HIT!
+2025-08-18 17:14:23.557 [T01]CRITICAL TaskView             🔥 E KEY - EXECUTING EDIT COMMAND
+2025-08-18 17:14:23.558 [T01]INFO     TaskItem             Edit mode changed: True → False for Id1=1, Name=dit
+2025-08-18 17:14:23.558 [T01]CRITICAL TaskView             🔥 E KEY - EDIT COMMAND EXECUTED
+2025-08-18 17:14:24.755 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=E, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 17:14:24.755 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: E, IsInEditMode: False
+2025-08-18 17:14:24.755 [T01]CRITICAL TaskView             🔥 E KEY CASE HIT!
+2025-08-18 17:14:24.755 [T01]CRITICAL TaskView             🔥 E KEY - EXECUTING EDIT COMMAND
+2025-08-18 17:14:24.756 [T01]INFO     TaskItem             Edit mode changed: False → True for Id1=1, Name=dit
+2025-08-18 17:14:24.756 [T01]CRITICAL TaskView             🔥 E KEY - EDIT COMMAND EXECUTED
+2025-08-18 17:14:24.757 [T01]CRITICAL TaskView             🔥 FocusEditTextBoxForSelectedItem: Focus=True, IsFocused=True
+2025-08-18 17:14:28.631 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=Tab, Handled=False, Source=TreeView, OriginalSource=TextBox
+2025-08-18 17:14:28.631 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: Tab, IsInEditMode: True
+2025-08-18 17:14:28.631 [T01]CRITICAL TaskView             🔥 IN EDIT MODE - IGNORING KEY: Tab
+2025-08-18 17:14:30.605 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=Tab, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 17:14:30.605 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: Tab, IsInEditMode: False
+2025-08-18 17:14:30.828 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=Tab, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 17:14:30.828 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: Tab, IsInEditMode: False
+2025-08-18 17:14:31.956 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=LeftCtrl, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 17:14:31.956 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: LeftCtrl, IsInEditMode: False
+2025-08-18 17:14:32.463 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=LeftCtrl, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 17:14:32.463 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: LeftCtrl, IsInEditMode: False
+2025-08-18 17:14:32.495 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=LeftCtrl, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 17:14:32.495 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: LeftCtrl, IsInEditMode: False
+2025-08-18 17:14:32.528 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=LeftCtrl, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 17:14:32.528 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: LeftCtrl, IsInEditMode: False
+2025-08-18 17:14:32.560 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=LeftCtrl, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 17:14:32.560 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: LeftCtrl, IsInEditMode: False
+2025-08-18 17:14:32.570 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=S, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 17:14:32.570 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: S, IsInEditMode: False
+2025-08-18 17:14:32.570 [T01]CRITICAL TaskView             🔥 S KEY CASE HIT!
+2025-08-18 17:14:32.570 [T01]CRITICAL TaskView             🔥 CTRL+S DETECTED!
+2025-08-18 17:14:32.571 [T01]CRITICAL TaskView             🔥 CTRL+S - EXECUTING SAVE COMMAND
+2025-08-18 17:14:32.571 [T01]INFO     TaskViewModel        Saving data via data service
+2025-08-18 17:14:32.571 [T01]DEBUG    JsonDataService      Saving 2 items to data.json
+2025-08-18 17:14:32.577 [T01]INFO     JsonDataService      Successfully saved 2 items to data.json
+2025-08-18 17:14:32.577 [T01]DEBUG    JsonDataService      PERF END: SaveItems | Duration: 5.39ms
+2025-08-18 17:14:32.577 [T01]INFO     TaskViewModel        Data saved successfully
+2025-08-18 17:14:32.577 [T01]DEBUG    TaskViewModel        PERF END: ExecuteSave | Duration: 5.93ms
+2025-08-18 17:14:32.577 [T01]CRITICAL TaskView             🔥 CTRL+S - SAVE COMMAND EXECUTED
+2025-08-18 17:14:42.032 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=Down, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 17:14:42.032 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: Down, IsInEditMode: False
+2025-08-18 17:14:43.248 [T01]INFO     TaskView             Escape pressed in TextBox - canceling edit
+2025-08-18 17:14:43.248 [T01]INFO     TaskItem             Edit mode changed: True → False for Id1=1, Name=dit
+2025-08-18 17:14:43.249 [T01]DEBUG    TaskView             Focus returned to TreeView after edit cancellation
+2025-08-18 17:14:43.730 [T01]INFO     TaskView             TreeView selection changed to: Sub-task A
+2025-08-18 17:14:43.730 [T01]INFO     TaskViewModel        Selection changed: 'dit' → 'Sub-task A'
+2025-08-18 17:14:43.730 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:14:43.731 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:14:43.880 [T01]INFO     TaskView             TreeView selection changed to: Sample Task 2
+2025-08-18 17:14:43.880 [T01]INFO     TaskViewModel        Selection changed: 'Sub-task A' → 'Sample Task 2'
+2025-08-18 17:14:43.880 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:14:43.881 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:14:43.894 [T01]DEBUG    TaskView             Selected item brought into view and selected
+2025-08-18 17:14:44.043 [T01]INFO     TaskView             TreeView selection changed to: New Task
+2025-08-18 17:14:44.043 [T01]INFO     TaskViewModel        Selection changed: 'Sample Task 2' → 'New Task'
+2025-08-18 17:14:44.043 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:14:44.043 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:14:44.204 [T01]INFO     TaskView             TreeView selection changed to: New Task
+2025-08-18 17:14:44.204 [T01]INFO     TaskViewModel        Selection changed: 'New Task' → 'New Task'
+2025-08-18 17:14:44.204 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:14:44.205 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:14:44.368 [T01]INFO     TaskView             TreeView selection changed to: w 
+2025-08-18 17:14:44.368 [T01]INFO     TaskViewModel        Selection changed: 'New Task' → 'w '
+2025-08-18 17:14:44.368 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:14:44.369 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:14:44.529 [T01]INFO     TaskView             TreeView selection changed to: New Task
+2025-08-18 17:14:44.529 [T01]INFO     TaskViewModel        Selection changed: 'w ' → 'New Task'
+2025-08-18 17:14:44.529 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:14:44.529 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:14:44.688 [T01]INFO     TaskView             TreeView selection changed to: s
+2025-08-18 17:14:44.688 [T01]INFO     TaskViewModel        Selection changed: 'New Task' → 's'
+2025-08-18 17:14:44.688 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:14:44.689 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:14:44.842 [T01]INFO     TaskView             TreeView selection changed to: 
+2025-08-18 17:14:44.842 [T01]INFO     TaskViewModel        Selection changed: 's' → ''
+2025-08-18 17:14:44.842 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:14:44.842 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:14:45.336 [T01]INFO     TaskView             TreeView selection changed to: New Subtask
+2025-08-18 17:14:45.336 [T01]INFO     TaskViewModel        Selection changed: '' → 'New Subtask'
+2025-08-18 17:14:45.336 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 17:14:45.337 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 17:14:50.709 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=LeftCtrl, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 17:14:50.709 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: LeftCtrl, IsInEditMode: False
+2025-08-18 17:14:51.211 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=LeftCtrl, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 17:14:51.211 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: LeftCtrl, IsInEditMode: False
+2025-08-18 17:14:51.243 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=LeftCtrl, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 17:14:51.243 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: LeftCtrl, IsInEditMode: False
+2025-08-18 17:14:51.276 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=LeftCtrl, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 17:14:51.276 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: LeftCtrl, IsInEditMode: False
+2025-08-18 17:14:51.308 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=LeftCtrl, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 17:14:51.308 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: LeftCtrl, IsInEditMode: False
+2025-08-18 17:14:51.341 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=LeftCtrl, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 17:14:51.341 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: LeftCtrl, IsInEditMode: False
+2025-08-18 17:14:51.373 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=LeftCtrl, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 17:14:51.373 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: LeftCtrl, IsInEditMode: False
+2025-08-18 17:14:51.406 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=LeftCtrl, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 17:14:51.406 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: LeftCtrl, IsInEditMode: False
+2025-08-18 17:14:51.439 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=LeftCtrl, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 17:14:51.439 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: LeftCtrl, IsInEditMode: False
+2025-08-18 17:14:51.471 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=LeftCtrl, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 17:14:51.471 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: LeftCtrl, IsInEditMode: False
+2025-08-18 17:14:51.503 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=LeftCtrl, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 17:14:51.503 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: LeftCtrl, IsInEditMode: False
+2025-08-18 17:14:53.485 [T01]INFO     MainWindow           Window closing
+2025-08-18 17:14:53.487 [T01]INFO     App                  Application shutting down with exit code: 0

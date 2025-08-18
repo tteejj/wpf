@@ -76,6 +76,41 @@
             "children": []
           }
         ]
+      },
+      {
+        "id1": 7,
+        "id2": 1,
+        "name": "s",
+        "assignedDate": "2025-08-18T17:13:31.5287062-06:00",
+        "dueDate": "2025-08-25T00:00:00-06:00",
+        "bringForwardDate": "2025-08-19T00:00:00-06:00",
+        "priority": "Medium",
+        "isExpanded": true,
+        "children": [
+          {
+            "id1": 8,
+            "id2": 1,
+            "name": "",
+            "assignedDate": "2025-08-18T17:13:41.2727494-06:00",
+            "dueDate": "2025-08-25T00:00:00-06:00",
+            "bringForwardDate": "2025-08-19T00:00:00-06:00",
+            "priority": "Medium",
+            "isExpanded": true,
+            "children": [
+              {
+                "id1": 9,
+                "id2": 1,
+                "name": "New Subtask",
+                "assignedDate": "2025-08-18T17:13:56.7492047-06:00",
+                "dueDate": "2025-08-25T00:00:00-06:00",
+                "bringForwardDate": "2025-08-19T00:00:00-06:00",
+                "priority": "Medium",
+                "isExpanded": false,
+                "children": []
+              }
+            ]
+          }
+        ]
       }
     ]
   }
