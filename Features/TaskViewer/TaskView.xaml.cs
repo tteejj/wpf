@@ -87,15 +87,19 @@ namespace PraxisWpf.Features.TaskViewer
                         Logger.Debug("TaskView", "TreeView focused for keyboard navigation");
                     }
                     
-                    // Ensure selected item is visible
+                    // Ensure selected item is visible and focused properly
                     if (e.NewValue != null)
                     {
-                        var treeViewItem = TaskTreeView.ItemContainerGenerator.ContainerFromItem(e.NewValue) as TreeViewItem;
-                        if (treeViewItem != null)
-                        {
-                            treeViewItem.BringIntoView();
-                            Logger.Debug("TaskView", "Selected item brought into view");
-                        }
+                        // Use Dispatcher to ensure TreeViewItem is generated
+                        Dispatcher.BeginInvoke(new Action(() => {
+                            var treeViewItem = TaskTreeView.ItemContainerGenerator.ContainerFromItem(e.NewValue) as TreeViewItem;
+                            if (treeViewItem != null)
+                            {
+                                treeViewItem.BringIntoView();
+                                treeViewItem.IsSelected = true;
+                                Logger.Debug("TaskView", "Selected item brought into view and selected");
+                            }
+                        }), System.Windows.Threading.DispatcherPriority.Background);
                     }
                 }
                 else if (e.NewValue == null && viewModel != null)
@@ -143,7 +147,18 @@ namespace PraxisWpf.Features.TaskViewer
                     return;
                 }
                 
-                Logger.Critical("TaskView", $"🔥 ABOUT TO PROCESS KEY: {e.Key}");
+                // Check if we're currently in edit mode by looking for focused TextBox
+                var focusedTextBox = Keyboard.FocusedElement as TextBox;
+                var isInEditMode = focusedTextBox != null && focusedTextBox.Name == "EditTextBox";
+                
+                Logger.Critical("TaskView", $"🔥 ABOUT TO PROCESS KEY: {e.Key}, IsInEditMode: {isInEditMode}");
+
+                // If we're in edit mode, only allow Enter/Escape to be processed as hotkeys
+                if (isInEditMode && e.Key != Key.Enter && e.Key != Key.Escape)
+                {
+                    Logger.Critical("TaskView", $"🔥 IN EDIT MODE - IGNORING KEY: {e.Key}");
+                    return;
+                }
 
                 switch (e.Key)
                 {
@@ -155,11 +170,39 @@ namespace PraxisWpf.Features.TaskViewer
                             Logger.Critical("TaskView", "🔥 N KEY - EXECUTING NEW COMMAND");
                             viewModel.NewCommand.Execute(null);
                             Logger.Critical("TaskView", "🔥 N KEY - NEW COMMAND EXECUTED");
+                            
+                            // Focus the newly created item's TextBox after a brief delay
+                            Dispatcher.BeginInvoke(new Action(() => {
+                                FocusEditTextBoxForSelectedItem();
+                            }), System.Windows.Threading.DispatcherPriority.Render);
+                            
                             e.Handled = true;
                         }
                         else
                         {
                             Logger.Critical("TaskView", "🔥 N KEY - NEW COMMAND CAN'T EXECUTE!");
+                        }
+                        break;
+
+                    case Key.P:
+                        Logger.Critical("TaskView", "🔥 P KEY CASE HIT!");
+                        // P key creates new project
+                        if (viewModel.NewProjectCommand.CanExecute(null))
+                        {
+                            Logger.Critical("TaskView", "🔥 P KEY - EXECUTING NEW PROJECT COMMAND");
+                            viewModel.NewProjectCommand.Execute(null);
+                            Logger.Critical("TaskView", "🔥 P KEY - NEW PROJECT COMMAND EXECUTED");
+                            
+                            // Focus the newly created project's TextBox after a brief delay
+                            Dispatcher.BeginInvoke(new Action(() => {
+                                FocusEditTextBoxForSelectedItem();
+                            }), System.Windows.Threading.DispatcherPriority.Render);
+                            
+                            e.Handled = true;
+                        }
+                        else
+                        {
+                            Logger.Critical("TaskView", "🔥 P KEY - NEW PROJECT COMMAND CAN'T EXECUTE!");
                         }
                         break;
 
@@ -169,8 +212,18 @@ namespace PraxisWpf.Features.TaskViewer
                         if (viewModel.EditCommand.CanExecute(null))
                         {
                             Logger.Critical("TaskView", "🔥 E KEY - EXECUTING EDIT COMMAND");
+                            var wasInEditMode = viewModel.SelectedItem?.IsInEditMode ?? false;
                             viewModel.EditCommand.Execute(null);
                             Logger.Critical("TaskView", "🔥 E KEY - EDIT COMMAND EXECUTED");
+                            
+                            // If we just entered edit mode, focus the TextBox
+                            if (!wasInEditMode && (viewModel.SelectedItem?.IsInEditMode ?? false))
+                            {
+                                Dispatcher.BeginInvoke(new Action(() => {
+                                    FocusEditTextBoxForSelectedItem();
+                                }), System.Windows.Threading.DispatcherPriority.Render);
+                            }
+                            
                             e.Handled = true;
                         }
                         else
@@ -191,7 +244,7 @@ namespace PraxisWpf.Features.TaskViewer
 
                     case Key.S:
                         Logger.Critical("TaskView", "🔥 S KEY CASE HIT!");
-                        // Ctrl+S saves data
+                        // Ctrl+S saves data, S alone creates subtask
                         if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
                         {
                             Logger.Critical("TaskView", "🔥 CTRL+S DETECTED!");
@@ -209,7 +262,25 @@ namespace PraxisWpf.Features.TaskViewer
                         }
                         else
                         {
-                            Logger.Critical("TaskView", "🔥 S KEY WITHOUT CTRL - IGNORING");
+                            Logger.Critical("TaskView", "🔥 S KEY WITHOUT CTRL - CREATING SUBTASK");
+                            // S key creates new subtask
+                            if (viewModel.NewSubtaskCommand.CanExecute(null))
+                            {
+                                Logger.Critical("TaskView", "🔥 S KEY - EXECUTING NEW SUBTASK COMMAND");
+                                viewModel.NewSubtaskCommand.Execute(null);
+                                Logger.Critical("TaskView", "🔥 S KEY - NEW SUBTASK COMMAND EXECUTED");
+                                
+                                // Focus the newly created subtask's TextBox after a brief delay
+                                Dispatcher.BeginInvoke(new Action(() => {
+                                    FocusEditTextBoxForSelectedItem();
+                                }), System.Windows.Threading.DispatcherPriority.Render);
+                                
+                                e.Handled = true;
+                            }
+                            else
+                            {
+                                Logger.Critical("TaskView", "🔥 S KEY - NEW SUBTASK COMMAND CAN'T EXECUTE!");
+                            }
                         }
                         break;
 
@@ -338,9 +409,12 @@ namespace PraxisWpf.Features.TaskViewer
                 if (textBox != null)
                 {
                     // Focus and select all text when edit mode starts
-                    var focusResult = textBox.Focus();
-                    textBox.SelectAll();
-                    Logger.Critical("TaskView", $"🔥 EDIT TEXTBOX LOADED: Focus={focusResult}, IsFocused={textBox.IsFocused}, Text='{textBox.Text}'");
+                    // Use Dispatcher to ensure this happens after the UI is fully rendered
+                    Dispatcher.BeginInvoke(new Action(() => {
+                        var focusResult = textBox.Focus();
+                        textBox.SelectAll();
+                        Logger.Critical("TaskView", $"🔥 EDIT TEXTBOX LOADED: Focus={focusResult}, IsFocused={textBox.IsFocused}, Text='{textBox.Text}'");
+                    }), System.Windows.Threading.DispatcherPriority.Input);
                 }
                 else
                 {
@@ -423,6 +497,44 @@ namespace PraxisWpf.Features.TaskViewer
                 }
             }
             return null;
+        }
+
+        private void FocusEditTextBoxForSelectedItem()
+        {
+            try
+            {
+                var viewModel = DataContext as TaskViewModel;
+                if (viewModel?.SelectedItem == null || !viewModel.SelectedItem.IsInEditMode)
+                {
+                    Logger.Critical("TaskView", "🔥 FocusEditTextBoxForSelectedItem: No selected item in edit mode");
+                    return;
+                }
+
+                // Find the TreeViewItem for the selected item
+                var treeViewItem = TaskTreeView.ItemContainerGenerator.ContainerFromItem(viewModel.SelectedItem) as TreeViewItem;
+                if (treeViewItem == null)
+                {
+                    Logger.Critical("TaskView", "🔥 FocusEditTextBoxForSelectedItem: TreeViewItem not found");
+                    return;
+                }
+
+                // Find the EditTextBox within this TreeViewItem
+                var editTextBox = FindVisualChild<TextBox>(treeViewItem);
+                if (editTextBox != null && editTextBox.Name == "EditTextBox")
+                {
+                    var focusResult = editTextBox.Focus();
+                    editTextBox.SelectAll();
+                    Logger.Critical("TaskView", $"🔥 FocusEditTextBoxForSelectedItem: Focus={focusResult}, IsFocused={editTextBox.IsFocused}");
+                }
+                else
+                {
+                    Logger.Critical("TaskView", "🔥 FocusEditTextBoxForSelectedItem: EditTextBox not found in TreeViewItem");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Critical("TaskView", "🔥 FocusEditTextBoxForSelectedItem: Exception", ex);
+            }
         }
     }
 }

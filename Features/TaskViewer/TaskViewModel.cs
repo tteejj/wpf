@@ -34,6 +34,8 @@ namespace PraxisWpf.Features.TaskViewer
         }
 
         public ICommand NewCommand { get; }
+        public ICommand NewProjectCommand { get; }
+        public ICommand NewSubtaskCommand { get; }
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand SaveCommand { get; }
@@ -75,6 +77,8 @@ namespace PraxisWpf.Features.TaskViewer
 
             Logger.TraceData("Initialize", "Commands");
             NewCommand = new RelayCommand(ExecuteNew, CanExecuteNew);
+            NewProjectCommand = new RelayCommand(ExecuteNewProject, CanExecuteNewProject);
+            NewSubtaskCommand = new RelayCommand(ExecuteNewSubtask, CanExecuteNewSubtask);
             EditCommand = new RelayCommand(ExecuteEdit, CanExecuteEdit);
             DeleteCommand = new RelayCommand(ExecuteDelete, CanExecuteDelete);
             SaveCommand = new RelayCommand(ExecuteSave);
@@ -137,6 +141,88 @@ namespace PraxisWpf.Features.TaskViewer
         private bool CanExecuteNew()
         {
             return true;
+        }
+
+        private void ExecuteNewProject()
+        {
+            Logger.TraceEnter();
+            using var perfTracker = Logger.TracePerformance("ExecuteNewProject");
+
+            var nextId = GetNextId1();
+            Logger.Debug("TaskViewModel", $"Creating new project with Id1={nextId}");
+
+            var newProject = new TaskItem
+            {
+                Id1 = nextId,
+                Id2 = 1,
+                Name = "New Project",
+                IsInEditMode = true,
+                Priority = PriorityType.Medium,
+                AssignedDate = DateTime.Now,
+                DueDate = DateTime.Today.AddDays(30), // Default due date 1 month from now for projects
+                BringForwardDate = DateTime.Today.AddDays(1)
+            };
+            Logger.Debug("TaskViewModel", $"New project created: Id1={newProject.Id1}, Name={newProject.Name}");
+
+            // Projects are always added as root items
+            Logger.Info("TaskViewModel", "Adding new project as root item");
+            Items.Add(newProject);
+            Logger.TraceData("Add", "root project");
+
+            SelectedItem = newProject;
+            Logger.Critical("TaskViewModel", $"🔥 NEW PROJECT CREATED: Id1={newProject.Id1}, Name='{newProject.Name}', IsInEditMode={newProject.IsInEditMode}");
+            Logger.Critical("TaskViewModel", $"🔥 SELECTED ITEM SET TO: {SelectedItem?.DisplayName ?? "NULL"}");
+            Logger.Critical("TaskViewModel", $"🔥 TOTAL ROOT ITEMS: {Items.Count}");
+            Logger.TraceExit();
+        }
+
+        private bool CanExecuteNewProject()
+        {
+            return true;
+        }
+
+        private void ExecuteNewSubtask()
+        {
+            Logger.TraceEnter();
+            using var perfTracker = Logger.TracePerformance("ExecuteNewSubtask");
+
+            if (SelectedItem == null)
+            {
+                Logger.Warning("TaskViewModel", "Cannot create subtask: no item selected");
+                return;
+            }
+
+            var nextId = GetNextId1();
+            Logger.Debug("TaskViewModel", $"Creating new subtask with Id1={nextId}");
+
+            var newSubtask = new TaskItem
+            {
+                Id1 = nextId,
+                Id2 = 1,
+                Name = "New Subtask",
+                IsInEditMode = true,
+                Priority = PriorityType.Medium,
+                AssignedDate = DateTime.Now,
+                DueDate = DateTime.Today.AddDays(7), // Default due date 1 week from now
+                BringForwardDate = DateTime.Today.AddDays(1)
+            };
+            Logger.Debug("TaskViewModel", $"New subtask created: Id1={newSubtask.Id1}, Name={newSubtask.Name}");
+
+            // Subtasks are always added as children of the selected item
+            Logger.Info("TaskViewModel", $"Adding new subtask as child of '{SelectedItem.DisplayName}'");
+            SelectedItem.Children.Add(newSubtask);
+            SelectedItem.IsExpanded = true;
+            Logger.TraceData("Add", "subtask", $"Parent: {SelectedItem.DisplayName}");
+
+            SelectedItem = newSubtask;
+            Logger.Critical("TaskViewModel", $"🔥 NEW SUBTASK CREATED: Id1={newSubtask.Id1}, Name='{newSubtask.Name}', IsInEditMode={newSubtask.IsInEditMode}");
+            Logger.Critical("TaskViewModel", $"🔥 SELECTED ITEM SET TO: {SelectedItem?.DisplayName ?? "NULL"}");
+            Logger.TraceExit();
+        }
+
+        private bool CanExecuteNewSubtask()
+        {
+            return SelectedItem != null;
         }
 
         private void ExecuteEdit()

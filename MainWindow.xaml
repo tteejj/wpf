@@ -27,7 +27,7 @@
         <!-- Status bar -->
         <StatusBar Grid.Row="2">
             <StatusBarItem>
-                <TextBlock Text="N: New | E: Edit | Del: Delete | +/-: Expand/Collapse | Ctrl+S: Save"/>
+                <TextBlock Text="N: New Task | P: New Project | S: New Subtask | E: Edit | Del: Delete | +/-: Expand/Collapse | Ctrl+S: Save"/>
             </StatusBarItem>
         </StatusBar>
     </Grid>
