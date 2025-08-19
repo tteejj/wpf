@@ -24,17 +24,34 @@ namespace PraxisWpf.Features.DataProcessing
 
         public DataProcessingViewModel()
         {
-            _projectDataService = new ProjectDataService();
+            Logger.TraceEnter();
+            
+            try
+            {
+                _projectDataService = new ProjectDataService();
 
-            ProjectIds = new ObservableCollection<string>();
-            ProjectDataFields = new ObservableCollection<ProjectDataField>();
+                ProjectIds = new ObservableCollection<string>();
+                ProjectDataFields = new ObservableCollection<ProjectDataField>();
 
-            ImportExcelCommand = new RelayCommand(async () => await ImportExcelAsync());
-            SyncProjectDataCommand = new RelayCommand(async () => await SyncProjectDataAsync());
-            ExportDataCommand = new RelayCommand(async () => await ExportDataAsync());
-            BrowseExcelFileCommand = new RelayCommand(() => BrowseExcelFile());
+                ImportExcelCommand = new RelayCommand(async () => await ImportExcelAsync());
+                SyncProjectDataCommand = new RelayCommand(async () => await SyncProjectDataAsync());
+                ExportDataCommand = new RelayCommand(async () => await ExportDataAsync());
+                BrowseExcelFileCommand = new RelayCommand(() => BrowseExcelFile());
 
-            LoadProjectIds();
+                StatusMessage = "Data Processing ready - No PowerShell dependencies required";
+                
+                // Load project IDs asynchronously to avoid blocking UI thread
+                _ = Task.Run(LoadProjectIdsAsync);
+                
+                Logger.Info("DataProcessingViewModel", "DataProcessingViewModel initialized successfully");
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("DataProcessingViewModel", $"Failed to initialize DataProcessingViewModel: {ex.Message}");
+                StatusMessage = $"Initialization error: {ex.Message}";
+            }
+            
+            Logger.TraceExit();
         }
 
         public ObservableCollection<string> ProjectIds { get; }
@@ -106,17 +123,72 @@ namespace PraxisWpf.Features.DataProcessing
         {
             Logger.TraceEnter();
             
-            var projectData = _projectDataService.GetAllProjectData();
-            ProjectIds.Clear();
-            
-            foreach (var project in projectData)
+            try
             {
-                ProjectIds.Add(project.ProjectId);
-            }
+                var projectData = _projectDataService.GetAllProjectData();
+                ProjectIds.Clear();
+                
+                foreach (var project in projectData)
+                {
+                    ProjectIds.Add(project.ProjectId);
+                }
 
-            OnPropertyChanged(nameof(HasProjects));
+                OnPropertyChanged(nameof(HasProjects));
+                
+                Logger.Info("DataProcessingViewModel", $"Loaded {ProjectIds.Count} project IDs");
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("DataProcessingViewModel", $"Failed to load project IDs: {ex.Message}");
+                StatusMessage = $"Error loading projects: {ex.Message}";
+            }
             
-            Logger.Info("DataProcessingViewModel", $"Loaded {ProjectIds.Count} project IDs");
+            Logger.TraceExit();
+        }
+
+        private async Task LoadProjectIdsAsync()
+        {
+            Logger.TraceEnter();
+            
+            try
+            {
+                await Task.Delay(50); // Small delay to ensure UI is ready
+                
+                var projectData = _projectDataService.GetAllProjectData();
+                
+                // Update UI on main thread
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                {
+                    try
+                    {
+                        ProjectIds.Clear();
+                        
+                        foreach (var project in projectData)
+                        {
+                            ProjectIds.Add(project.ProjectId);
+                        }
+
+                        OnPropertyChanged(nameof(HasProjects));
+                        StatusMessage = $"Loaded {ProjectIds.Count} projects";
+                        
+                        Logger.Info("DataProcessingViewModel", $"Loaded {ProjectIds.Count} project IDs asynchronously");
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error("DataProcessingViewModel", $"Failed to update UI with project IDs: {ex.Message}");
+                        StatusMessage = $"Error updating UI: {ex.Message}";
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("DataProcessingViewModel", $"Failed to load project IDs async: {ex.Message}");
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                {
+                    StatusMessage = $"Error loading projects: {ex.Message}";
+                });
+            }
+            
             Logger.TraceExit();
         }
 

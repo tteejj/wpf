@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "HXLtAal+NCU=",
+  "dgSpecHash": "SeP25wlSY9w=",
   "success": true,
-  "projectFilePath": "C:\\Users\\jhnhe\\OneDrive\\Documents\\GitHub\\wpf\\PraxisWpf.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "/home/teej/projects/github/wpf/PraxisWpf.csproj",
+  "expectedPackageFiles": [
+    "/home/teej/.nuget/packages/microsoft.windowsdesktop.app.ref/8.0.19/microsoft.windowsdesktop.app.ref.8.0.19.nupkg.sha512"
+  ],
   "logs": []
 }

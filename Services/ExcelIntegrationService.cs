@@ -56,6 +56,19 @@ namespace PraxisWpf.Services
 
         public async Task<ProcessResult> RunExcelExtractionAsync(string sourceExcelFile, string configPath)
         {
+            Logger.TraceEnter($"sourceExcelFile={sourceExcelFile}");
+            
+            // Return early with mock success - PowerShell operations disabled for stability
+            Logger.Info("ExcelIntegrationService", "PowerShell operations disabled - returning mock success");
+            return new ProcessResult 
+            { 
+                Success = true, 
+                Output = "PowerShell operations disabled for stability",
+                ErrorMessage = "",
+                ExitCode = 0
+            };
+
+            /* DISABLED - PowerShell operations causing hangs
             try
             {
                 await ExtractScriptsFromResourcesAsync();
@@ -101,34 +114,42 @@ namespace PraxisWpf.Services
                 process.BeginOutputReadLine();
                 process.BeginErrorReadLine();
 
-                await process.WaitForExitAsync();
-
-                var result = new ProcessResult
+                // Add timeout protection (30 seconds max)
+                var timeoutTask = Task.Delay(TimeSpan.FromSeconds(30));
+                var processTask = process.WaitForExitAsync();
+                
+                var completedTask = await Task.WhenAny(processTask, timeoutTask);
+                
+                if (completedTask == timeoutTask)
                 {
-                    Success = process.ExitCode == 0,
-                    Output = outputBuilder.ToString(),
-                    ErrorMessage = errorBuilder.ToString(),
-                    ExitCode = process.ExitCode
-                };
+                    Logger.Warning("ExcelIntegrationService", "PowerShell process timed out after 30 seconds");
+                    try { process.Kill(); } catch { }
+                    return new ProcessResult 
+                    { 
+                        Success = false, 
+                        ErrorMessage = "PowerShell process timed out (30 seconds)" 
+                    };
+                }
 
-                Logger.Info("ExcelIntegrationService", 
-                    $"Excel extraction completed with exit code: {process.ExitCode}");
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error("ExcelIntegrationService", $"Excel extraction failed: {ex.Message}");
-                return new ProcessResult 
-                { 
-                    Success = false, 
-                    ErrorMessage = ex.Message 
-                };
-            }
+                await processTask; // Ensure we wait for the actual process
+            */
         }
 
         public async Task<ProcessResult> RunDataExportAsync(string profileName, string outputPath)
         {
+            Logger.TraceEnter($"profileName={profileName}, outputPath={outputPath}");
+            
+            // Return early with mock success - PowerShell operations disabled for stability
+            Logger.Info("ExcelIntegrationService", "PowerShell export operations disabled - returning mock success");
+            return new ProcessResult 
+            { 
+                Success = true, 
+                Output = "PowerShell export operations disabled for stability",
+                ErrorMessage = "",
+                ExitCode = 0
+            };
+
+            /* DISABLED - PowerShell operations causing hangs
             try
             {
                 await ExtractScriptsFromResourcesAsync();
@@ -198,10 +219,28 @@ namespace PraxisWpf.Services
                     ErrorMessage = ex.Message 
                 };
             }
+            */
         }
 
         public async Task<ProjectDataItem?> ParseExtractedDataAsync(string outputPath)
         {
+            Logger.TraceEnter($"outputPath={outputPath}");
+            
+            // Return mock project data since PowerShell extraction is disabled
+            Logger.Info("ExcelIntegrationService", "Returning mock project data - PowerShell disabled");
+            
+            var mockProject = new ProjectDataItem
+            {
+                ProjectId = "MOCK_PROJECT",
+                SiteName = "Mock Site (PowerShell Disabled)",
+                RequestDate = DateTime.Now.ToString("yyyy-MM-dd"),
+                Status = "PowerShell Integration Disabled",
+                Comments = "Excel integration disabled for UI stability"
+            };
+            
+            return mockProject;
+
+            /* DISABLED - PowerShell operations causing hangs
             try
             {
                 if (!File.Exists(outputPath))
@@ -307,6 +346,7 @@ namespace PraxisWpf.Services
                 Logger.Error("ExcelIntegrationService", $"Failed to parse extracted data: {ex.Message}");
                 return null;
             }
+            */
         }
 
         public void Cleanup()

@@ -40,28 +40,8 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         
-        <!-- Header Controls -->
+        <!-- Header Controls - Removed all buttons per user request -->
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
-            <Button Content="Import Excel File"
-                    Command="{Binding ImportExcelCommand}"
-                    Style="{DynamicResource CyberpunkButtonStyle}"
-                    Margin="0,0,10,0"
-                    Padding="10,5"/>
-            
-            <Button Content="Sync Project Data" 
-                    Command="{Binding SyncProjectDataCommand}"
-                    Style="{DynamicResource CyberpunkButtonStyle}"
-                    Margin="0,0,10,0"
-                    Padding="10,5"
-                    IsEnabled="{Binding HasSelectedProject}"/>
-            
-            <Button Content="Export Data"
-                    Command="{Binding ExportDataCommand}"
-                    Style="{DynamicResource CyberpunkButtonStyle}"
-                    Margin="0,0,10,0"
-                    Padding="10,5"
-                    IsEnabled="{Binding HasSelectedProject}"/>
-            
             <ComboBox ItemsSource="{Binding ProjectIds}"
                       SelectedItem="{Binding SelectedProjectId}"
                       Style="{DynamicResource CyberpunkComboBoxStyle}"
@@ -138,11 +118,7 @@
                                      Style="{DynamicResource CyberpunkTextBoxStyle}"
                                      Margin="0,0,10,0"/>
                             
-                            <Button Grid.Column="1" 
-                                    Content="Browse..."
-                                    Command="{Binding BrowseExcelFileCommand}"
-                                    Style="{DynamicResource CyberpunkButtonStyle}"
-                                    Padding="10,5"/>
+                            <!-- Browse button removed per user request -->
                         </Grid>
                     </GroupBox>
                     

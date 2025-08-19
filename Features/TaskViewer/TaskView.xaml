@@ -67,7 +67,7 @@
                         <!-- ID1 -->
                         <TextBlock Grid.Column="0" Text="{Binding Id1}" VerticalAlignment="Center"
                                    Visibility="{Binding IsInEditMode, Converter={StaticResource InverseBoolToVisibilityConverter}}"
-                                   Foreground="{DynamicResource CyberAccentBrush}"/>
+                                   Foreground="{DynamicResource CyberAccentBrush}" FontWeight="Bold"/>
                         <TextBox Grid.Column="0" Text="{Binding Id1, UpdateSourceTrigger=PropertyChanged}" 
                                  Visibility="{Binding IsInEditMode, Converter={StaticResource BoolToVisibilityConverter}}"
                                  VerticalAlignment="Center" FontSize="10" TabIndex="1"
@@ -76,7 +76,7 @@
                         <!-- ID2 -->
                         <TextBlock Grid.Column="1" Text="{Binding Id2}" VerticalAlignment="Center"
                                    Visibility="{Binding IsInEditMode, Converter={StaticResource InverseBoolToVisibilityConverter}}"
-                                   Foreground="{DynamicResource CyberAccentBrush}"/>
+                                   Foreground="{DynamicResource CyberAccentBrush}" FontWeight="Bold"/>
                         <TextBox Grid.Column="1" Text="{Binding Id2, UpdateSourceTrigger=PropertyChanged}" 
                                  Visibility="{Binding IsInEditMode, Converter={StaticResource BoolToVisibilityConverter}}"
                                  VerticalAlignment="Center" FontSize="10" TabIndex="2"
@@ -86,7 +86,7 @@
                         <TextBlock Grid.Column="2" VerticalAlignment="Center"
                                    Visibility="{Binding IsInEditMode, Converter={StaticResource InverseBoolToVisibilityConverter}}"
                                    Text="{Binding AssignedDate, Converter={StaticResource DateDisplayConverter}}"
-                                   Foreground="{DynamicResource CyberAccentBrush}"/>
+                                   Foreground="{DynamicResource CyberAccentBrush}" FontWeight="Bold"/>
                         <DatePicker Grid.Column="2" SelectedDate="{Binding AssignedDate, UpdateSourceTrigger=PropertyChanged}" 
                                     Visibility="{Binding IsInEditMode, Converter={StaticResource BoolToVisibilityConverter}}"
                                     VerticalAlignment="Center" FontSize="10" TabIndex="3"
@@ -96,10 +96,11 @@
                         <TextBlock Grid.Column="3" VerticalAlignment="Center"
                                    Visibility="{Binding IsInEditMode, Converter={StaticResource InverseBoolToVisibilityConverter}}"
                                    Text="{Binding DueDate, Converter={StaticResource DateDisplayConverter}}"
-                                   Foreground="{DynamicResource CyberAccentBrush}">
+                                   Foreground="{DynamicResource CyberAccentBrush}" FontWeight="Bold">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-                                    <Setter Property="Foreground" Value="{DynamicResource CyberTextBrush}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource CyberAccentBrush}"/>
+                                    <Setter Property="FontWeight" Value="Bold"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Priority}" Value="High">
                                             <Setter Property="Foreground" Value="{DynamicResource CyberErrorBrush}"/>
@@ -118,7 +119,7 @@
                         <TextBlock Grid.Column="4" VerticalAlignment="Center"
                                    Visibility="{Binding IsInEditMode, Converter={StaticResource InverseBoolToVisibilityConverter}}"
                                    Text="{Binding BringForwardDate, Converter={StaticResource DateDisplayConverter}}"
-                                   Foreground="{DynamicResource CyberAccentBrush}"/>
+                                   Foreground="{DynamicResource CyberAccentBrush}" FontWeight="Bold"/>
                         <DatePicker Grid.Column="4" SelectedDate="{Binding BringForwardDate, UpdateSourceTrigger=PropertyChanged}" 
                                     Visibility="{Binding IsInEditMode, Converter={StaticResource BoolToVisibilityConverter}}"
                                     VerticalAlignment="Center" FontSize="10" TabIndex="5"
@@ -138,10 +139,12 @@
                                         <DataTrigger Binding="{Binding Priority}" Value="Medium">
                                             <Setter Property="Foreground" Value="{DynamicResource CyberWarningBrush}"/>
                                             <Setter Property="Text" Value="M"/>
+                                            <Setter Property="FontWeight" Value="Bold"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Priority}" Value="Low">
                                             <Setter Property="Foreground" Value="{DynamicResource CyberInfoBrush}"/>
                                             <Setter Property="Text" Value="L"/>
+                                            <Setter Property="FontWeight" Value="Bold"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -162,7 +165,7 @@
                         <TextBlock Grid.Column="6" Text="{Binding Name}" 
                                    Visibility="{Binding IsInEditMode, Converter={StaticResource InverseBoolToVisibilityConverter}}" 
                                    VerticalAlignment="Center"
-                                   Foreground="{DynamicResource CyberAccentBrush}"/>
+                                   Foreground="{DynamicResource CyberAccentBrush}" FontWeight="Bold"/>
                         <TextBox Grid.Column="6" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
                                  Visibility="{Binding IsInEditMode, Converter={StaticResource BoolToVisibilityConverter}}"
                                  BorderThickness="1" VerticalAlignment="Center"
