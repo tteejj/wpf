@@ -77,15 +77,6 @@ namespace PraxisWpf
             Logger.TraceExit();
         }
 
-        private void TasksButton_Click(object sender, RoutedEventArgs e)
-        {
-            ShowTasks();
-        }
-
-        private void TimeButton_Click(object sender, RoutedEventArgs e)
-        {
-            ShowTimeEntry();
-        }
 
         protected override void OnSourceInitialized(EventArgs e)
         {

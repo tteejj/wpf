@@ -144,24 +144,6 @@ namespace PraxisWpf.Features.TaskViewer
                 UpdateFileStatus();
                 
                 Logger.Info("NotesDialog", $"Notes saved successfully to {_filePath}");
-                
-                // Show brief success indicator
-                var originalSaveText = SaveButton.Content;
-                SaveButton.Content = "Saved!";
-                SaveButton.IsEnabled = false;
-                
-                // Reset button after brief delay
-                var timer = new System.Windows.Threading.DispatcherTimer
-                {
-                    Interval = TimeSpan.FromMilliseconds(1500)
-                };
-                timer.Tick += (s, e) =>
-                {
-                    timer.Stop();
-                    SaveButton.Content = originalSaveText;
-                    SaveButton.IsEnabled = true;
-                };
-                timer.Start();
 
                 Logger.TraceExit();
             }
@@ -211,33 +193,6 @@ namespace PraxisWpf.Features.TaskViewer
         {
             UpdateFileStatus();
             UpdateTextStats();
-        }
-
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
-        {
-            Logger.Info("NotesDialog", "Save button clicked");
-            SaveNotes();
-        }
-
-        private void SaveAndCloseButton_Click(object sender, RoutedEventArgs e)
-        {
-            Logger.Info("NotesDialog", "Save and close button clicked");
-            SaveNotes();
-            if (!_isModified) // Only close if save was successful
-            {
-                DialogResult = true;
-                Close();
-            }
-        }
-
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            Logger.Info("NotesDialog", "Cancel button clicked");
-            if (PromptSaveIfModified())
-            {
-                DialogResult = false;
-                Close();
-            }
         }
 
         protected override void OnKeyDown(KeyEventArgs e)

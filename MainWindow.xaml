@@ -25,14 +25,18 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 
-                <Button Grid.Column="0" Content="Tasks (Esc)" Name="TasksButton" 
-                        Click="TasksButton_Click" Margin="0,0,10,0" Padding="8,2"/>
+                <TextBlock Grid.Column="0" Text="Tasks (Esc)" 
+                           Foreground="{DynamicResource CyberAccentBrush}"
+                           FontFamily="Consolas, Courier New, monospace"
+                           VerticalAlignment="Center" Margin="10,0"/>
                         
                 <TextBlock Grid.Column="1" Text="╔═══ PRAXIS TASK MANAGER ═══╗" 
                            Style="{DynamicResource CyberHeaderText}" HorizontalAlignment="Center"/>
                            
-                <Button Grid.Column="2" Content="Time Entry (T)" Name="TimeButton" 
-                        Click="TimeButton_Click" Margin="10,0,0,0" Padding="8,2"/>
+                <TextBlock Grid.Column="2" Text="Time Entry (T)" 
+                           Foreground="{DynamicResource CyberAccentBrush}"
+                           FontFamily="Consolas, Courier New, monospace"
+                           VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0"/>
             </Grid>
         </Border>
 

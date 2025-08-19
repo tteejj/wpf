@@ -104,10 +104,10 @@
         <Border Grid.Row="2" 
                 BorderBrush="{DynamicResource CyberBorderBrush}" 
                 BorderThickness="2"
-                Background="{DynamicResource CyberControlBrush}">
+                Background="{DynamicResource CyberBackgroundBrush}">
             <ScrollViewer VerticalScrollBarVisibility="Auto" 
                           HorizontalScrollBarVisibility="Auto"
-                          Background="{DynamicResource CyberControlBrush}">
+                          Background="{DynamicResource CyberBackgroundBrush}">
                 <TextBox Name="NotesTextBox"
                          Background="Transparent"
                          Foreground="{DynamicResource CyberTextBrush}"
@@ -176,21 +176,14 @@
                                FontWeight="Bold"/>
                 </StackPanel>
                 
-                <!-- Action Buttons -->
-                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Name="SaveButton" 
-                            Content="Save (Ctrl+S)" 
-                            Style="{StaticResource NotesButtonStyle}"
-                            Click="SaveButton_Click"/>
-                    <Button Name="SaveAndCloseButton" 
-                            Content="Save &amp; Close" 
-                            Style="{StaticResource NotesButtonStyle}"
-                            Click="SaveAndCloseButton_Click"/>
-                    <Button Name="CancelButton" 
-                            Content="Cancel (Esc)" 
-                            Style="{StaticResource NotesButtonStyle}"
-                            Click="CancelButton_Click"/>
-                </StackPanel>
+                <!-- Keyboard-only info (no mouse buttons) -->
+                <TextBlock Grid.Column="1" 
+                           Text="TUI Mode: All operations via keyboard only"
+                           Foreground="{DynamicResource CyberDimCyanBrush}"
+                           FontFamily="Consolas, Courier New, monospace"
+                           FontSize="10"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Right"/>
             </Grid>
         </Border>
     </Grid>
