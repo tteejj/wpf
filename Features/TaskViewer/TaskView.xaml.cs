@@ -384,6 +384,22 @@ namespace PraxisWpf.Features.TaskViewer
                         }
                         break;
 
+                    case Key.D:
+                        // D key opens data processing screen
+                        Logger.Critical("TaskView", "🔥 D KEY CASE HIT!");
+                        var dataMainWindow = System.Windows.Window.GetWindow(this) as MainWindow;
+                        if (dataMainWindow != null)
+                        {
+                            Logger.Critical("TaskView", "🔥 D KEY - SWITCHING TO DATA PROCESSING");
+                            dataMainWindow.ShowDataProcessing();
+                            e.Handled = true;
+                        }
+                        else
+                        {
+                            Logger.Critical("TaskView", "🔥 D KEY - MAIN WINDOW NOT FOUND!");
+                        }
+                        break;
+
                     case Key.O:
                         // O key opens notes editor, Shift+O opens notes2 editor
                         if (Keyboard.Modifiers == ModifierKeys.Shift)

@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:taskViewer="clr-namespace:PraxisWpf.Features.TaskViewer"
         xmlns:timeTracker="clr-namespace:PraxisWpf.Features.TimeTracker"
+        xmlns:dataProcessing="clr-namespace:PraxisWpf.Features.DataProcessing"
         Title="Praxis WPF Task Manager" Height="600" Width="1000">
     
     <!-- No Window.InputBindings - all key handling at data level -->
@@ -25,10 +26,16 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 
-                <TextBlock Grid.Column="0" Text="Tasks (Esc)" 
-                           Foreground="{DynamicResource CyberAccentBrush}"
-                           FontFamily="Consolas, Courier New, monospace"
-                           VerticalAlignment="Center" Margin="10,0"/>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Tasks (Esc)" 
+                               Foreground="{DynamicResource CyberAccentBrush}"
+                               FontFamily="Consolas, Courier New, monospace"
+                               Margin="10,0"/>
+                    <TextBlock Text="Data (D)" 
+                               Foreground="{DynamicResource CyberAccentBrush}"
+                               FontFamily="Consolas, Courier New, monospace"
+                               Margin="10,0"/>
+                </StackPanel>
                         
                 <TextBlock Grid.Column="1" Text="╔═══ PRAXIS TASK MANAGER ═══╗" 
                            Style="{DynamicResource CyberHeaderText}" HorizontalAlignment="Center"/>
@@ -46,15 +53,20 @@
                                  Visibility="Visible"/>
             <timeTracker:TimeView x:Name="TimeViewControl" DataContext="{Binding TimeViewModel}" 
                                   Visibility="Collapsed"/>
+            <dataProcessing:DataProcessingView x:Name="DataProcessingViewControl" DataContext="{Binding DataProcessingViewModel}" 
+                                               Visibility="Collapsed"/>
         </Grid>
 
         <!-- Status bar -->
         <StatusBar Grid.Row="2">
             <StatusBarItem Name="TaskStatusBar">
-                <TextBlock Text="N: New Project | S: New Subtask | E: Edit | O: Notes | Shift+O: Notes2 | T: Time Entry | Del: Delete | +/-: Expand/Collapse | Ctrl+S: Save"/>
+                <TextBlock Text="N: New Project | S: New Subtask | E: Edit | O: Notes | Shift+O: Notes2 | T: Time Entry | D: Data Processing | Del: Delete | +/-: Expand/Collapse | Ctrl+S: Save"/>
             </StatusBarItem>
             <StatusBarItem Name="TimeStatusBar" Visibility="Collapsed">
                 <TextBlock Text="Esc: Back to Tasks | P: Project Time | N: Generic Time | Del: Delete | Ctrl+S: Save"/>
+            </StatusBarItem>
+            <StatusBarItem Name="DataStatusBar" Visibility="Collapsed">
+                <TextBlock Text="Esc: Back to Tasks | Import Excel | Sync Project Data | Export Data | Browse Files"/>
             </StatusBarItem>
         </StatusBar>
     </Grid>

@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using PraxisWpf.Features.TaskViewer;
 using PraxisWpf.Features.TimeTracker;
+using PraxisWpf.Features.DataProcessing;
 using PraxisWpf.Services;
 
 namespace PraxisWpf
@@ -9,6 +10,7 @@ namespace PraxisWpf
     {
         private TaskViewModel? _taskViewModel;
         private TimeViewModel? _timeViewModel;
+        private DataProcessingViewModel? _dataProcessingViewModel;
 
         public MainViewModel()
         {
@@ -47,6 +49,23 @@ namespace PraxisWpf
                 _timeViewModel = value;
                 OnPropertyChanged(nameof(TimeViewModel));
                 Logger.Debug("MainViewModel", "TimeViewModel changed");
+            }
+        }
+
+        public DataProcessingViewModel? DataProcessingViewModel
+        {
+            get 
+            { 
+                Logger.TraceProperty("DataProcessingViewModel", null, _dataProcessingViewModel?.GetType().Name ?? "null");
+                return _dataProcessingViewModel; 
+            }
+            set
+            {
+                var oldValue = _dataProcessingViewModel;
+                Logger.TraceProperty("DataProcessingViewModel", oldValue?.GetType().Name ?? "null", value?.GetType().Name ?? "null");
+                _dataProcessingViewModel = value;
+                OnPropertyChanged(nameof(DataProcessingViewModel));
+                Logger.Debug("MainViewModel", "DataProcessingViewModel changed");
             }
         }
 

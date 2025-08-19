@@ -25,19 +25,10 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 
-                <Button Grid.Column="0" Content="◄ Prev Week" Command="{Binding PreviousWeekCommand}" 
-                        Margin="0,0,10,0" Padding="5,2"/>
-                
                 <TextBlock Grid.Column="1" 
                            Text="{Binding WeekStartDate, StringFormat='╔═══ TIME ENTRY - Week of {0:MMM dd, yyyy} ═══╗'}" 
                            Style="{DynamicResource CyberHeaderText}"
                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                
-                <Button Grid.Column="2" Content="Current Week" Command="{Binding CurrentWeekCommand}" 
-                        Margin="0,0,10,0" Padding="5,2"/>
-                
-                <Button Grid.Column="3" Content="Next Week ►" Command="{Binding NextWeekCommand}" 
-                        Margin="0,0,10,0" Padding="5,2"/>
                 
                 <TextBlock Grid.Column="4" 
                            Text="{Binding WeekTotal, StringFormat='Week Total: {0:F2}h'}" 
@@ -67,11 +58,6 @@
                            Foreground="{DynamicResource CyberDimCyanBrush}"
                            VerticalAlignment="Center" HorizontalAlignment="Center"/>
                            
-                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button Content="◄" Command="{Binding PreviousDayCommand}" Margin="0,0,5,0" Padding="5,2"/>
-                    <Button Content="Today" Command="{Binding TodayCommand}" Margin="0,0,5,0" Padding="5,2"/>
-                    <Button Content="►" Command="{Binding NextDayCommand}" Padding="5,2"/>
-                </StackPanel>
             </Grid>
         </Border>
 
@@ -153,7 +139,7 @@
                         <DataGridTextColumn Binding="{Binding Date, StringFormat=ddd MM/dd}" Width="80" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
-                                    <Setter Property="Foreground" Value="{DynamicResource CyberDimCyanBrush}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource CyberAccentBrush}"/>
                                     <Setter Property="Padding" Value="4,2"/>
                                 </Style>
                             </DataGridTextColumn.ElementStyle>

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -13,12 +14,14 @@ namespace PraxisWpf.Services
     {
         private readonly string _dataFilePath;
         private readonly JsonSerializerOptions _jsonOptions;
+        private readonly ProjectDataService _projectDataService;
 
         public JsonDataService(string dataFilePath = "data.json")
         {
             Logger.TraceEnter(parameters: new object[] { dataFilePath });
             
             _dataFilePath = dataFilePath;
+            _projectDataService = new ProjectDataService();
             _jsonOptions = new JsonSerializerOptions
             {
                 WriteIndented = true,
@@ -60,15 +63,17 @@ namespace PraxisWpf.Services
                     return new ObservableCollection<IDisplayableItem>();
                 }
 
-                Logger.TraceData("Deserialize", "JSON to TaskItem[]");
-                var taskItems = JsonSerializer.Deserialize<TaskItem[]>(jsonString, _jsonOptions);
-                Logger.Debug("JsonDataService", $"Deserialized {taskItems?.Length ?? 0} items from JSON");
+                // Parse the complete data structure including project data
+                var dataStructure = JsonSerializer.Deserialize<DataFileStructure>(jsonString, _jsonOptions);
+                Logger.Debug("JsonDataService", $"Deserialized data structure with {dataStructure?.Tasks?.Length ?? 0} tasks and {dataStructure?.ProjectData?.Count ?? 0} projects");
 
                 var result = new ObservableCollection<IDisplayableItem>();
-                if (taskItems != null)
+                
+                // Load tasks
+                if (dataStructure?.Tasks != null)
                 {
-                    Logger.Trace("JsonDataService", $"Converting {taskItems.Length} TaskItems to ObservableCollection");
-                    foreach (var item in taskItems)
+                    Logger.Trace("JsonDataService", $"Converting {dataStructure.Tasks.Length} TaskItems to ObservableCollection");
+                    foreach (var item in dataStructure.Tasks)
                     {
                         Logger.Trace("JsonDataService", $"Adding item: Id1={item.Id1}, Name={item.Name}");
                         // Fix the children collection hierarchy
@@ -78,7 +83,14 @@ namespace PraxisWpf.Services
                     }
                 }
 
-                Logger.Info("JsonDataService", $"Successfully loaded {result.Count} root items");
+                // Load project data
+                if (dataStructure?.ProjectData != null)
+                {
+                    Logger.Trace("JsonDataService", $"Loading {dataStructure.ProjectData.Count} project data items");
+                    _projectDataService.LoadProjectDataFromDictionary(dataStructure.ProjectData);
+                }
+
+                Logger.Info("JsonDataService", $"Successfully loaded {result.Count} root items and {dataStructure?.ProjectData?.Count ?? 0} project data items");
                 Logger.TraceExit(returnValue: $"{result.Count} items");
                 return result;
             }
@@ -140,14 +152,21 @@ namespace PraxisWpf.Services
                     Logger.Trace("JsonDataService", $"Converting item {i}: Id1={taskItems[i].Id1}, Name={taskItems[i].Name}");
                 }
 
-                Logger.TraceData("Serialize", "TaskItem[] to JSON");
-                var jsonString = JsonSerializer.Serialize(taskItems, _jsonOptions);
+                // Create complete data structure including project data
+                var dataStructure = new DataFileStructure
+                {
+                    Tasks = taskItems,
+                    ProjectData = _projectDataService.GetProjectDataDictionary()
+                };
+
+                Logger.TraceData("Serialize", "DataFileStructure to JSON");
+                var jsonString = JsonSerializer.Serialize(dataStructure, _jsonOptions);
                 Logger.Trace("JsonDataService", $"Serialized to {jsonString.Length} characters");
 
                 Logger.TraceData("Write", "JSON to file", _dataFilePath);
                 File.WriteAllText(_dataFilePath, jsonString);
                 
-                Logger.Info("JsonDataService", $"Successfully saved {items.Count} items to {_dataFilePath}");
+                Logger.Info("JsonDataService", $"Successfully saved {items.Count} tasks and {dataStructure.ProjectData.Count} project data items to {_dataFilePath}");
                 Logger.TraceExit();
             }
             catch (JsonException jsonEx)
@@ -182,5 +201,19 @@ namespace PraxisWpf.Services
                 LogItemHierarchy(child, depth + 1);
             }
         }
+
+        public ProjectDataService GetProjectDataService()
+        {
+            return _projectDataService;
+        }
+    }
+
+    public class DataFileStructure
+    {
+        [JsonPropertyName("tasks")]
+        public TaskItem[] Tasks { get; set; } = new TaskItem[0];
+
+        [JsonPropertyName("projectData")]
+        public Dictionary<string, ProjectDataItem> ProjectData { get; set; } = new Dictionary<string, ProjectDataItem>();
     }
 }

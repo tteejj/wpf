@@ -28,6 +28,7 @@ namespace PraxisWpf.Models
 
         public int Id1 { get; set; }
         public int Id2 { get; set; }
+        public string ProjectId { get; set; } = string.Empty;
         
         public string Name
         {

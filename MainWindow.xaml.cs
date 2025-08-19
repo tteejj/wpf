@@ -2,6 +2,7 @@ using System;
 using System.Windows;
 using PraxisWpf.Features.TaskViewer;
 using PraxisWpf.Features.TimeTracker;
+using PraxisWpf.Features.DataProcessing;
 using PraxisWpf.Services;
 
 namespace PraxisWpf
@@ -10,6 +11,7 @@ namespace PraxisWpf
     {
         private TaskViewModel? _taskViewModel;
         private TimeViewModel? _timeViewModel;
+        private DataProcessingViewModel? _dataProcessingViewModel;
         private MainViewModel? _mainViewModel;
 
         public MainWindow()
@@ -25,12 +27,14 @@ namespace PraxisWpf
                 Logger.Debug("MainWindow", "Creating ViewModels");
                 _taskViewModel = new TaskViewModel();
                 _timeViewModel = new TimeViewModel();
+                _dataProcessingViewModel = new DataProcessingViewModel();
                 
-                // Create a main view model to hold both
+                // Create a main view model to hold all ViewModels
                 _mainViewModel = new MainViewModel 
                 { 
                     TaskViewModel = _taskViewModel,
-                    TimeViewModel = _timeViewModel 
+                    TimeViewModel = _timeViewModel,
+                    DataProcessingViewModel = _dataProcessingViewModel
                 };
                 DataContext = _mainViewModel;
 
@@ -66,14 +70,34 @@ namespace PraxisWpf
             Logger.TraceEnter();
             
             TimeViewControl.Visibility = Visibility.Collapsed;
+            DataProcessingViewControl.Visibility = Visibility.Collapsed;
             TaskViewControl.Visibility = Visibility.Visible;
             TimeStatusBar.Visibility = Visibility.Collapsed;
+            DataStatusBar.Visibility = Visibility.Collapsed;
             TaskStatusBar.Visibility = Visibility.Visible;
             
             // Focus the task view
             TaskViewControl.Focus();
             
             Logger.Info("MainWindow", "Switched to task view");
+            Logger.TraceExit();
+        }
+
+        public void ShowDataProcessing()
+        {
+            Logger.TraceEnter();
+            
+            TaskViewControl.Visibility = Visibility.Collapsed;
+            TimeViewControl.Visibility = Visibility.Collapsed;
+            DataProcessingViewControl.Visibility = Visibility.Visible;
+            TaskStatusBar.Visibility = Visibility.Collapsed;
+            TimeStatusBar.Visibility = Visibility.Collapsed;
+            DataStatusBar.Visibility = Visibility.Visible;
+            
+            // Focus the data processing view
+            DataProcessingViewControl.Focus();
+            
+            Logger.Info("MainWindow", "Switched to data processing view");
             Logger.TraceExit();
         }
 
