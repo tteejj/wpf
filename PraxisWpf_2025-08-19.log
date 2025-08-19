@@ -613,3 +613,265 @@ Stack:    at System.IO.Path.GetFullPath(String path)
 2025-08-19 11:29:07.609 [T01]INFO     ActionBasedAutoSaveService Action-based auto-save service disposed
 2025-08-19 11:29:07.609 [T01]INFO     DataSafetyService    Data safety service disposed
 2025-08-19 11:29:07.611 [T01]INFO     App                  Application shutting down with exit code: 0
+2025-08-19 12:04:13.047 [T01]INFO     Logger               Logger initialized | Level=Info, StackTrace=False, ThreadId=True, Path=PraxisWpf_2025-08-19.log
+2025-08-19 12:04:13.051 [T01]INFO     Logger               Logger initialized | Level=Debug, StackTrace=True, ThreadId=True, Path=PraxisWpf_2025-08-19.log
+2025-08-19 12:04:13.051 [T01]INFO     AppConfig            Configuration loaded from app-config.json
+2025-08-19 12:04:13.051 [T01]INFO     App                  Application starting up
+2025-08-19 12:04:13.052 [T01]DEBUG    App                  Command line args: 
+2025-08-19 12:04:13.052 [T01]INFO     App                  Application startup completed successfully
+2025-08-19 12:04:13.058 [T01]DEBUG    MainWindow           Initializing WPF components
+2025-08-19 12:04:13.130 [T01]DEBUG    TaskView             Initializing XAML components
+2025-08-19 12:04:13.143 [T01]INFO     TaskView             TaskView initialized successfully
+2025-08-19 12:04:13.145 [T01]DEBUG    TaskView.xaml        PERF END: TaskView Constructor | Duration: 13.38ms
+2025-08-19 12:04:13.147 [T01]DEBUG    TimeView             Initializing XAML components
+2025-08-19 12:04:13.182 [T01]INFO     TimeView             TimeView initialized successfully
+2025-08-19 12:04:13.182 [T01]DEBUG    TimeView.xaml        PERF END: TimeView Constructor | Duration: 35.61ms
+2025-08-19 12:04:13.183 [T01]DEBUG    DataProcessingView   Initializing XAML components
+2025-08-19 12:04:13.196 [T01]INFO     DataProcessingView   DataProcessingView initialized successfully
+2025-08-19 12:04:13.196 [T01]DEBUG    DataProcessingView.xaml PERF END: DataProcessingView Constructor | Duration: 13.02ms
+2025-08-19 12:04:13.197 [T01]DEBUG    ThemeView            Initializing XAML components
+2025-08-19 12:04:13.201 [T01]INFO     ThemeView            ThemeView initialized successfully
+2025-08-19 12:04:13.202 [T01]DEBUG    ThemeView.xaml       PERF END: ThemeView Constructor | Duration: 4.47ms
+2025-08-19 12:04:13.204 [T01]DEBUG    MainWindow           Initializing data safety service
+2025-08-19 12:04:13.205 [T01]INFO     BackupManager        Initialized - Directory: , Max backups: 5
+2025-08-19 12:04:13.205 [T01]INFO     ActionBasedAutoSaveService Action-based auto-save service initialized
+2025-08-19 12:04:13.205 [T01]DEBUG    DataSafetyService    No recovery flag found - clean startup
+2025-08-19 12:04:13.205 [T01]INFO     DataSafetyService    Data safety service initialized with comprehensive protection
+2025-08-19 12:04:13.206 [T01]DEBUG    MainWindow           Creating ViewModels
+2025-08-19 12:04:13.206 [T01]INFO     JsonDataService      Initialized with data file: data.json
+2025-08-19 12:04:13.206 [T01]DEBUG    JsonDataService      JSON options configured | WriteIndented=true, CamelCase=true, StringEnumConverter=true
+2025-08-19 12:04:13.207 [T01]DEBUG    TaskViewModel        Data service initialized: JsonDataService
+2025-08-19 12:04:13.208 [T01]DEBUG    JsonDataService      Reading data file: data.json
+2025-08-19 12:04:13.227 [T01]DEBUG    TaskItem             Name changed: '' → 'esd' for Id1=1
+2025-08-19 12:04:13.230 [T01]DEBUG    TaskItem             Priority changed: Medium → High for Id1=1, Name=esd
+2025-08-19 12:04:13.230 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=1, Name=esd
+2025-08-19 12:04:13.231 [T01]DEBUG    TaskItem             Name changed: '' → 'Sub-task A' for Id1=1
+2025-08-19 12:04:13.231 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=1, Name=Sub-task A
+2025-08-19 12:04:13.231 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=1, Name=Sub-task A
+2025-08-19 12:04:13.233 [T01]DEBUG    TaskItem             Name changed: '' → 'Sample Task 2' for Id1=2
+2025-08-19 12:04:13.233 [T01]DEBUG    TaskItem             Priority changed: Medium → Low for Id1=2, Name=Sample Task 2
+2025-08-19 12:04:13.233 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=2, Name=Sample Task 2
+2025-08-19 12:04:13.233 [T01]DEBUG    TaskItem             Name changed: '' → 'New Task' for Id1=3
+2025-08-19 12:04:13.233 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=3, Name=New Task
+2025-08-19 12:04:13.233 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=3, Name=New Task
+2025-08-19 12:04:13.233 [T01]DEBUG    TaskItem             Name changed: '' → 'New Task' for Id1=4
+2025-08-19 12:04:13.233 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=4, Name=New Task
+2025-08-19 12:04:13.233 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=4, Name=New Task
+2025-08-19 12:04:13.233 [T01]DEBUG    TaskItem             Name changed: '' → 'w ' for Id1=5
+2025-08-19 12:04:13.233 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=5, Name=w 
+2025-08-19 12:04:13.233 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=5, Name=w 
+2025-08-19 12:04:13.233 [T01]DEBUG    TaskItem             Name changed: '' → 'New Task' for Id1=6
+2025-08-19 12:04:13.233 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=6, Name=New Task
+2025-08-19 12:04:13.233 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=6, Name=New Task
+2025-08-19 12:04:13.233 [T01]DEBUG    TaskItem             Name changed: '' → 's' for Id1=7
+2025-08-19 12:04:13.233 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=7, Name=s
+2025-08-19 12:04:13.233 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=7, Name=s
+2025-08-19 12:04:13.233 [T01]DEBUG    TaskItem             Name changed: '' → '' for Id1=8
+2025-08-19 12:04:13.233 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=8, Name=
+2025-08-19 12:04:13.233 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=8, Name=
+2025-08-19 12:04:13.233 [T01]DEBUG    TaskItem             Name changed: '' → 'New Subtask' for Id1=9
+2025-08-19 12:04:13.233 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=9, Name=New Subtask
+2025-08-19 12:04:13.233 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=9, Name=New Subtask
+2025-08-19 12:04:13.234 [T01]DEBUG    JsonDataService      Deserialized data structure with 2 tasks and 0 projects
+2025-08-19 12:04:13.234 [T01]INFO     ProjectDataService   Loaded 0 project data items into cache
+2025-08-19 12:04:13.235 [T01]INFO     JsonDataService      Successfully loaded 2 root items and 0 project data items
+2025-08-19 12:04:13.235 [T01]DEBUG    JsonDataService      PERF END: LoadItems | Duration: 26.35ms
+2025-08-19 12:04:13.235 [T01]INFO     TaskViewModel        Loaded 2 root items
+2025-08-19 12:04:13.235 [T01]INFO     TaskViewModel        Selection changed: 'null' → 'esd'
+2025-08-19 12:04:13.235 [T01]INFO     TaskViewModel        Auto-selected first item: esd
+2025-08-19 12:04:13.235 [T01]DEBUG    TaskViewModel        All commands initialized
+2025-08-19 12:04:13.235 [T01]DEBUG    TaskViewModel        PERF END: TaskViewModel Constructor | Duration: 27.94ms
+2025-08-19 12:04:13.235 [T01]INFO     JsonDataService      Initialized with data file: data.json
+2025-08-19 12:04:13.236 [T01]DEBUG    JsonDataService      JSON options configured | WriteIndented=true, CamelCase=true, StringEnumConverter=true
+2025-08-19 12:04:13.236 [T01]DEBUG    TimeDataService      Reading time data file: time-data.json
+2025-08-19 12:04:13.237 [T01]INFO     TimeDataService      Empty JSON file, returning empty collection
+2025-08-19 12:04:13.237 [T01]DEBUG    TimeDataService      PERF END: LoadTimeEntries | Duration: 0.24ms
+2025-08-19 12:04:13.237 [T01]INFO     TimeDataService      Initialized with time data file: time-data.json
+2025-08-19 12:04:13.237 [T01]DEBUG    TimeDataService      Loaded 0 existing time entries
+2025-08-19 12:04:13.237 [T01]DEBUG    TimeViewModel        Time data service initialized: TimeDataService
+2025-08-19 12:04:13.238 [T01]DEBUG    TimeDataService      Reading time data file: time-data.json
+2025-08-19 12:04:13.238 [T01]INFO     TimeDataService      Empty JSON file, returning empty collection
+2025-08-19 12:04:13.238 [T01]DEBUG    TimeDataService      PERF END: LoadTimeEntries | Duration: 0.15ms
+2025-08-19 12:04:13.239 [T01]DEBUG    TimeViewModel        Created 96 hour increment options
+2025-08-19 12:04:13.240 [T01]DEBUG    JsonDataService      Reading data file: data.json
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             Name changed: '' → 'esd' for Id1=1
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             Priority changed: Medium → High for Id1=1, Name=esd
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=1, Name=esd
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             Name changed: '' → 'Sub-task A' for Id1=1
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=1, Name=Sub-task A
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=1, Name=Sub-task A
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             Name changed: '' → 'Sample Task 2' for Id1=2
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             Priority changed: Medium → Low for Id1=2, Name=Sample Task 2
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=2, Name=Sample Task 2
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             Name changed: '' → 'New Task' for Id1=3
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=3, Name=New Task
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=3, Name=New Task
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             Name changed: '' → 'New Task' for Id1=4
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=4, Name=New Task
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=4, Name=New Task
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             Name changed: '' → 'w ' for Id1=5
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=5, Name=w 
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=5, Name=w 
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             Name changed: '' → 'New Task' for Id1=6
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=6, Name=New Task
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=6, Name=New Task
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             Name changed: '' → 's' for Id1=7
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=7, Name=s
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=7, Name=s
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             Name changed: '' → '' for Id1=8
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=8, Name=
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=8, Name=
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             Name changed: '' → 'New Subtask' for Id1=9
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=9, Name=New Subtask
+2025-08-19 12:04:13.242 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=9, Name=New Subtask
+2025-08-19 12:04:13.242 [T01]DEBUG    JsonDataService      Deserialized data structure with 2 tasks and 0 projects
+2025-08-19 12:04:13.242 [T01]INFO     ProjectDataService   Loaded 0 project data items into cache
+2025-08-19 12:04:13.242 [T01]INFO     JsonDataService      Successfully loaded 2 root items and 0 project data items
+2025-08-19 12:04:13.242 [T01]DEBUG    JsonDataService      PERF END: LoadItems | Duration: 2.33ms
+2025-08-19 12:04:13.247 [T01]DEBUG    TimeDataService      Found 10 available projects
+2025-08-19 12:04:13.248 [T01]DEBUG    TimeViewModel        Refreshed 10 available projects
+2025-08-19 12:04:13.248 [T01]INFO     TimeViewModel        Initialized to week of 2025-08-19
+2025-08-19 12:04:13.248 [T01]DEBUG    TimeViewModel        All commands initialized
+2025-08-19 12:04:13.248 [T01]DEBUG    TimeViewModel        PERF END: TimeViewModel Constructor | Duration: 10.20ms
+2025-08-19 12:04:13.248 [T01]INFO     DataProcessingViewModel Status: Data Processing ready - No PowerShell dependencies required
+2025-08-19 12:04:13.249 [T01]INFO     ProjectDataService   Returning 0 cached project data items
+2025-08-19 12:04:13.249 [T01]INFO     DataProcessingViewModel Loaded 0 project IDs
+2025-08-19 12:04:13.249 [T01]INFO     DataProcessingViewModel DataProcessingViewModel initialized successfully
+2025-08-19 12:04:13.249 [T01]INFO     ThemeService         Initialized with 5 available themes
+2025-08-19 12:04:13.250 [T01]INFO     ThemeViewModel       Loaded 5 themes
+2025-08-19 12:04:13.250 [T01]INFO     ThemeViewModel       ThemeViewModel initialized successfully
+2025-08-19 12:04:13.250 [T01]DEBUG    MainWindow           Configuring action-based auto-save
+2025-08-19 12:04:13.250 [T01]INFO     ActionBasedAutoSaveService Registered TaskViewModel with key: Tasks
+2025-08-19 12:04:13.250 [T01]INFO     ActionBasedAutoSaveService Registered TimeViewModel with key: TimeTracker
+2025-08-19 12:04:13.250 [T01]INFO     TaskViewModel        Auto-save service configured
+2025-08-19 12:04:13.250 [T01]INFO     TimeViewModel        Auto-save service configured
+2025-08-19 12:04:13.250 [T01]DEBUG    MainWindow           Starting data safety services
+2025-08-19 12:04:13.251 [T01]DEBUG    DataSafetyService    Created recovery flag
+2025-08-19 12:04:13.254 [T01]INFO     BackupManager        Created backup: backup_data.json_20250819_120413
+2025-08-19 12:04:13.265 [T01]ERROR    BackupManager        Failed to get backups |  Exception: ArgumentException: The path is empty. (Parameter 'path')
+Stack:    at System.IO.Path.GetFullPath(String path)
+   at System.IO.Enumeration.FileSystemEnumerator`1..ctor(String directory, Boolean isNormalized, EnumerationOptions options)
+   at System.IO.Enumeration.FileSystemEnumerable`1..ctor(String directory, FindTransform transform, EnumerationOptions options, Boolean isNormalized)
+   at System.IO.Enumeration.FileSystemEnumerableFactory.UserFiles(String directory, String expression, EnumerationOptions options)
+   at System.IO.Directory.InternalEnumeratePaths(String path, String searchPattern, SearchTarget searchTarget, EnumerationOptions options)
+   at System.IO.Directory.GetFiles(String path, String searchPattern, EnumerationOptions enumerationOptions)
+   at PraxisWpf.Services.BackupManager.GetBackups(String baseFileName) in C:\Users\jhnhe\OneDrive\Documents\GitHub\wpf\Services\BackupManager.cs:line 79
+2025-08-19 12:04:13.265 [T01]DEBUG    BackupManager        No cleanup needed - 0 backups <= 5 max
+2025-08-19 12:04:13.265 [T01]INFO     DataSafetyService    Task data backed up to: backup_data.json_20250819_120413
+2025-08-19 12:04:13.266 [T01]INFO     BackupManager        Created backup: backup_time-data.json_20250819_120413
+2025-08-19 12:04:13.266 [T01]ERROR    BackupManager        Failed to get backups |  Exception: ArgumentException: The path is empty. (Parameter 'path')
+Stack:    at System.IO.Path.GetFullPath(String path)
+   at System.IO.Enumeration.FileSystemEnumerator`1..ctor(String directory, Boolean isNormalized, EnumerationOptions options)
+   at System.IO.Enumeration.FileSystemEnumerable`1..ctor(String directory, FindTransform transform, EnumerationOptions options, Boolean isNormalized)
+   at System.IO.Enumeration.FileSystemEnumerableFactory.UserFiles(String directory, String expression, EnumerationOptions options)
+   at System.IO.Directory.InternalEnumeratePaths(String path, String searchPattern, SearchTarget searchTarget, EnumerationOptions options)
+   at System.IO.Directory.GetFiles(String path, String searchPattern, EnumerationOptions enumerationOptions)
+   at PraxisWpf.Services.BackupManager.GetBackups(String baseFileName) in C:\Users\jhnhe\OneDrive\Documents\GitHub\wpf\Services\BackupManager.cs:line 79
+2025-08-19 12:04:13.266 [T01]DEBUG    BackupManager        No cleanup needed - 0 backups <= 5 max
+2025-08-19 12:04:13.266 [T01]INFO     DataSafetyService    Time data backed up to: backup_time-data.json_20250819_120413
+2025-08-19 12:04:13.266 [T01]INFO     DataSafetyService    Backup completed successfully
+2025-08-19 12:04:13.267 [T01]INFO     DataSafetyService    Data safety services started
+2025-08-19 12:04:13.268 [T01]DEBUG    MainViewModel        TaskViewModel changed
+2025-08-19 12:04:13.268 [T01]DEBUG    MainViewModel        TimeViewModel changed
+2025-08-19 12:04:13.268 [T04]INFO     DataSafetyService    Startup backup completed
+2025-08-19 12:04:13.268 [T01]DEBUG    MainViewModel        DataProcessingViewModel changed
+2025-08-19 12:04:13.268 [T01]DEBUG    MainViewModel        ThemeViewModel changed
+2025-08-19 12:04:13.268 [T01]INFO     MainWindow           MainWindow initialized successfully
+2025-08-19 12:04:13.268 [T01]DEBUG    MainWindow.xaml      PERF END: MainWindow Constructor | Duration: 210.25ms
+2025-08-19 12:04:13.319 [T01]DEBUG    TaskView             Applying template and setting foolproof data focus
+2025-08-19 12:04:13.333 [T01]DEBUG    MainWindow           Window source initialized
+2025-08-19 12:04:13.383 [T01]DEBUG    TimeDataService      Found 0 time entries for week 2025-08-18 to 2025-08-22
+2025-08-19 12:04:13.385 [T01]DEBUG    TimeDataService      Week total for week of 2025-08-18: 0h
+2025-08-19 12:04:13.418 [T01]CRITICAL TaskView             🔥 TREEVIEW FOCUS ON LOAD: Success=True, IsFocused=True, IsKeyboardFocused=True
+2025-08-19 12:04:13.418 [T01]CRITICAL TaskView             🔥 WINDOW ACTIVATION HANDLER ATTACHED
+2025-08-19 12:04:13.419 [T01]CRITICAL TimeView             🔥 TIMEVIEW FOCUS ON LOAD: Success=False, IsFocused=False, IsKeyboardFocused=False
+2025-08-19 12:04:13.419 [T01]CRITICAL DataProcessingView   🔥 DATAPROCESSINGVIEW FOCUS ON LOAD: Success=False, IsFocused=False, IsKeyboardFocused=False
+2025-08-19 12:04:13.419 [T01]DEBUG    ThemeView            ThemeView focus on load: Success=False, IsFocused=False, IsKeyboardFocused=False
+2025-08-19 12:04:13.455 [T01]CRITICAL TaskView             🔥 EDIT TEXTBOX LOADED: Focus=False, IsFocused=False, Text='esd'
+2025-08-19 12:04:13.455 [T01]CRITICAL TaskView             🔥 EDIT TEXTBOX LOADED: Focus=False, IsFocused=False, Text='Sample Task 2'
+2025-08-19 12:04:26.284 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=H, Handled=False, Source=TreeView, OriginalSource=TreeView
+2025-08-19 12:04:26.284 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: H, IsInEditMode: False
+2025-08-19 12:04:26.284 [T01]CRITICAL TaskView             🔥 H KEY CASE HIT!
+2025-08-19 12:04:26.284 [T01]CRITICAL TaskView             🔥 H KEY - SWITCHING TO THEMES
+2025-08-19 12:04:26.286 [T01]INFO     MainWindow           Switched to theme view
+2025-08-19 12:04:30.111 [T01]DEBUG    ThemeView            ThemeView KeyDown: Key=Down, Handled=False
+2025-08-19 12:04:38.619 [T01]DEBUG    ThemeView            Mouse click on ThemeView - setting focus
+2025-08-19 12:04:38.620 [T01]INFO     ThemeViewModel       Selected theme changed to: Green Console
+2025-08-19 12:04:38.620 [T01]INFO     ThemeView            Theme selected by mouse click: Green Console
+2025-08-19 12:04:39.312 [T01]DEBUG    ThemeView            Mouse click on ThemeView - setting focus
+2025-08-19 12:04:39.313 [T01]INFO     ThemeView            Theme selected by mouse click: Green Console
+2025-08-19 12:04:39.708 [T01]DEBUG    ThemeView            Mouse click on ThemeView - setting focus
+2025-08-19 12:04:39.708 [T01]INFO     ThemeViewModel       Selected theme changed to: Cyberpunk
+2025-08-19 12:04:39.708 [T01]INFO     ThemeView            Theme selected by mouse click: Cyberpunk
+2025-08-19 12:04:40.226 [T01]DEBUG    ThemeView            Mouse click on ThemeView - setting focus
+2025-08-19 12:04:40.227 [T01]INFO     ThemeViewModel       Selected theme changed to: Green Console
+2025-08-19 12:04:40.227 [T01]INFO     ThemeView            Theme selected by mouse click: Green Console
+2025-08-19 12:04:40.700 [T01]DEBUG    ThemeView            Mouse click on ThemeView - setting focus
+2025-08-19 12:04:40.701 [T01]INFO     ThemeViewModel       Selected theme changed to: Amber Console
+2025-08-19 12:04:40.701 [T01]INFO     ThemeView            Theme selected by mouse click: Amber Console
+2025-08-19 12:04:41.072 [T01]DEBUG    ThemeView            Mouse click on ThemeView - setting focus
+2025-08-19 12:04:41.072 [T01]INFO     ThemeViewModel       Selected theme changed to: Blue Matrix
+2025-08-19 12:04:41.072 [T01]INFO     ThemeView            Theme selected by mouse click: Blue Matrix
+2025-08-19 12:04:41.326 [T01]DEBUG    ThemeView            Mouse click on ThemeView - setting focus
+2025-08-19 12:04:41.327 [T01]INFO     ThemeViewModel       Selected theme changed to: High Contrast
+2025-08-19 12:04:41.327 [T01]INFO     ThemeView            Theme selected by mouse click: High Contrast
+2025-08-19 12:04:46.038 [T01]DEBUG    ThemeView            ThemeView KeyDown: Key=Down, Handled=False
+2025-08-19 12:04:46.812 [T01]DEBUG    ThemeView            ThemeView KeyDown: Key=Return, Handled=False
+2025-08-19 12:04:47.349 [T01]DEBUG    ThemeView            ThemeView KeyDown: Key=Escape, Handled=False
+2025-08-19 12:04:47.349 [T01]INFO     ThemeView            Escape key - switching back to tasks
+2025-08-19 12:04:47.349 [T01]INFO     MainWindow           Switched to task view
+2025-08-19 12:05:02.037 [T01]INFO     TaskView             TreeView selection changed to: esd
+2025-08-19 12:05:02.037 [T01]INFO     TaskViewModel        Selection changed: 'esd' → 'esd'
+2025-08-19 12:05:02.037 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-19 12:05:02.037 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-19 12:05:02.051 [T01]DEBUG    TaskView             Selected item brought into view and selected
+2025-08-19 12:05:02.530 [T01]INFO     TaskView             TreeView selection changed to: Sample Task 2
+2025-08-19 12:05:02.530 [T01]INFO     TaskViewModel        Selection changed: 'esd' → 'Sample Task 2'
+2025-08-19 12:05:02.530 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-19 12:05:02.530 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-19 12:05:02.543 [T01]DEBUG    TaskView             Selected item brought into view and selected
+2025-08-19 12:05:08.764 [T01]INFO     MainWindow           Window closing - disposing data safety service
+2025-08-19 12:05:08.764 [T01]INFO     DataSafetyService    Performing shutdown save
+2025-08-19 12:05:08.765 [T01]DEBUG    ActionBasedAutoSaveService Saving Tasks for Application Shutdown
+2025-08-19 12:05:08.765 [T01]DEBUG    JsonDataService      Saving 2 items to data.json
+2025-08-19 12:05:08.766 [T01]INFO     ProjectDataService   Returning dictionary with 0 project data items
+2025-08-19 12:05:08.773 [T01]DEBUG    SafeFileWriter       Writing to temporary file
+2025-08-19 12:05:08.775 [T01]DEBUG    SafeFileWriter       Validating temporary file
+2025-08-19 12:05:08.776 [T01]DEBUG    SafeFileWriter       Creating backup of existing file
+2025-08-19 12:05:08.777 [T01]DEBUG    SafeFileWriter       Performing atomic file replacement
+2025-08-19 12:05:08.778 [T01]INFO     SafeFileWriter       Successfully wrote 3953 characters to data.json
+2025-08-19 12:05:08.778 [T01]INFO     JsonDataService      Successfully saved 2 tasks and 0 project data items to data.json
+2025-08-19 12:05:08.778 [T01]DEBUG    JsonDataService      PERF END: SaveItems | Duration: 12.81ms
+2025-08-19 12:05:08.778 [T01]INFO     TaskViewModel        Task data saved successfully
+2025-08-19 12:05:08.778 [T01]DEBUG    ActionBasedAutoSaveService Successfully saved Tasks
+2025-08-19 12:05:08.778 [T01]DEBUG    ActionBasedAutoSaveService Saving TimeTracker for Application Shutdown
+2025-08-19 12:05:08.779 [T01]DEBUG    TimeDataService      Saving 0 time entries to time-data.json
+2025-08-19 12:05:08.786 [T01]INFO     TimeDataService      Successfully saved 0 time entries to time-data.json
+2025-08-19 12:05:08.786 [T01]DEBUG    TimeDataService      PERF END: SaveTimeEntries | Duration: 7.07ms
+2025-08-19 12:05:08.786 [T01]INFO     TimeViewModel        Time data saved successfully
+2025-08-19 12:05:08.786 [T01]DEBUG    ActionBasedAutoSaveService Successfully saved TimeTracker
+2025-08-19 12:05:08.786 [T01]INFO     ActionBasedAutoSaveService Application Shutdown save completed successfully - Saved: 2 services
+2025-08-19 12:05:08.787 [T01]DEBUG    DataSafetyService    Removed recovery flag
+2025-08-19 12:05:08.787 [T01]INFO     DataSafetyService    Shutdown save completed
+2025-08-19 12:05:08.787 [T01]DEBUG    ActionBasedAutoSaveService Saving Tasks for Service Disposal
+2025-08-19 12:05:08.787 [T01]DEBUG    JsonDataService      Saving 2 items to data.json
+2025-08-19 12:05:08.787 [T01]INFO     ProjectDataService   Returning dictionary with 0 project data items
+2025-08-19 12:05:08.787 [T01]DEBUG    SafeFileWriter       Writing to temporary file
+2025-08-19 12:05:08.788 [T01]DEBUG    SafeFileWriter       Validating temporary file
+2025-08-19 12:05:08.789 [T01]DEBUG    SafeFileWriter       Creating backup of existing file
+2025-08-19 12:05:08.790 [T01]DEBUG    SafeFileWriter       Performing atomic file replacement
+2025-08-19 12:05:08.790 [T01]INFO     SafeFileWriter       Successfully wrote 3953 characters to data.json
+2025-08-19 12:05:08.791 [T01]INFO     JsonDataService      Successfully saved 2 tasks and 0 project data items to data.json
+2025-08-19 12:05:08.791 [T01]DEBUG    JsonDataService      PERF END: SaveItems | Duration: 3.28ms
+2025-08-19 12:05:08.791 [T01]INFO     TaskViewModel        Task data saved successfully
+2025-08-19 12:05:08.791 [T01]DEBUG    ActionBasedAutoSaveService Successfully saved Tasks
+2025-08-19 12:05:08.791 [T01]DEBUG    ActionBasedAutoSaveService Saving TimeTracker for Service Disposal
+2025-08-19 12:05:08.791 [T01]DEBUG    TimeDataService      Saving 0 time entries to time-data.json
+2025-08-19 12:05:08.791 [T01]INFO     TimeDataService      Successfully saved 0 time entries to time-data.json
+2025-08-19 12:05:08.791 [T01]DEBUG    TimeDataService      PERF END: SaveTimeEntries | Duration: 0.57ms
+2025-08-19 12:05:08.791 [T01]INFO     TimeViewModel        Time data saved successfully
+2025-08-19 12:05:08.791 [T01]DEBUG    ActionBasedAutoSaveService Successfully saved TimeTracker
+2025-08-19 12:05:08.791 [T01]INFO     ActionBasedAutoSaveService Service Disposal save completed successfully - Saved: 2 services
+2025-08-19 12:05:08.791 [T01]INFO     ActionBasedAutoSaveService Action-based auto-save service disposed
+2025-08-19 12:05:08.791 [T01]INFO     DataSafetyService    Data safety service disposed
+2025-08-19 12:05:08.794 [T01]INFO     App                  Application shutting down with exit code: 0
