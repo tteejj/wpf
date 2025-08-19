@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\jhnhe\OneDrive\Documents\GitHub\wpf\obj\Debug\net8.0-windows\
+/home/teej/projects/github/wpf/obj/Debug/net8.0-windows/
 PraxisWpf
 none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
-C:\Users\jhnhe\OneDrive\Documents\GitHub\wpf\App.xaml
-14-1673267635
+/home/teej/projects/github/wpf/App.xaml
+14-1664803374
 
-38-269878433
-198-2136442823
-Features\DataProcessing\DataProcessingView.xaml;Features\TaskViewer\NotesDialog.xaml;Features\TaskViewer\TaskView.xaml;Features\ThemeSelector\ThemeView.xaml;Features\TimeTracker\GenericTimeEntryDialog.xaml;Features\TimeTracker\ProjectTimeEntryDialog.xaml;Features\TimeTracker\TimeView.xaml;MainWindow.xaml;Themes\AmberConsole.xaml;Themes\BlueMatrix.xaml;Themes\Cyberpunk.xaml;Themes\GreenConsole.xaml;Themes\HighContrast.xaml;Themes\MinimalTheme.xaml;
+38982358621
+198-891690674
+Features/DataProcessing/DataProcessingView.xaml;Features/TaskViewer/NotesDialog.xaml;Features/TaskViewer/TaskView.xaml;Features/ThemeSelector/ThemeView.xaml;Features/TimeTracker/GenericTimeEntryDialog.xaml;Features/TimeTracker/ProjectTimeEntryDialog.xaml;Features/TimeTracker/TimeView.xaml;MainWindow.xaml;Themes/AmberConsole.xaml;Themes/BlueMatrix.xaml;Themes/Cyberpunk.xaml;Themes/GreenConsole.xaml;Themes/HighContrast.xaml;Themes/MinimalTheme.xaml;
 
 False
 

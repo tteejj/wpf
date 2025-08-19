@@ -35,16 +35,27 @@ namespace PraxisWpf.Features.ThemeSelector
         {
             Logger.TraceEnter();
             
-            // Ensure this control can receive key events
+            // Ensure this control can receive key events and force focus
+            Focusable = true;
             var focusResult = Focus();
-            Logger.Debug("ThemeView", $"ThemeView focus on load: Success={focusResult}, IsFocused={IsFocused}, IsKeyboardFocused={IsKeyboardFocused}");
+            if (!focusResult)
+            {
+                // Try again with dispatcher
+                Dispatcher.BeginInvoke(new System.Action(() =>
+                {
+                    Focus();
+                    Logger.Critical("ThemeView", $"FORCED FOCUS: IsFocused={IsFocused}, IsKeyboardFocused={IsKeyboardFocused}");
+                }), System.Windows.Threading.DispatcherPriority.Input);
+            }
+            
+            Logger.Critical("ThemeView", $"ThemeView focus on load: Success={focusResult}, IsFocused={IsFocused}, IsKeyboardFocused={IsKeyboardFocused}");
             
             Logger.TraceExit();
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            Logger.Debug("ThemeView", $"ThemeView KeyDown: Key={e.Key}, Handled={e.Handled}");
+            Logger.Critical("ThemeView", $"🔥 THEMEVIEW KEYDOWN: Key={e.Key}, Handled={e.Handled}");
             
             try
             {
@@ -54,36 +65,38 @@ namespace PraxisWpf.Features.ThemeSelector
                 {
                     case Key.Escape:
                         // Escape key goes back to task view
-                        Logger.Info("ThemeView", "Escape key - switching back to tasks");
+                        Logger.Critical("ThemeView", "🔥 ESCAPE KEY - SWITCHING TO TASKS");
                         var mainWindow = System.Windows.Window.GetWindow(this) as MainWindow;
                         if (mainWindow != null)
                         {
+                            Logger.Critical("ThemeView", "🔥 ESCAPE KEY - EXECUTING SHOW TASKS");
                             mainWindow.ShowTasks();
                             e.Handled = true;
                         }
                         else
                         {
-                            Logger.Warning("ThemeView", "MainWindow not found for navigation");
+                            Logger.Critical("ThemeView", "🔥 ESCAPE KEY - MAIN WINDOW NOT FOUND!");
                         }
                         break;
 
                     case Key.A:
                         // A key applies the selected theme
-                        Logger.Info("ThemeView", "A key - applying selected theme");
+                        Logger.Critical("ThemeView", "🔥 A KEY - APPLYING SELECTED THEME");
                         if (viewModel?.ApplyThemeCommand.CanExecute(null) == true)
                         {
+                            Logger.Critical("ThemeView", "🔥 A KEY - THEME COMMAND EXECUTING");
                             viewModel.ApplyThemeCommand.Execute(null);
                             e.Handled = true;
                         }
                         else
                         {
-                            Logger.Info("ThemeView", "Cannot apply theme - no theme selected or theme already active");
+                            Logger.Critical("ThemeView", "🔥 A KEY - CANNOT APPLY THEME");
                         }
                         break;
 
                     case Key.R:
                         // R key refreshes the theme list
-                        Logger.Info("ThemeView", "R key - refreshing themes");
+                        Logger.Critical("ThemeView", "🔥 R KEY - REFRESHING THEMES");
                         if (viewModel?.RefreshThemesCommand.CanExecute(null) == true)
                         {
                             viewModel.RefreshThemesCommand.Execute(null);
@@ -94,30 +107,35 @@ namespace PraxisWpf.Features.ThemeSelector
                     case Key.D1:
                     case Key.NumPad1:
                         // Number keys select themes by index
+                        Logger.Critical("ThemeView", "🔥 1 KEY - SELECTING THEME 1");
                         SelectThemeByIndex(0, viewModel);
                         e.Handled = true;
                         break;
 
                     case Key.D2:
                     case Key.NumPad2:
+                        Logger.Critical("ThemeView", "🔥 2 KEY - SELECTING THEME 2");
                         SelectThemeByIndex(1, viewModel);
                         e.Handled = true;
                         break;
 
                     case Key.D3:
                     case Key.NumPad3:
+                        Logger.Critical("ThemeView", "🔥 3 KEY - SELECTING THEME 3");
                         SelectThemeByIndex(2, viewModel);
                         e.Handled = true;
                         break;
 
                     case Key.D4:
                     case Key.NumPad4:
+                        Logger.Critical("ThemeView", "🔥 4 KEY - SELECTING THEME 4");
                         SelectThemeByIndex(3, viewModel);
                         e.Handled = true;
                         break;
 
                     case Key.D5:
                     case Key.NumPad5:
+                        Logger.Critical("ThemeView", "🔥 5 KEY - SELECTING THEME 5");
                         SelectThemeByIndex(4, viewModel);
                         e.Handled = true;
                         break;

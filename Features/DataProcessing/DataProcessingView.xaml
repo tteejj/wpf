@@ -10,27 +10,35 @@
     <UserControl.Resources>
         <!-- Project Data Field Editor Template -->
         <DataTemplate x:Key="ProjectDataFieldTemplate">
-            <Grid>
+            <Grid Margin="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="200"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 
+                <!-- Field Label - FORCE VISIBLE -->
                 <TextBlock Grid.Column="0" 
                            Text="{Binding Key}" 
-                           Foreground="{DynamicResource CyberAccentBrush}"
+                           Foreground="#00ff00"
                            FontWeight="Bold"
-                           Margin="0,2,10,2"
-                           VerticalAlignment="Center"/>
+                           FontSize="12"
+                           FontFamily="Consolas"
+                           Margin="5,5,15,5"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left"/>
                 
+                <!-- Field Value TextBox - FORCE VISIBLE -->
                 <TextBox Grid.Column="1"
                          Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
-                         Background="{DynamicResource CyberControlBrush}"
-                         Foreground="{DynamicResource CyberTextBrush}"
-                         BorderBrush="{DynamicResource CyberBorderBrush}"
+                         Background="#000000"
+                         Foreground="#00ffff"
+                         BorderBrush="#00ff00"
+                         BorderThickness="1"
                          FontWeight="Bold"
-                         Margin="0,1"
-                         Padding="5,2"/>
+                         FontSize="11"
+                         FontFamily="Consolas"
+                         Margin="5"
+                         Padding="8,4"/>
             </Grid>
         </DataTemplate>
     </UserControl.Resources>
@@ -46,7 +54,6 @@
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
             <ComboBox ItemsSource="{Binding ProjectIds}"
                       SelectedItem="{Binding SelectedProjectId}"
-                      Style="{DynamicResource CyberpunkComboBoxStyle}"
                       Margin="0,0,10,0"
                       MinWidth="150"
                       IsEnabled="{Binding HasProjects}"/>
@@ -56,8 +63,7 @@
         <TabControl Grid.Row="1" Margin="10,0,10,10">
             
             <!-- Project Data Tab -->
-            <TabItem Header="Project Data" 
-                     Style="{DynamicResource CyberpunkTabItemStyle}">
+            <TabItem Header="Project Data">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="2*"/>
@@ -66,7 +72,6 @@
                     
                     <!-- Project Summary -->
                     <GroupBox Grid.Column="0" Header="Project Summary" 
-                              Style="{DynamicResource CyberpunkGroupBoxStyle}"
                               Margin="0,0,5,0">
                         <StackPanel>
                             <TextBlock Text="{Binding SelectedProject.SiteName, StringFormat='Site: {0}'}"
@@ -90,7 +95,6 @@
                     
                     <!-- Editable Fields -->
                     <GroupBox Grid.Column="1" Header="Project Details" 
-                              Style="{DynamicResource CyberpunkGroupBoxStyle}"
                               Margin="5,0,0,0">
                         <ScrollViewer VerticalScrollBarVisibility="Auto">
                             <ItemsControl ItemsSource="{Binding ProjectDataFields}"
@@ -101,8 +105,7 @@
             </TabItem>
             
             <!-- Excel Integration Tab -->
-            <TabItem Header="Excel Integration" 
-                     Style="{DynamicResource CyberpunkTabItemStyle}">
+            <TabItem Header="Excel Integration">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -111,7 +114,6 @@
                     
                     <!-- Excel File Path -->
                     <GroupBox Grid.Row="0" Header="Excel Configuration" 
-                              Style="{DynamicResource CyberpunkGroupBoxStyle}"
                               Margin="0,0,0,10">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -132,8 +134,7 @@
                     </GroupBox>
                     
                     <!-- Integration Log -->
-                    <GroupBox Grid.Row="1" Header="Integration Log" 
-                              Style="{DynamicResource CyberpunkGroupBoxStyle}">
+                    <GroupBox Grid.Row="1" Header="Integration Log">
                         <TextBox Text="{Binding IntegrationLog, Mode=OneWay}"
                                  Background="{DynamicResource CyberControlBrush}"
                                  Foreground="{DynamicResource CyberTextBrush}"
