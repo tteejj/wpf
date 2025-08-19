@@ -6472,3 +6472,224 @@ Stack:    at System.Windows.Markup.XamlReader.RewrapException(Exception e, IXaml
 2025-08-18 17:15:45.215 [T01]CRITICAL TaskView             🔥 CTRL+S - SAVE COMMAND EXECUTED
 2025-08-18 17:15:48.475 [T01]INFO     MainWindow           Window closing
 2025-08-18 17:15:48.477 [T01]INFO     App                  Application shutting down with exit code: 0
+2025-08-18 21:06:02.049 [T01]INFO     Logger               Logger initialized | Level=Info, StackTrace=False, ThreadId=True, Path=PraxisWpf_2025-08-18.log
+2025-08-18 21:06:02.053 [T01]INFO     Logger               Logger initialized | Level=Debug, StackTrace=True, ThreadId=True, Path=PraxisWpf_2025-08-18.log
+2025-08-18 21:06:02.053 [T01]INFO     AppConfig            Configuration loaded from app-config.json
+2025-08-18 21:06:02.054 [T01]INFO     App                  Application starting up
+2025-08-18 21:06:02.054 [T01]DEBUG    App                  Command line args: 
+2025-08-18 21:06:02.054 [T01]INFO     App                  Application startup completed successfully
+2025-08-18 21:06:02.089 [T01]DEBUG    MainWindow           Initializing WPF components
+2025-08-18 21:06:02.235 [T01]DEBUG    TaskView             Initializing XAML components
+2025-08-18 21:06:02.248 [T01]INFO     TaskView             TaskView initialized successfully
+2025-08-18 21:06:02.250 [T01]DEBUG    TaskView.xaml        PERF END: TaskView Constructor | Duration: 13.39ms
+2025-08-18 21:06:02.252 [T01]DEBUG    TimeView             Initializing XAML components
+2025-08-18 21:06:02.313 [T01]INFO     TimeView             TimeView initialized successfully
+2025-08-18 21:06:02.313 [T01]DEBUG    TimeView.xaml        PERF END: TimeView Constructor | Duration: 61.20ms
+2025-08-18 21:06:02.315 [T01]DEBUG    MainWindow           Creating ViewModels
+2025-08-18 21:06:02.315 [T01]INFO     JsonDataService      Initialized with data file: data.json
+2025-08-18 21:06:02.315 [T01]DEBUG    JsonDataService      JSON options configured | WriteIndented=true, CamelCase=true, StringEnumConverter=true
+2025-08-18 21:06:02.315 [T01]DEBUG    TaskViewModel        Data service initialized: JsonDataService
+2025-08-18 21:06:02.316 [T01]DEBUG    JsonDataService      Reading data file: data.json
+2025-08-18 21:06:02.333 [T01]DEBUG    TaskItem             Name changed: '' → 'esd' for Id1=1
+2025-08-18 21:06:02.336 [T01]DEBUG    TaskItem             Priority changed: Medium → High for Id1=1, Name=esd
+2025-08-18 21:06:02.336 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=1, Name=esd
+2025-08-18 21:06:02.337 [T01]DEBUG    TaskItem             Name changed: '' → 'Sub-task A' for Id1=1
+2025-08-18 21:06:02.337 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=1, Name=Sub-task A
+2025-08-18 21:06:02.337 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=1, Name=Sub-task A
+2025-08-18 21:06:02.338 [T01]DEBUG    TaskItem             Name changed: '' → 'Sample Task 2' for Id1=2
+2025-08-18 21:06:02.338 [T01]DEBUG    TaskItem             Priority changed: Medium → Low for Id1=2, Name=Sample Task 2
+2025-08-18 21:06:02.338 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=2, Name=Sample Task 2
+2025-08-18 21:06:02.338 [T01]DEBUG    TaskItem             Name changed: '' → 'New Task' for Id1=3
+2025-08-18 21:06:02.338 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=3, Name=New Task
+2025-08-18 21:06:02.338 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=3, Name=New Task
+2025-08-18 21:06:02.338 [T01]DEBUG    TaskItem             Name changed: '' → 'New Task' for Id1=4
+2025-08-18 21:06:02.338 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=4, Name=New Task
+2025-08-18 21:06:02.338 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=4, Name=New Task
+2025-08-18 21:06:02.338 [T01]DEBUG    TaskItem             Name changed: '' → 'w ' for Id1=5
+2025-08-18 21:06:02.338 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=5, Name=w 
+2025-08-18 21:06:02.338 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=5, Name=w 
+2025-08-18 21:06:02.339 [T01]DEBUG    TaskItem             Name changed: '' → 'New Task' for Id1=6
+2025-08-18 21:06:02.339 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=6, Name=New Task
+2025-08-18 21:06:02.339 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=6, Name=New Task
+2025-08-18 21:06:02.339 [T01]DEBUG    TaskItem             Name changed: '' → 's' for Id1=7
+2025-08-18 21:06:02.339 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=7, Name=s
+2025-08-18 21:06:02.339 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=7, Name=s
+2025-08-18 21:06:02.339 [T01]DEBUG    TaskItem             Name changed: '' → '' for Id1=8
+2025-08-18 21:06:02.339 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=8, Name=
+2025-08-18 21:06:02.339 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=8, Name=
+2025-08-18 21:06:02.339 [T01]DEBUG    TaskItem             Name changed: '' → 'New Subtask' for Id1=9
+2025-08-18 21:06:02.339 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=9, Name=New Subtask
+2025-08-18 21:06:02.339 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=9, Name=New Subtask
+2025-08-18 21:06:02.339 [T01]DEBUG    JsonDataService      Deserialized 2 items from JSON
+2025-08-18 21:06:02.339 [T01]INFO     JsonDataService      Successfully loaded 2 root items
+2025-08-18 21:06:02.339 [T01]DEBUG    JsonDataService      PERF END: LoadItems | Duration: 23.41ms
+2025-08-18 21:06:02.340 [T01]INFO     TaskViewModel        Loaded 2 root items
+2025-08-18 21:06:02.340 [T01]INFO     TaskViewModel        Selection changed: 'null' → 'esd'
+2025-08-18 21:06:02.340 [T01]INFO     TaskViewModel        Auto-selected first item: esd
+2025-08-18 21:06:02.340 [T01]DEBUG    TaskViewModel        All commands initialized
+2025-08-18 21:06:02.340 [T01]DEBUG    TaskViewModel        PERF END: TaskViewModel Constructor | Duration: 24.71ms
+2025-08-18 21:06:02.340 [T01]INFO     JsonDataService      Initialized with data file: data.json
+2025-08-18 21:06:02.340 [T01]DEBUG    JsonDataService      JSON options configured | WriteIndented=true, CamelCase=true, StringEnumConverter=true
+2025-08-18 21:06:02.341 [T01]WARNING  TimeDataService      Time data file not found: time-data.json
+2025-08-18 21:06:02.341 [T01]DEBUG    TimeDataService      PERF END: LoadTimeEntries | Duration: 0.12ms
+2025-08-18 21:06:02.341 [T01]INFO     TimeDataService      Initialized with time data file: time-data.json
+2025-08-18 21:06:02.341 [T01]DEBUG    TimeDataService      Loaded 0 existing time entries
+2025-08-18 21:06:02.342 [T01]DEBUG    TimeViewModel        Time data service initialized: TimeDataService
+2025-08-18 21:06:02.342 [T01]WARNING  TimeDataService      Time data file not found: time-data.json
+2025-08-18 21:06:02.342 [T01]DEBUG    TimeDataService      PERF END: LoadTimeEntries | Duration: 0.04ms
+2025-08-18 21:06:02.343 [T01]DEBUG    TimeViewModel        Created 96 hour increment options
+2025-08-18 21:06:02.345 [T01]DEBUG    JsonDataService      Reading data file: data.json
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             Name changed: '' → 'esd' for Id1=1
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             Priority changed: Medium → High for Id1=1, Name=esd
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=1, Name=esd
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             Name changed: '' → 'Sub-task A' for Id1=1
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=1, Name=Sub-task A
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=1, Name=Sub-task A
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             Name changed: '' → 'Sample Task 2' for Id1=2
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             Priority changed: Medium → Low for Id1=2, Name=Sample Task 2
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=2, Name=Sample Task 2
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             Name changed: '' → 'New Task' for Id1=3
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=3, Name=New Task
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=3, Name=New Task
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             Name changed: '' → 'New Task' for Id1=4
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=4, Name=New Task
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=4, Name=New Task
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             Name changed: '' → 'w ' for Id1=5
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=5, Name=w 
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=5, Name=w 
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             Name changed: '' → 'New Task' for Id1=6
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=6, Name=New Task
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=6, Name=New Task
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             Name changed: '' → 's' for Id1=7
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=7, Name=s
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=7, Name=s
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             Name changed: '' → '' for Id1=8
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=8, Name=
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=8, Name=
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             Name changed: '' → 'New Subtask' for Id1=9
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=9, Name=New Subtask
+2025-08-18 21:06:02.346 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=9, Name=New Subtask
+2025-08-18 21:06:02.346 [T01]DEBUG    JsonDataService      Deserialized 2 items from JSON
+2025-08-18 21:06:02.346 [T01]INFO     JsonDataService      Successfully loaded 2 root items
+2025-08-18 21:06:02.346 [T01]DEBUG    JsonDataService      PERF END: LoadItems | Duration: 1.76ms
+2025-08-18 21:06:02.351 [T01]DEBUG    TimeDataService      Found 10 available projects
+2025-08-18 21:06:02.352 [T01]DEBUG    TimeViewModel        Refreshed 10 available projects
+2025-08-18 21:06:02.352 [T01]INFO     TimeViewModel        Initialized to week of 2025-08-18
+2025-08-18 21:06:02.352 [T01]DEBUG    TimeViewModel        All commands initialized
+2025-08-18 21:06:02.352 [T01]DEBUG    TimeViewModel        PERF END: TimeViewModel Constructor | Duration: 9.32ms
+2025-08-18 21:06:02.352 [T01]DEBUG    MainViewModel        TaskViewModel changed
+2025-08-18 21:06:02.352 [T01]DEBUG    MainViewModel        TimeViewModel changed
+2025-08-18 21:06:02.352 [T01]INFO     MainWindow           MainWindow initialized successfully
+2025-08-18 21:06:02.352 [T01]DEBUG    MainWindow.xaml      PERF END: MainWindow Constructor | Duration: 262.55ms
+2025-08-18 21:06:02.431 [T01]DEBUG    TaskView             Applying template and setting foolproof data focus
+2025-08-18 21:06:02.453 [T01]DEBUG    MainWindow           Window source initialized
+2025-08-18 21:06:02.516 [T01]DEBUG    TimeDataService      Found 0 time entries for week 2025-08-18 to 2025-08-22
+2025-08-18 21:06:02.518 [T01]DEBUG    TimeDataService      Week total for week of 2025-08-18: 0h
+2025-08-18 21:06:02.522 [T01]DEBUG    TimeDataService      Found 0 time entries for 2025-08-18
+2025-08-18 21:06:02.522 [T01]DEBUG    TimeDataService      Day total for 2025-08-18: 0h
+2025-08-18 21:06:02.562 [T01]CRITICAL TaskView             🔥 TREEVIEW FOCUS ON LOAD: Success=True, IsFocused=True, IsKeyboardFocused=True
+2025-08-18 21:06:02.562 [T01]CRITICAL TaskView             🔥 WINDOW ACTIVATION HANDLER ATTACHED
+2025-08-18 21:06:02.562 [T01]CRITICAL TimeView             🔥 TIMEVIEW FOCUS ON LOAD: Success=False, IsFocused=False, IsKeyboardFocused=False
+2025-08-18 21:06:02.595 [T01]CRITICAL TaskView             🔥 EDIT TEXTBOX LOADED: Focus=False, IsFocused=False, Text='esd'
+2025-08-18 21:06:02.606 [T01]CRITICAL TaskView             🔥 EDIT TEXTBOX LOADED: Focus=False, IsFocused=False, Text='Sample Task 2'
+2025-08-18 21:06:06.870 [T01]INFO     TaskView             TreeView selection changed to: esd
+2025-08-18 21:06:06.870 [T01]INFO     TaskViewModel        Selection changed: 'esd' → 'esd'
+2025-08-18 21:06:06.870 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 21:06:06.872 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 21:06:06.885 [T01]DEBUG    TaskView             Selected item brought into view and selected
+2025-08-18 21:06:07.400 [T01]INFO     TaskView             TreeView selection changed to: Sample Task 2
+2025-08-18 21:06:07.400 [T01]INFO     TaskViewModel        Selection changed: 'esd' → 'Sample Task 2'
+2025-08-18 21:06:07.400 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 21:06:07.402 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 21:06:07.417 [T01]DEBUG    TaskView             Selected item brought into view and selected
+2025-08-18 21:06:19.535 [T01]INFO     MainWindow           Switched to task view
+2025-08-18 21:06:23.025 [T01]INFO     MainWindow           Switched to time entry view
+2025-08-18 21:06:41.682 [T01]DEBUG    TimeDataService      Found 0 time entries for 2025-08-11
+2025-08-18 21:06:41.683 [T01]DEBUG    TimeDataService      Day total for 2025-08-11: 0h
+2025-08-18 21:06:41.683 [T01]DEBUG    TimeDataService      Found 0 time entries for week 2025-08-11 to 2025-08-15
+2025-08-18 21:06:41.683 [T01]DEBUG    TimeDataService      Week total for week of 2025-08-11: 0h
+2025-08-18 21:06:41.683 [T01]DEBUG    TimeDataService      Found 0 time entries for 2025-08-11
+2025-08-18 21:06:41.684 [T01]DEBUG    TimeDataService      Day total for 2025-08-11: 0h
+2025-08-18 21:06:41.684 [T01]DEBUG    TimeDataService      Found 0 time entries for week 2025-08-11 to 2025-08-15
+2025-08-18 21:06:41.684 [T01]DEBUG    TimeDataService      Week total for week of 2025-08-11: 0h
+2025-08-18 21:06:41.684 [T01]INFO     TimeViewModel        Selected date changed: 2025-08-18 → 2025-08-11
+2025-08-18 21:06:41.684 [T01]INFO     TimeViewModel        Navigated to previous week: 2025-08-11
+2025-08-18 21:06:43.229 [T01]DEBUG    TimeDataService      Found 0 time entries for 2025-08-18
+2025-08-18 21:06:43.229 [T01]DEBUG    TimeDataService      Day total for 2025-08-18: 0h
+2025-08-18 21:06:43.230 [T01]DEBUG    TimeDataService      Found 0 time entries for week 2025-08-18 to 2025-08-22
+2025-08-18 21:06:43.230 [T01]DEBUG    TimeDataService      Week total for week of 2025-08-18: 0h
+2025-08-18 21:06:43.230 [T01]DEBUG    TimeDataService      Found 0 time entries for 2025-08-18
+2025-08-18 21:06:43.230 [T01]DEBUG    TimeDataService      Day total for 2025-08-18: 0h
+2025-08-18 21:06:43.230 [T01]DEBUG    TimeDataService      Found 0 time entries for week 2025-08-18 to 2025-08-22
+2025-08-18 21:06:43.230 [T01]DEBUG    TimeDataService      Week total for week of 2025-08-18: 0h
+2025-08-18 21:06:43.230 [T01]INFO     TimeViewModel        Selected date changed: 2025-08-11 → 2025-08-18
+2025-08-18 21:06:43.231 [T01]INFO     TimeViewModel        Navigated to current week: 2025-08-18
+2025-08-18 21:06:44.008 [T01]DEBUG    TimeDataService      Found 0 time entries for 2025-08-25
+2025-08-18 21:06:44.009 [T01]DEBUG    TimeDataService      Day total for 2025-08-25: 0h
+2025-08-18 21:06:44.009 [T01]DEBUG    TimeDataService      Found 0 time entries for week 2025-08-25 to 2025-08-29
+2025-08-18 21:06:44.009 [T01]DEBUG    TimeDataService      Week total for week of 2025-08-25: 0h
+2025-08-18 21:06:44.009 [T01]DEBUG    TimeDataService      Found 0 time entries for 2025-08-25
+2025-08-18 21:06:44.009 [T01]DEBUG    TimeDataService      Day total for 2025-08-25: 0h
+2025-08-18 21:06:44.009 [T01]DEBUG    TimeDataService      Found 0 time entries for week 2025-08-25 to 2025-08-29
+2025-08-18 21:06:44.009 [T01]DEBUG    TimeDataService      Week total for week of 2025-08-25: 0h
+2025-08-18 21:06:44.009 [T01]INFO     TimeViewModel        Selected date changed: 2025-08-18 → 2025-08-25
+2025-08-18 21:06:44.009 [T01]INFO     TimeViewModel        Navigated to next week: 2025-08-25
+2025-08-18 21:06:44.756 [T01]DEBUG    TimeDataService      Found 0 time entries for 2025-08-18
+2025-08-18 21:06:44.756 [T01]DEBUG    TimeDataService      Day total for 2025-08-18: 0h
+2025-08-18 21:06:44.756 [T01]DEBUG    TimeDataService      Found 0 time entries for week 2025-08-18 to 2025-08-22
+2025-08-18 21:06:44.756 [T01]DEBUG    TimeDataService      Week total for week of 2025-08-18: 0h
+2025-08-18 21:06:44.756 [T01]DEBUG    TimeDataService      Found 0 time entries for 2025-08-18
+2025-08-18 21:06:44.756 [T01]DEBUG    TimeDataService      Day total for 2025-08-18: 0h
+2025-08-18 21:06:44.756 [T01]DEBUG    TimeDataService      Found 0 time entries for week 2025-08-18 to 2025-08-22
+2025-08-18 21:06:44.756 [T01]DEBUG    TimeDataService      Week total for week of 2025-08-18: 0h
+2025-08-18 21:06:44.756 [T01]INFO     TimeViewModel        Selected date changed: 2025-08-25 → 2025-08-18
+2025-08-18 21:06:44.756 [T01]INFO     TimeViewModel        Navigated to today: 2025-08-18
+2025-08-18 21:06:45.696 [T01]DEBUG    TimeDataService      Found 0 time entries for 2025-08-15
+2025-08-18 21:06:45.696 [T01]DEBUG    TimeDataService      Day total for 2025-08-15: 0h
+2025-08-18 21:06:45.696 [T01]DEBUG    TimeDataService      Found 0 time entries for week 2025-08-11 to 2025-08-15
+2025-08-18 21:06:45.696 [T01]DEBUG    TimeDataService      Week total for week of 2025-08-11: 0h
+2025-08-18 21:06:45.696 [T01]DEBUG    TimeDataService      Found 0 time entries for 2025-08-15
+2025-08-18 21:06:45.696 [T01]DEBUG    TimeDataService      Day total for 2025-08-15: 0h
+2025-08-18 21:06:45.696 [T01]DEBUG    TimeDataService      Found 0 time entries for week 2025-08-11 to 2025-08-15
+2025-08-18 21:06:45.696 [T01]DEBUG    TimeDataService      Week total for week of 2025-08-11: 0h
+2025-08-18 21:06:45.696 [T01]INFO     TimeViewModel        Selected date changed: 2025-08-18 → 2025-08-15
+2025-08-18 21:06:45.696 [T01]INFO     TimeViewModel        Navigated to previous day: 2025-08-15
+2025-08-18 21:06:46.557 [T01]DEBUG    TimeDataService      Found 0 time entries for 2025-08-18
+2025-08-18 21:06:46.557 [T01]DEBUG    TimeDataService      Day total for 2025-08-18: 0h
+2025-08-18 21:06:46.557 [T01]DEBUG    TimeDataService      Found 0 time entries for week 2025-08-18 to 2025-08-22
+2025-08-18 21:06:46.557 [T01]DEBUG    TimeDataService      Week total for week of 2025-08-18: 0h
+2025-08-18 21:06:46.557 [T01]DEBUG    TimeDataService      Found 0 time entries for 2025-08-18
+2025-08-18 21:06:46.557 [T01]DEBUG    TimeDataService      Day total for 2025-08-18: 0h
+2025-08-18 21:06:46.557 [T01]DEBUG    TimeDataService      Found 0 time entries for week 2025-08-18 to 2025-08-22
+2025-08-18 21:06:46.557 [T01]DEBUG    TimeDataService      Week total for week of 2025-08-18: 0h
+2025-08-18 21:06:46.557 [T01]INFO     TimeViewModel        Selected date changed: 2025-08-15 → 2025-08-18
+2025-08-18 21:06:46.557 [T01]INFO     TimeViewModel        Navigated to next day: 2025-08-18
+2025-08-18 21:06:52.362 [T01]CRITICAL TimeView             🔥 TIMEVIEW KEYDOWN: Key=N, Handled=False
+2025-08-18 21:06:52.362 [T01]CRITICAL TimeView             🔥 N KEY - ADD GENERIC TIME
+2025-08-18 21:06:52.368 [T01]INFO     GenericTimeEntryDialog Dialog initialized for date 2025-08-18
+2025-08-18 21:07:14.319 [T01]INFO     GenericTimeEntryDialog Generic time entry confirmed: 50 - 1.00h - ''
+2025-08-18 21:07:14.321 [T01]DEBUG    TaskView             TreeView focused on window activation (foolproof data focus)
+2025-08-18 21:07:14.325 [T01]DEBUG    TimeEntry            Id1 changed: 0 → 50
+2025-08-18 21:07:14.326 [T01]DEBUG    TimeEntry            Id2 changed:  → , IsGeneric: True
+2025-08-18 21:07:14.326 [T01]DEBUG    TimeEntry            Date changed: 2025-08-18 → 2025-08-18
+2025-08-18 21:07:14.326 [T01]DEBUG    TimeEntry            Hours changed: 0 → 1 (input: 1.00)
+2025-08-18 21:07:14.326 [T01]DEBUG    TimeEntry            Description changed: '' → ''
+2025-08-18 21:07:14.327 [T01]INFO     TimeViewModel        Time entry selection changed: 'null' → 'Generic-50 - 08-18 - 1h'
+2025-08-18 21:07:14.329 [T01]DEBUG    TimeDataService      Found 0 time entries for 2025-08-18
+2025-08-18 21:07:14.329 [T01]DEBUG    TimeDataService      Day total for 2025-08-18: 0h
+2025-08-18 21:07:14.329 [T01]DEBUG    TimeDataService      Found 0 time entries for week 2025-08-18 to 2025-08-22
+2025-08-18 21:07:14.329 [T01]DEBUG    TimeDataService      Week total for week of 2025-08-18: 0h
+2025-08-18 21:07:14.329 [T01]INFO     TimeViewModel        Added generic time entry: Generic-50 for 1h
+2025-08-18 21:07:14.341 [T01]DEBUG    TimeDataService      Found 0 time entries for 2025-08-18
+2025-08-18 21:07:14.341 [T01]DEBUG    TimeDataService      Day total for 2025-08-18: 0h
+2025-08-18 21:07:18.211 [T01]CRITICAL TimeView             🔥 TIMEVIEW KEYDOWN: Key=P, Handled=False
+2025-08-18 21:07:18.211 [T01]CRITICAL TimeView             🔥 P KEY - ADD PROJECT TIME
+2025-08-18 21:07:18.217 [T01]INFO     ProjectTimeEntryDialog Dialog initialized for date 2025-08-18 with 10 projects
+2025-08-18 22:27:40.804 [T01]DEBUG    TaskView             TreeView focused on window activation (foolproof data focus)
+2025-08-18 22:29:36.721 [T01]CRITICAL TimeView             🔥 TIMEVIEW KEYDOWN: Key=Escape, Handled=False
+2025-08-18 22:29:36.722 [T01]CRITICAL TimeView             🔥 ESCAPE KEY - SWITCHING TO TASKS
+2025-08-18 22:29:36.722 [T01]CRITICAL TimeView             🔥 ESCAPE KEY - EXECUTING SHOW TASKS
+2025-08-18 22:29:36.722 [T01]INFO     MainWindow           Switched to task view
+2025-08-18 22:30:04.136 [T01]INFO     MainWindow           Switched to task view
+2025-08-18 22:30:15.565 [T01]INFO     MainWindow           Window closing
+2025-08-18 22:30:15.567 [T01]INFO     App                  Application shutting down with exit code: 0
