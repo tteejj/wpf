@@ -38,9 +38,9 @@
 
         <!-- Main content area with switching views -->
         <Grid Grid.Row="1">
-            <taskViewer:TaskView Name="TaskViewControl" DataContext="{Binding TaskViewModel}" 
+            <taskViewer:TaskView x:Name="TaskViewControl" DataContext="{Binding TaskViewModel}" 
                                  Visibility="Visible"/>
-            <timeTracker:TimeView Name="TimeViewControl" DataContext="{Binding TimeViewModel}" 
+            <timeTracker:TimeView x:Name="TimeViewControl" DataContext="{Binding TimeViewModel}" 
                                   Visibility="Collapsed"/>
         </Grid>
 
