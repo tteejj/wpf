@@ -84,18 +84,14 @@
             </Grid>
         </Border>
 
-        <!-- Buttons -->
+        <!-- Keyboard Instructions -->
         <Border Grid.Row="3" Background="{DynamicResource CyberControlBrush}" 
                 BorderBrush="{DynamicResource CyberBorderBrush}" 
                 BorderThickness="0,1,0,0" Padding="20,10">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="Add Entry" Name="AddButton" 
-                        Click="AddButton_Click" Margin="0,0,10,0" 
-                        Padding="20,5" IsDefault="True"/>
-                <Button Content="Cancel" Name="CancelButton" 
-                        Click="CancelButton_Click" Padding="20,5" 
-                        IsCancel="True"/>
-            </StackPanel>
+            <TextBlock Text="Enter: Add Entry | Escape: Cancel | Tab: Navigate Fields"
+                       Foreground="{DynamicResource CyberTextBrush}"
+                       FontFamily="Consolas, Courier New, monospace"
+                       HorizontalAlignment="Center"/>
         </Border>
     </Grid>
 </Window>

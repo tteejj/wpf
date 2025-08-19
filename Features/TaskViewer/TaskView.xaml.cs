@@ -385,18 +385,36 @@ namespace PraxisWpf.Features.TaskViewer
                         break;
 
                     case Key.O:
-                        // O key opens notes editor
-                        Logger.Critical("TaskView", "🔥 O KEY CASE HIT!");
-                        if (viewModel.OpenNotesCommand.CanExecute(null))
+                        // O key opens notes editor, Shift+O opens notes2 editor
+                        if (Keyboard.Modifiers == ModifierKeys.Shift)
                         {
-                            Logger.Critical("TaskView", "🔥 O KEY - EXECUTING OPEN NOTES COMMAND");
-                            viewModel.OpenNotesCommand.Execute(null);
-                            Logger.Critical("TaskView", "🔥 O KEY - OPEN NOTES COMMAND EXECUTED");
-                            e.Handled = true;
+                            Logger.Critical("TaskView", "🔥 SHIFT+O KEY CASE HIT!");
+                            if (viewModel.OpenNotes2Command.CanExecute(null))
+                            {
+                                Logger.Critical("TaskView", "🔥 SHIFT+O KEY - EXECUTING OPEN NOTES2 COMMAND");
+                                viewModel.OpenNotes2Command.Execute(null);
+                                Logger.Critical("TaskView", "🔥 SHIFT+O KEY - OPEN NOTES2 COMMAND EXECUTED");
+                                e.Handled = true;
+                            }
+                            else
+                            {
+                                Logger.Critical("TaskView", "🔥 SHIFT+O KEY - OPEN NOTES2 COMMAND CAN'T EXECUTE!");
+                            }
                         }
                         else
                         {
-                            Logger.Critical("TaskView", "🔥 O KEY - OPEN NOTES COMMAND CAN'T EXECUTE!");
+                            Logger.Critical("TaskView", "🔥 O KEY CASE HIT!");
+                            if (viewModel.OpenNotesCommand.CanExecute(null))
+                            {
+                                Logger.Critical("TaskView", "🔥 O KEY - EXECUTING OPEN NOTES COMMAND");
+                                viewModel.OpenNotesCommand.Execute(null);
+                                Logger.Critical("TaskView", "🔥 O KEY - OPEN NOTES COMMAND EXECUTED");
+                                e.Handled = true;
+                            }
+                            else
+                            {
+                                Logger.Critical("TaskView", "🔥 O KEY - OPEN NOTES COMMAND CAN'T EXECUTE!");
+                            }
                         }
                         break;
                 }
@@ -590,10 +608,9 @@ namespace PraxisWpf.Features.TaskViewer
                     Logger.Critical("TaskView", $"🔥 FocusEditTextBoxWithRetry: TreeViewItem not found on attempt {attempt + 1}");
                     
                     // Retry with a delay
-                    var delay = TimeSpan.FromMilliseconds(50 * (attempt + 1));
                     Dispatcher.BeginInvoke(new Action(() => {
                         FocusEditTextBoxWithRetry(selectedItem, attempt + 1);
-                    }), System.Windows.Threading.DispatcherPriority.Background, delay);
+                    }), System.Windows.Threading.DispatcherPriority.Background);
                     return;
                 }
 
@@ -614,10 +631,9 @@ namespace PraxisWpf.Features.TaskViewer
                     Logger.Critical("TaskView", $"🔥 FocusEditTextBoxWithRetry: EditTextBox not found in TreeViewItem on attempt {attempt + 1}");
                     
                     // Retry with a delay
-                    var delay = TimeSpan.FromMilliseconds(50 * (attempt + 1));
                     Dispatcher.BeginInvoke(new Action(() => {
                         FocusEditTextBoxWithRetry(selectedItem, attempt + 1);
-                    }), System.Windows.Threading.DispatcherPriority.Background, delay);
+                    }), System.Windows.Threading.DispatcherPriority.Background);
                 }
             }
             catch (Exception ex)

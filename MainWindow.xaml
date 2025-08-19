@@ -51,7 +51,7 @@
         <!-- Status bar -->
         <StatusBar Grid.Row="2">
             <StatusBarItem Name="TaskStatusBar">
-                <TextBlock Text="N: New Project | S: New Subtask | E: Edit | O: Notes | T: Time Entry | Del: Delete | +/-: Expand/Collapse | Ctrl+S: Save"/>
+                <TextBlock Text="N: New Project | S: New Subtask | E: Edit | O: Notes | Shift+O: Notes2 | T: Time Entry | Del: Delete | +/-: Expand/Collapse | Ctrl+S: Save"/>
             </StatusBarItem>
             <StatusBarItem Name="TimeStatusBar" Visibility="Collapsed">
                 <TextBlock Text="Esc: Back to Tasks | P: Project Time | N: Generic Time | Del: Delete | Ctrl+S: Save"/>

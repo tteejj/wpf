@@ -10,7 +10,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <!-- Header with week navigation -->
@@ -180,15 +179,5 @@
             </Grid>
         </Border>
 
-        <!-- Status bar -->
-        <StatusBar Grid.Row="3">
-            <StatusBarItem>
-                <TextBlock Text="Esc: Back to Tasks | P: Project Time | N: Generic Time | Del: Delete | Ctrl+S: Save"/>
-            </StatusBarItem>
-            <StatusBarItem HorizontalAlignment="Right">
-                <TextBlock Text="{Binding DayTotal, StringFormat='Today: {0:F2}h'}" 
-                           Foreground="{DynamicResource CyberAccentBrush}" FontWeight="Bold"/>
-            </StatusBarItem>
-        </StatusBar>
     </Grid>
 </UserControl>

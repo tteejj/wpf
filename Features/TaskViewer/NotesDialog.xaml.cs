@@ -10,17 +10,19 @@ namespace PraxisWpf.Features.TaskViewer
     public partial class NotesDialog : Window
     {
         private readonly TaskItem _task;
+        private readonly string _notesType;
         private string _originalText = string.Empty;
         private string _filePath = string.Empty;
         private bool _isModified = false;
         private bool _isSaving = false;
 
-        public NotesDialog(TaskItem task)
+        public NotesDialog(TaskItem task, string notesType = "notes")
         {
-            Logger.TraceEnter(parameters: new object[] { task?.DisplayName ?? "null" });
+            Logger.TraceEnter(parameters: new object[] { task?.DisplayName ?? "null", notesType });
             
             InitializeComponent();
             _task = task ?? throw new ArgumentNullException(nameof(task));
+            _notesType = notesType ?? "notes";
             
             SetupNotesEditor();
             Logger.TraceExit();
@@ -34,17 +36,17 @@ namespace PraxisWpf.Features.TaskViewer
                 using var perfTracker = Logger.TracePerformance("SetupNotesEditor");
 
                 // Update window title and header
-                Title = $"Notes Editor - {_task.Name}";
-                TaskNameTextBlock.Text = $"Notes for: {_task.Name}";
+                Title = $"{(_notesType == "notes2" ? "Notes2" : "Notes")} Editor - {_task.Name}";
+                TaskNameTextBlock.Text = $"{(_notesType == "notes2" ? "Notes2" : "Notes")} for: {_task.Name}";
 
                 // Create Notes directory if it doesn't exist
                 var notesDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Notes");
                 Directory.CreateDirectory(notesDir);
                 Logger.Debug("NotesDialog", $"Notes directory ensured: {notesDir}");
 
-                // Generate safe filename: "{Id1}_{Name}.txt"
+                // Generate safe filename: "{Id1}_{Name}_{notesType}.txt"
                 var sanitizedName = string.Join("_", _task.Name.Split(Path.GetInvalidFileNameChars()));
-                var fileName = $"{_task.Id1}_{sanitizedName}.txt";
+                var fileName = $"{_task.Id1}_{sanitizedName}_{_notesType}.txt";
                 _filePath = Path.Combine(notesDir, fileName);
                 
                 FilePathTextBlock.Text = _filePath;

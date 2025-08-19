@@ -45,6 +45,7 @@ namespace PraxisWpf.Features.TaskViewer
         public ICommand ExpandAllCommand { get; }
         public ICommand CollapseAllCommand { get; }
         public ICommand OpenNotesCommand { get; }
+        public ICommand OpenNotes2Command { get; }
 
         public TaskViewModel() : this(new JsonDataService())
         {
@@ -93,6 +94,7 @@ namespace PraxisWpf.Features.TaskViewer
             ExpandAllCommand = new RelayCommand(ExecuteExpandAll);
             CollapseAllCommand = new RelayCommand(ExecuteCollapseAll);
             OpenNotesCommand = new RelayCommand(ExecuteOpenNotes, CanExecuteOpenNotes);
+            OpenNotes2Command = new RelayCommand(ExecuteOpenNotes2, CanExecuteOpenNotes);
             Logger.Debug("TaskViewModel", "All commands initialized");
 
             Logger.TraceExit();
@@ -453,6 +455,56 @@ namespace PraxisWpf.Features.TaskViewer
             var canExecute = SelectedItem != null;
             Logger.Trace("TaskViewModel", $"CanExecuteOpenNotes: {canExecute}");
             return canExecute;
+        }
+
+        private void ExecuteOpenNotes2()
+        {
+            Logger.TraceEnter();
+            using var perfTracker = Logger.TracePerformance("ExecuteOpenNotes2");
+
+            if (SelectedItem == null)
+            {
+                Logger.Warning("TaskViewModel", "Cannot open notes2: no item selected");
+                return;
+            }
+
+            try
+            {
+                Logger.Info("TaskViewModel", $"Opening notes2 editor for task: {SelectedItem.DisplayName}");
+                
+                // Cast to TaskItem to access the concrete implementation
+                if (SelectedItem is TaskItem taskItem)
+                {
+                    var notesDialog = new NotesDialog(taskItem, notesType: "notes2");
+                    
+                    // Set owner to current main window for proper modal behavior
+                    var mainWindow = System.Windows.Application.Current.MainWindow;
+                    if (mainWindow != null)
+                    {
+                        notesDialog.Owner = mainWindow;
+                    }
+                    
+                    Logger.Debug("TaskViewModel", "Showing notes2 dialog");
+                    var result = notesDialog.ShowDialog();
+                    
+                    Logger.Info("TaskViewModel", $"Notes2 dialog closed with result: {result}");
+                }
+                else
+                {
+                    Logger.Error("TaskViewModel", "Selected item is not a TaskItem - cannot open notes2");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("TaskViewModel", "Failed to open notes2 editor", ex);
+                System.Windows.MessageBox.Show(
+                    $"Failed to open notes2 editor: {ex.Message}", 
+                    "Error", 
+                    System.Windows.MessageBoxButton.OK, 
+                    System.Windows.MessageBoxImage.Error);
+            }
+
+            Logger.TraceExit();
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
