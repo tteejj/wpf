@@ -33,11 +33,18 @@ namespace PraxisWpf
                 _timeViewModel = new TimeViewModel();
                 _dataProcessingViewModel = new DataProcessingViewModel();
                 
-                // Register services for auto-save
-                // Note: We'll need to update the services to implement IAutoSaveable properly
+                // Register ViewModels with action-based auto-save
+                Logger.Debug("MainWindow", "Configuring action-based auto-save");
+                var autoSaveService = _dataSafetyService.GetActionBasedAutoSaveService();
+                _dataSafetyService.RegisterForActionBasedAutoSave("Tasks", _taskViewModel);
+                _dataSafetyService.RegisterForActionBasedAutoSave("TimeTracker", _timeViewModel);
+                
+                // Configure ViewModels with auto-save service
+                _taskViewModel.SetAutoSaveService(autoSaveService);
+                _timeViewModel.SetAutoSaveService(autoSaveService);
+                
                 Logger.Debug("MainWindow", "Starting data safety services");
                 _dataSafetyService.Start();
-                _dataSafetyService.SetAutoSaveInterval(2); // 2 minute auto-save
                 
                 // Create a main view model to hold all ViewModels
                 _mainViewModel = new MainViewModel 

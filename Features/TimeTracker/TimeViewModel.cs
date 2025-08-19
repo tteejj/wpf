@@ -12,11 +12,12 @@ using PraxisWpf.Services;
 
 namespace PraxisWpf.Features.TimeTracker
 {
-    public class TimeViewModel : INotifyPropertyChanged
+    public class TimeViewModel : INotifyPropertyChanged, ISaveableService
     {
         private readonly ITimeDataService _timeDataService;
         private DateTime _selectedDate;
         private TimeEntry? _selectedTimeEntry;
+        private ActionBasedAutoSaveService? _autoSaveService;
 
         public ObservableCollection<TimeEntry> TimeEntries { get; private set; }
         public ObservableCollection<(int Id1, int? Id2, string Name)> AvailableProjects { get; private set; }
@@ -223,6 +224,9 @@ namespace PraxisWpf.Features.TimeTracker
                 SelectedTimeEntry = newEntry;
                 RefreshCurrentWeekData();
                 
+                // Trigger auto-save after creating time entry
+                _autoSaveService?.SaveAfterAction("TimeTracker", "Create Project Time Entry");
+                
                 Logger.Info("TimeViewModel", $"Added project time entry: {newEntry.ProjectReference} for {newEntry.Hours}h");
             }
             
@@ -252,6 +256,9 @@ namespace PraxisWpf.Features.TimeTracker
                 SelectedTimeEntry = newEntry;
                 RefreshCurrentWeekData();
                 
+                // Trigger auto-save after creating time entry
+                _autoSaveService?.SaveAfterAction("TimeTracker", "Create Generic Time Entry");
+                
                 Logger.Info("TimeViewModel", $"Added generic time entry: {newEntry.ProjectReference} for {newEntry.Hours}h");
             }
             
@@ -274,6 +281,9 @@ namespace PraxisWpf.Features.TimeTracker
             SelectedTimeEntry = null;
 
             RefreshCurrentWeekData();
+            
+            // Trigger auto-save after deleting time entry
+            _autoSaveService?.SaveAfterAction("TimeTracker", $"Delete Time Entry: {entryToDelete.ProjectReference}");
 
             Logger.Info("TimeViewModel", $"Deleted time entry: {entryToDelete.ProjectReference}");
             Logger.TraceExit();
@@ -502,6 +512,37 @@ namespace PraxisWpf.Features.TimeTracker
             OnPropertyChanged(nameof(CurrentWeekEntries));
             OnPropertyChanged(nameof(DayTotal));
             OnPropertyChanged(nameof(WeekTotal));
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Sets the auto-save service for action-based saving
+        /// </summary>
+        public void SetAutoSaveService(ActionBasedAutoSaveService autoSaveService)
+        {
+            _autoSaveService = autoSaveService;
+            Logger.Info("TimeViewModel", "Auto-save service configured");
+        }
+
+        #region ISaveableService Implementation
+
+        public string ServiceName => "TimeViewModel";
+
+        public void Save()
+        {
+            Logger.TraceEnter();
+            try
+            {
+                _timeDataService.SaveTimeEntries(TimeEntries);
+                Logger.Info("TimeViewModel", "Time data saved successfully");
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("TimeViewModel", $"Failed to save time data: {ex.Message}");
+                throw; // Re-throw so caller knows save failed
+            }
+            Logger.TraceExit();
         }
 
         #endregion

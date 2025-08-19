@@ -12,7 +12,7 @@ namespace PraxisWpf.Services
     /// </summary>
     public class DataSafetyService : IDisposable
     {
-        private readonly AutoSaveService _autoSaveService;
+        private readonly ActionBasedAutoSaveService _actionBasedAutoSaveService;
         private readonly BackupManager _backupManager;
         private readonly SafeFileWriter _taskDataWriter;
         private readonly SafeFileWriter _timeDataWriter;
@@ -32,7 +32,7 @@ namespace PraxisWpf.Services
             _taskDataWriter = new SafeFileWriter(_taskDataPath);
             _timeDataWriter = new SafeFileWriter(_timeDataPath);
             _backupManager = new BackupManager(_taskDataPath, maxBackups: 5);
-            _autoSaveService = new AutoSaveService();
+            _actionBasedAutoSaveService = new ActionBasedAutoSaveService(_taskDataPath, _timeDataPath);
 
             // Set up application shutdown handling
             if (Application.Current != null)
@@ -58,8 +58,7 @@ namespace PraxisWpf.Services
             // Create recovery flag to detect crashes
             CreateRecoveryFlag();
 
-            // Start auto-save
-            _autoSaveService.Start();
+            // Note: ActionBasedAutoSaveService doesn't need to be "started" - it triggers on actions
 
             // Create initial backup
             CreateStartupBackup();
@@ -69,12 +68,12 @@ namespace PraxisWpf.Services
         }
 
         /// <summary>
-        /// Registers a service for auto-saving
+        /// Registers a service for action-based auto-saving
         /// </summary>
-        public void RegisterForAutoSave(IAutoSaveable service)
+        public void RegisterForActionBasedAutoSave(string serviceKey, ISaveableService service)
         {
-            Logger.TraceEnter($"service={service.ServiceName}");
-            _autoSaveService.RegisterSaveableService(service);
+            Logger.TraceEnter($"serviceKey={serviceKey}, service={service.ServiceName}");
+            _actionBasedAutoSaveService.RegisterService(serviceKey, service);
             Logger.TraceExit();
         }
 
@@ -192,7 +191,7 @@ namespace PraxisWpf.Services
 
             var status = new DataSafetyStatus
             {
-                AutoSaveStatus = _autoSaveService.GetStatus(),
+                ActionBasedAutoSaveStatus = _actionBasedAutoSaveService.GetStatus(),
                 BackupStats = _backupManager.GetBackupStats(),
                 TaskDataHealthy = _taskDataWriter.IsMainFileHealthy(),
                 TimeDataHealthy = _timeDataWriter.IsMainFileHealthy(),
@@ -205,13 +204,11 @@ namespace PraxisWpf.Services
         }
 
         /// <summary>
-        /// Configures auto-save interval
+        /// Gets the action-based auto-save service for direct use
         /// </summary>
-        public void SetAutoSaveInterval(int minutes)
+        public ActionBasedAutoSaveService GetActionBasedAutoSaveService()
         {
-            Logger.TraceEnter($"minutes={minutes}");
-            _autoSaveService.SetInterval(minutes);
-            Logger.TraceExit();
+            return _actionBasedAutoSaveService;
         }
 
         /// <summary>
@@ -220,7 +217,7 @@ namespace PraxisWpf.Services
         public void SaveNow()
         {
             Logger.TraceEnter();
-            _autoSaveService.SaveNow();
+            _actionBasedAutoSaveService.SaveAll("Manual Save Request");
             Logger.TraceExit();
         }
 
@@ -334,8 +331,8 @@ namespace PraxisWpf.Services
             {
                 Logger.Info("DataSafetyService", "Performing shutdown save");
                 
-                // Force immediate save
-                SaveNow();
+                // Force immediate save of all services
+                _actionBasedAutoSaveService.SaveAll("Application Shutdown");
 
                 // Remove recovery flag to indicate clean shutdown
                 RemoveRecoveryFlag();
@@ -359,9 +356,8 @@ namespace PraxisWpf.Services
                 // Perform final save and cleanup
                 PerformShutdownSave();
 
-                // Stop auto-save service
-                _autoSaveService?.Stop();
-                _autoSaveService?.Dispose();
+                // Dispose action-based auto-save service
+                _actionBasedAutoSaveService?.Dispose();
 
                 // Unregister event handlers
                 if (Application.Current != null)
@@ -406,7 +402,7 @@ namespace PraxisWpf.Services
     /// </summary>
     public class DataSafetyStatus
     {
-        public AutoSaveStatus AutoSaveStatus { get; set; } = new();
+        public ActionBasedAutoSaveStatus ActionBasedAutoSaveStatus { get; set; } = new();
         public BackupStats BackupStats { get; set; } = new();
         public bool TaskDataHealthy { get; set; }
         public bool TimeDataHealthy { get; set; }
@@ -414,7 +410,7 @@ namespace PraxisWpf.Services
         public FileInfo? TimeDataBackupInfo { get; set; }
 
         public string OverallStatus => 
-            $"Auto-save: {(AutoSaveStatus.IsEnabled ? "ON" : "OFF")} | " +
+            $"Auto-save: {ActionBasedAutoSaveStatus.StatusText} | " +
             $"Backups: {BackupStats.TotalBackups} | " +
             $"Health: {(TaskDataHealthy && TimeDataHealthy ? "GOOD" : "WARNING")}";
     }
