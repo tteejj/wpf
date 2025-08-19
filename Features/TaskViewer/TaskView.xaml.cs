@@ -400,6 +400,22 @@ namespace PraxisWpf.Features.TaskViewer
                         }
                         break;
 
+                    case Key.H:
+                        // H key opens theme selection screen
+                        Logger.Critical("TaskView", "🔥 H KEY CASE HIT!");
+                        var themeMainWindow = System.Windows.Window.GetWindow(this) as MainWindow;
+                        if (themeMainWindow != null)
+                        {
+                            Logger.Critical("TaskView", "🔥 H KEY - SWITCHING TO THEMES");
+                            themeMainWindow.ShowThemes();
+                            e.Handled = true;
+                        }
+                        else
+                        {
+                            Logger.Critical("TaskView", "🔥 H KEY - MAIN WINDOW NOT FOUND!");
+                        }
+                        break;
+
                     case Key.O:
                         // O key opens notes editor, Shift+O opens notes2 editor
                         if (Keyboard.Modifiers == ModifierKeys.Shift)

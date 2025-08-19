@@ -37,27 +37,60 @@
             </Grid>
         </Border>
 
-        <!-- Quick entry info -->
+        <!-- Inline Time Entry -->
         <Border Grid.Row="1" Background="{DynamicResource CyberControlBrush}" 
                 BorderBrush="{DynamicResource CyberBorderBrush}" 
                 BorderThickness="0,0,0,1" Padding="10">
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
                 
-                <TextBlock Grid.Column="0" 
+                <!-- Date Display -->
+                <TextBlock Grid.Row="0" 
                            Text="{Binding SelectedDate, StringFormat='Selected Date: {0:ddd, MMM dd, yyyy}'}" 
                            Foreground="{DynamicResource CyberAccentBrush}" FontWeight="Bold"
-                           VerticalAlignment="Center" Margin="0,0,20,0"/>
-                           
-                <TextBlock Grid.Column="1" 
-                           Text="P: Add Project Time | N: Add Generic Time | Del: Delete | Ctrl+S: Save" 
-                           Foreground="{DynamicResource CyberDimCyanBrush}"
-                           VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                           
+                           HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                
+                <!-- Inline Entry Controls -->
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- Project Selection -->
+                    <ComboBox Grid.Column="0" 
+                              ItemsSource="{Binding AvailableProjects}" 
+                              SelectedItem="{Binding SelectedProject}"
+                              DisplayMemberPath="Name"
+                              Margin="0,0,5,0"/>
+                    
+                    <!-- Hours Entry -->
+                    <ComboBox Grid.Column="1" 
+                              ItemsSource="{Binding HourIncrements}" 
+                              SelectedItem="{Binding EntryHours}"
+                              Margin="0,0,5,0"/>
+                    
+                    <!-- Description Entry -->
+                    <TextBox Grid.Column="2" 
+                             Text="{Binding EntryDescription, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,0,5,0"/>
+                    
+                    <!-- Add Project Entry -->
+                    <TextBlock Grid.Column="3" Text="[P]roject" 
+                               Foreground="{DynamicResource CyberAccentBrush}"
+                               FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    
+                    <!-- Add Generic Entry -->
+                    <TextBlock Grid.Column="4" Text="[N]ew Generic" 
+                               Foreground="{DynamicResource CyberAccentBrush}"
+                               FontWeight="Bold" VerticalAlignment="Center"/>
+                </Grid>
             </Grid>
         </Border>
 

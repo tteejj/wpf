@@ -18,22 +18,24 @@
                 
                 <TextBlock Grid.Column="0" 
                            Text="{Binding Key}" 
-                           Foreground="{DynamicResource PrimaryTextBrush}"
+                           Foreground="{DynamicResource CyberAccentBrush}"
+                           FontWeight="Bold"
                            Margin="0,2,10,2"
                            VerticalAlignment="Center"/>
                 
                 <TextBox Grid.Column="1"
                          Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
-                         Background="{DynamicResource InputBackgroundBrush}"
-                         Foreground="{DynamicResource PrimaryTextBrush}"
-                         BorderBrush="{DynamicResource AccentBrush}"
+                         Background="{DynamicResource CyberControlBrush}"
+                         Foreground="{DynamicResource CyberTextBrush}"
+                         BorderBrush="{DynamicResource CyberBorderBrush}"
+                         FontWeight="Bold"
                          Margin="0,1"
                          Padding="5,2"/>
             </Grid>
         </DataTemplate>
     </UserControl.Resources>
     
-    <Grid Background="{DynamicResource BackgroundBrush}">
+    <Grid Background="{DynamicResource CyberBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -68,16 +70,20 @@
                               Margin="0,0,5,0">
                         <StackPanel>
                             <TextBlock Text="{Binding SelectedProject.SiteName, StringFormat='Site: {0}'}"
-                                       Style="{DynamicResource CyberpunkTextStyle}"
+                                       Foreground="{DynamicResource CyberAccentBrush}"
+                                       FontWeight="Bold"
                                        Margin="0,5"/>
                             <TextBlock Text="{Binding SelectedProject.SiteAddress, StringFormat='Address: {0}'}"
-                                       Style="{DynamicResource CyberpunkTextStyle}"
+                                       Foreground="{DynamicResource CyberAccentBrush}"
+                                       FontWeight="Bold"
                                        Margin="0,5"/>
                             <TextBlock Text="{Binding SelectedProject.RequestDate, StringFormat='Request Date: {0}'}"
-                                       Style="{DynamicResource CyberpunkTextStyle}"
+                                       Foreground="{DynamicResource CyberAccentBrush}"
+                                       FontWeight="Bold"
                                        Margin="0,5"/>
                             <TextBlock Text="{Binding SelectedProject.Status, StringFormat='Status: {0}'}"
-                                       Style="{DynamicResource CyberpunkTextStyle}"
+                                       Foreground="{DynamicResource CyberAccentBrush}"
+                                       FontWeight="Bold"
                                        Margin="0,5"/>
                         </StackPanel>
                     </GroupBox>
@@ -115,7 +121,10 @@
                             
                             <TextBox Grid.Column="0"
                                      Text="{Binding ExcelFilePath, UpdateSourceTrigger=PropertyChanged}"
-                                     Style="{DynamicResource CyberpunkTextBoxStyle}"
+                                     Background="{DynamicResource CyberControlBrush}"
+                                     Foreground="{DynamicResource CyberTextBrush}"
+                                     BorderBrush="{DynamicResource CyberBorderBrush}"
+                                     FontWeight="Bold"
                                      Margin="0,0,10,0"/>
                             
                             <!-- Browse button removed per user request -->
@@ -126,7 +135,10 @@
                     <GroupBox Grid.Row="1" Header="Integration Log" 
                               Style="{DynamicResource CyberpunkGroupBoxStyle}">
                         <TextBox Text="{Binding IntegrationLog, Mode=OneWay}"
-                                 Style="{DynamicResource CyberpunkTextBoxStyle}"
+                                 Background="{DynamicResource CyberControlBrush}"
+                                 Foreground="{DynamicResource CyberTextBrush}"
+                                 BorderBrush="{DynamicResource CyberBorderBrush}"
+                                 FontWeight="Bold"
                                  IsReadOnly="True"
                                  TextWrapping="Wrap"
                                  AcceptsReturn="True"
@@ -140,10 +152,11 @@
         
         <!-- Status Bar -->
         <Border Grid.Row="2" 
-                Background="{DynamicResource AccentBrush}" 
+                Background="{DynamicResource CyberAccentBrush}" 
                 Height="25">
             <TextBlock Text="{Binding StatusMessage}" 
-                       Foreground="{DynamicResource PrimaryTextBrush}"
+                       Foreground="{DynamicResource CyberTextBrush}"
+                       FontWeight="Bold"
                        VerticalAlignment="Center"
                        Margin="10,0"/>
         </Border>

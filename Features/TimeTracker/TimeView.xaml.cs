@@ -68,21 +68,21 @@ namespace PraxisWpf.Features.TimeTracker
                         break;
 
                     case Key.P:
-                        // P key adds project time entry
-                        Logger.Critical("TimeView", "🔥 P KEY - ADD PROJECT TIME");
-                        if (viewModel != null)
+                        // P key adds project time entry inline
+                        Logger.Critical("TimeView", "🔥 P KEY - ADD PROJECT TIME INLINE");
+                        if (viewModel?.AddProjectTimeInlineCommand.CanExecute(null) == true)
                         {
-                            viewModel.ShowProjectTimeEntryDialog();
+                            viewModel.AddProjectTimeInlineCommand.Execute(null);
                             e.Handled = true;
                         }
                         break;
 
                     case Key.N:
-                        // N key adds generic/non-project time entry
-                        Logger.Critical("TimeView", "🔥 N KEY - ADD GENERIC TIME");
-                        if (viewModel != null)
+                        // N key adds generic/non-project time entry inline
+                        Logger.Critical("TimeView", "🔥 N KEY - ADD GENERIC TIME INLINE");
+                        if (viewModel?.AddGenericTimeInlineCommand.CanExecute(null) == true)
                         {
-                            viewModel.ShowGenericTimeEntryDialog();
+                            viewModel.AddGenericTimeInlineCommand.Execute(null);
                             e.Handled = true;
                         }
                         break;
@@ -117,6 +117,21 @@ namespace PraxisWpf.Features.TimeTracker
                         {
                             viewModel.ExportWeeklyTimesheetCommand.Execute(null);
                             e.Handled = true;
+                        }
+                        break;
+
+                    case Key.H:
+                        // H key opens theme selection screen
+                        Logger.Critical("TimeView", "🔥 H KEY - SWITCHING TO THEMES");
+                        var themeMainWindow = System.Windows.Window.GetWindow(this) as MainWindow;
+                        if (themeMainWindow != null)
+                        {
+                            themeMainWindow.ShowThemes();
+                            e.Handled = true;
+                        }
+                        else
+                        {
+                            Logger.Critical("TimeView", "🔥 H KEY - MAIN WINDOW NOT FOUND!");
                         }
                         break;
                 }

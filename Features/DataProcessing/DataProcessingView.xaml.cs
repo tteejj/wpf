@@ -64,6 +64,21 @@ namespace PraxisWpf.Features.DataProcessing
                             Logger.Critical("DataProcessingView", "🔥 ESCAPE KEY - MAIN WINDOW NOT FOUND!");
                         }
                         break;
+
+                    case Key.H:
+                        // H key opens theme selection screen
+                        Logger.Critical("DataProcessingView", "🔥 H KEY - SWITCHING TO THEMES");
+                        var themeMainWindow = System.Windows.Window.GetWindow(this) as MainWindow;
+                        if (themeMainWindow != null)
+                        {
+                            themeMainWindow.ShowThemes();
+                            e.Handled = true;
+                        }
+                        else
+                        {
+                            Logger.Critical("DataProcessingView", "🔥 H KEY - MAIN WINDOW NOT FOUND!");
+                        }
+                        break;
                 }
 
                 base.OnKeyDown(e);

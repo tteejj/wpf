@@ -18,6 +18,9 @@ namespace PraxisWpf.Features.TimeTracker
         private DateTime _selectedDate;
         private TimeEntry? _selectedTimeEntry;
         private ActionBasedAutoSaveService? _autoSaveService;
+        private (int Id1, int? Id2, string Name)? _selectedProject;
+        private decimal _entryHours = 1.0m;
+        private string _entryDescription = string.Empty;
 
         public ObservableCollection<TimeEntry> TimeEntries { get; private set; }
         public ObservableCollection<(int Id1, int? Id2, string Name)> AvailableProjects { get; private set; }
@@ -32,6 +35,8 @@ namespace PraxisWpf.Features.TimeTracker
         public ICommand NextDayCommand { get; }
         public ICommand TodayCommand { get; }
         public ICommand ExportWeeklyTimesheetCommand { get; }
+        public ICommand AddProjectTimeInlineCommand { get; }
+        public ICommand AddGenericTimeInlineCommand { get; }
 
         public TimeViewModel() : this(new TimeDataService())
         {
@@ -80,6 +85,8 @@ namespace PraxisWpf.Features.TimeTracker
             NextDayCommand = new RelayCommand(ExecuteNextDay);
             TodayCommand = new RelayCommand(ExecuteToday);
             ExportWeeklyTimesheetCommand = new RelayCommand(ExecuteExportWeeklyTimesheet);
+            AddProjectTimeInlineCommand = new RelayCommand(ExecuteAddProjectTimeInline);
+            AddGenericTimeInlineCommand = new RelayCommand(ExecuteAddGenericTimeInline);
 
             Logger.Debug("TimeViewModel", "All commands initialized");
             Logger.TraceExit();
@@ -194,6 +201,36 @@ namespace PraxisWpf.Features.TimeTracker
                 _selectedTimeEntry = value;
                 OnPropertyChanged(nameof(SelectedTimeEntry));
                 Logger.Info("TimeViewModel", $"Time entry selection changed: '{oldValue?.DisplayName ?? "null"}' → '{value?.DisplayName ?? "null"}'");
+            }
+        }
+
+        public (int Id1, int? Id2, string Name)? SelectedProject
+        {
+            get => _selectedProject;
+            set
+            {
+                _selectedProject = value;
+                OnPropertyChanged(nameof(SelectedProject));
+            }
+        }
+
+        public decimal EntryHours
+        {
+            get => _entryHours;
+            set
+            {
+                _entryHours = value;
+                OnPropertyChanged(nameof(EntryHours));
+            }
+        }
+
+        public string EntryDescription
+        {
+            get => _entryDescription;
+            set
+            {
+                _entryDescription = value;
+                OnPropertyChanged(nameof(EntryDescription));
             }
         }
 
@@ -512,6 +549,78 @@ namespace PraxisWpf.Features.TimeTracker
             OnPropertyChanged(nameof(CurrentWeekEntries));
             OnPropertyChanged(nameof(DayTotal));
             OnPropertyChanged(nameof(WeekTotal));
+        }
+
+        private void ExecuteAddProjectTimeInline()
+        {
+            Logger.TraceEnter();
+            
+            if (SelectedProject == null)
+            {
+                Logger.Warning("TimeViewModel", "No project selected for inline entry");
+                return;
+            }
+            
+            if (string.IsNullOrWhiteSpace(EntryDescription))
+            {
+                Logger.Warning("TimeViewModel", "Description required for inline entry");
+                return;
+            }
+            
+            var newEntry = new TimeEntry
+            {
+                Id1 = SelectedProject.Value.Id1,
+                Id2 = SelectedProject.Value.Id2,
+                Date = SelectedDate,
+                Hours = EntryHours,
+                Description = EntryDescription
+            };
+            
+            TimeEntries.Add(newEntry);
+            Logger.Info("TimeViewModel", $"Added project time entry: {SelectedProject.Value.Name} - {EntryHours}h - '{EntryDescription}'");
+            
+            // Clear the entry fields
+            EntryDescription = string.Empty;
+            EntryHours = 1.0m;
+            
+            // Trigger auto-save after successful add
+            _autoSaveService?.SaveAfterAction("TimeViewModel", "Add Project Time Entry (Inline)");
+            
+            RefreshCurrentWeekData();
+            Logger.TraceExit();
+        }
+        
+        private void ExecuteAddGenericTimeInline()
+        {
+            Logger.TraceEnter();
+            
+            if (string.IsNullOrWhiteSpace(EntryDescription))
+            {
+                Logger.Warning("TimeViewModel", "Description required for inline entry");
+                return;
+            }
+            
+            var newEntry = new TimeEntry
+            {
+                Id1 = 0, // Generic entry
+                Id2 = null,
+                Date = SelectedDate,
+                Hours = EntryHours,
+                Description = EntryDescription
+            };
+            
+            TimeEntries.Add(newEntry);
+            Logger.Info("TimeViewModel", $"Added generic time entry: {EntryHours}h - '{EntryDescription}'");
+            
+            // Clear the entry fields
+            EntryDescription = string.Empty;
+            EntryHours = 1.0m;
+            
+            // Trigger auto-save after successful add
+            _autoSaveService?.SaveAfterAction("TimeViewModel", "Add Generic Time Entry (Inline)");
+            
+            RefreshCurrentWeekData();
+            Logger.TraceExit();
         }
 
         #endregion

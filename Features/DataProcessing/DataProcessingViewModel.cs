@@ -40,8 +40,8 @@ namespace PraxisWpf.Features.DataProcessing
 
                 StatusMessage = "Data Processing ready - No PowerShell dependencies required";
                 
-                // Load project IDs asynchronously to avoid blocking UI thread
-                _ = Task.Run(LoadProjectIdsAsync);
+                // Load project IDs synchronously - async was causing hangs
+                LoadProjectIds();
                 
                 Logger.Info("DataProcessingViewModel", "DataProcessingViewModel initialized successfully");
             }
@@ -152,41 +152,64 @@ namespace PraxisWpf.Features.DataProcessing
             
             try
             {
-                await Task.Delay(50); // Small delay to ensure UI is ready
+                Logger.Debug("DataProcessingViewModel", "LoadProjectIdsAsync - Starting project data retrieval");
                 
                 var projectData = _projectDataService.GetAllProjectData();
                 
-                // Update UI on main thread
-                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                Logger.Debug("DataProcessingViewModel", $"LoadProjectIdsAsync - Retrieved {projectData.Count()} projects, updating UI");
+                
+                // Update UI on main thread - but check if dispatcher is available
+                if (System.Windows.Application.Current?.Dispatcher != null)
                 {
-                    try
+                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
                     {
-                        ProjectIds.Clear();
-                        
-                        foreach (var project in projectData)
+                        try
                         {
-                            ProjectIds.Add(project.ProjectId);
-                        }
+                            Logger.Debug("DataProcessingViewModel", "LoadProjectIdsAsync - Clearing ProjectIds");
+                            ProjectIds.Clear();
+                            
+                            Logger.Debug("DataProcessingViewModel", "LoadProjectIdsAsync - Adding projects to collection");
+                            foreach (var project in projectData)
+                            {
+                                ProjectIds.Add(project.ProjectId);
+                            }
 
-                        OnPropertyChanged(nameof(HasProjects));
-                        StatusMessage = $"Loaded {ProjectIds.Count} projects";
-                        
-                        Logger.Info("DataProcessingViewModel", $"Loaded {ProjectIds.Count} project IDs asynchronously");
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.Error("DataProcessingViewModel", $"Failed to update UI with project IDs: {ex.Message}");
-                        StatusMessage = $"Error updating UI: {ex.Message}";
-                    }
-                });
+                            OnPropertyChanged(nameof(HasProjects));
+                            StatusMessage = $"Loaded {ProjectIds.Count} projects";
+                            
+                            Logger.Info("DataProcessingViewModel", $"LoadProjectIdsAsync - Successfully loaded {ProjectIds.Count} project IDs");
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Error("DataProcessingViewModel", $"LoadProjectIdsAsync - UI update failed: {ex.Message}");
+                            StatusMessage = $"Error updating UI: {ex.Message}";
+                        }
+                    });
+                }
+                else
+                {
+                    Logger.Warning("DataProcessingViewModel", "LoadProjectIdsAsync - No dispatcher available, updating directly");
+                    StatusMessage = "Loaded projects (no dispatcher)";
+                }
             }
             catch (Exception ex)
             {
-                Logger.Error("DataProcessingViewModel", $"Failed to load project IDs async: {ex.Message}");
-                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                Logger.Error("DataProcessingViewModel", $"LoadProjectIdsAsync failed: {ex.Message}");
+                
+                if (System.Windows.Application.Current?.Dispatcher != null)
                 {
-                    StatusMessage = $"Error loading projects: {ex.Message}";
-                });
+                    try
+                    {
+                        System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            StatusMessage = $"Error loading projects: {ex.Message}";
+                        });
+                    }
+                    catch (Exception dispatcherEx)
+                    {
+                        Logger.Error("DataProcessingViewModel", $"LoadProjectIdsAsync - Dispatcher invoke failed: {dispatcherEx.Message}");
+                    }
+                }
             }
             
             Logger.TraceExit();

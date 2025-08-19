@@ -3,6 +3,7 @@ using System.Windows;
 using PraxisWpf.Features.TaskViewer;
 using PraxisWpf.Features.TimeTracker;
 using PraxisWpf.Features.DataProcessing;
+using PraxisWpf.Features.ThemeSelector;
 using PraxisWpf.Services;
 
 namespace PraxisWpf
@@ -12,6 +13,7 @@ namespace PraxisWpf
         private TaskViewModel? _taskViewModel;
         private TimeViewModel? _timeViewModel;
         private DataProcessingViewModel? _dataProcessingViewModel;
+        private ThemeViewModel? _themeViewModel;
         private MainViewModel? _mainViewModel;
         private DataSafetyService? _dataSafetyService;
 
@@ -32,6 +34,7 @@ namespace PraxisWpf
                 _taskViewModel = new TaskViewModel();
                 _timeViewModel = new TimeViewModel();
                 _dataProcessingViewModel = new DataProcessingViewModel();
+                _themeViewModel = new ThemeViewModel();
                 
                 // Register ViewModels with action-based auto-save
                 Logger.Debug("MainWindow", "Configuring action-based auto-save");
@@ -51,7 +54,8 @@ namespace PraxisWpf
                 { 
                     TaskViewModel = _taskViewModel,
                     TimeViewModel = _timeViewModel,
-                    DataProcessingViewModel = _dataProcessingViewModel
+                    DataProcessingViewModel = _dataProcessingViewModel,
+                    ThemeViewModel = _themeViewModel
                 };
                 DataContext = _mainViewModel;
 
@@ -71,8 +75,12 @@ namespace PraxisWpf
             Logger.TraceEnter();
             
             TaskViewControl.Visibility = Visibility.Collapsed;
+            DataProcessingViewControl.Visibility = Visibility.Collapsed;
+            ThemeViewControl.Visibility = Visibility.Collapsed;
             TimeViewControl.Visibility = Visibility.Visible;
             TaskStatusBar.Visibility = Visibility.Collapsed;
+            DataStatusBar.Visibility = Visibility.Collapsed;
+            ThemeStatusBar.Visibility = Visibility.Collapsed;
             TimeStatusBar.Visibility = Visibility.Visible;
             
             // Focus the time view
@@ -88,9 +96,11 @@ namespace PraxisWpf
             
             TimeViewControl.Visibility = Visibility.Collapsed;
             DataProcessingViewControl.Visibility = Visibility.Collapsed;
+            ThemeViewControl.Visibility = Visibility.Collapsed;
             TaskViewControl.Visibility = Visibility.Visible;
             TimeStatusBar.Visibility = Visibility.Collapsed;
             DataStatusBar.Visibility = Visibility.Collapsed;
+            ThemeStatusBar.Visibility = Visibility.Collapsed;
             TaskStatusBar.Visibility = Visibility.Visible;
             
             // Focus the task view
@@ -106,15 +116,37 @@ namespace PraxisWpf
             
             TaskViewControl.Visibility = Visibility.Collapsed;
             TimeViewControl.Visibility = Visibility.Collapsed;
+            ThemeViewControl.Visibility = Visibility.Collapsed;
             DataProcessingViewControl.Visibility = Visibility.Visible;
             TaskStatusBar.Visibility = Visibility.Collapsed;
             TimeStatusBar.Visibility = Visibility.Collapsed;
+            ThemeStatusBar.Visibility = Visibility.Collapsed;
             DataStatusBar.Visibility = Visibility.Visible;
             
             // Focus the data processing view
             DataProcessingViewControl.Focus();
             
             Logger.Info("MainWindow", "Switched to data processing view");
+            Logger.TraceExit();
+        }
+
+        public void ShowThemes()
+        {
+            Logger.TraceEnter();
+            
+            TaskViewControl.Visibility = Visibility.Collapsed;
+            TimeViewControl.Visibility = Visibility.Collapsed;
+            DataProcessingViewControl.Visibility = Visibility.Collapsed;
+            ThemeViewControl.Visibility = Visibility.Visible;
+            TaskStatusBar.Visibility = Visibility.Collapsed;
+            TimeStatusBar.Visibility = Visibility.Collapsed;
+            DataStatusBar.Visibility = Visibility.Collapsed;
+            ThemeStatusBar.Visibility = Visibility.Visible;
+            
+            // Focus the theme view
+            ThemeViewControl.Focus();
+            
+            Logger.Info("MainWindow", "Switched to theme view");
             Logger.TraceExit();
         }
 
