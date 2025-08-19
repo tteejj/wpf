@@ -10,10 +10,11 @@ using PraxisWpf.Services;
 
 namespace PraxisWpf.Features.TaskViewer
 {
-    public class TaskViewModel : INotifyPropertyChanged
+    public class TaskViewModel : INotifyPropertyChanged, ISaveableService
     {
         private readonly IDataService _dataService;
         private IDisplayableItem? _selectedItem;
+        private ActionBasedAutoSaveService? _autoSaveService;
 
         public ObservableCollection<IDisplayableItem> Items { get; private set; }
 
@@ -130,6 +131,10 @@ namespace PraxisWpf.Features.TaskViewer
             Logger.Critical("TaskViewModel", $"🔥 NEW PROJECT CREATED: Id1={newProject.Id1}, Name='{newProject.Name}', IsInEditMode={newProject.IsInEditMode}");
             Logger.Critical("TaskViewModel", $"🔥 SELECTED ITEM SET TO: {SelectedItem?.DisplayName ?? "NULL"}");
             Logger.Critical("TaskViewModel", $"🔥 TOTAL ROOT ITEMS: {Items.Count}");
+            
+            // Trigger auto-save after creating new project
+            _autoSaveService?.SaveAfterAction("Tasks", "Create New Project");
+            
             Logger.TraceExit();
         }
 
@@ -212,6 +217,10 @@ namespace PraxisWpf.Features.TaskViewer
             SelectedItem = newSubtask;
             Logger.Critical("TaskViewModel", $"🔥 NEW SUBTASK CREATED: Id1={newSubtask.Id1}, Name='{newSubtask.Name}', IsInEditMode={newSubtask.IsInEditMode}");
             Logger.Critical("TaskViewModel", $"🔥 SELECTED ITEM SET TO: {SelectedItem?.DisplayName ?? "NULL"}");
+            
+            // Trigger auto-save after creating new subtask
+            _autoSaveService?.SaveAfterAction("Tasks", "Create New Subtask");
+            
             Logger.TraceExit();
         }
 
@@ -237,10 +246,15 @@ namespace PraxisWpf.Features.TaskViewer
         {
             if (SelectedItem == null) return;
 
+            var deletedItemName = SelectedItem.DisplayName;
+            
             // Find and remove from parent collection
             if (RemoveFromCollection(Items, SelectedItem))
             {
                 SelectedItem = null;
+                
+                // Trigger auto-save after deleting item
+                _autoSaveService?.SaveAfterAction("Tasks", $"Delete Item: {deletedItemName}");
             }
         }
 
@@ -506,6 +520,37 @@ namespace PraxisWpf.Features.TaskViewer
 
             Logger.TraceExit();
         }
+
+        /// <summary>
+        /// Sets the auto-save service for action-based saving
+        /// </summary>
+        public void SetAutoSaveService(ActionBasedAutoSaveService autoSaveService)
+        {
+            _autoSaveService = autoSaveService;
+            Logger.Info("TaskViewModel", "Auto-save service configured");
+        }
+
+        #region ISaveableService Implementation
+
+        public string ServiceName => "TaskViewModel";
+
+        public void Save()
+        {
+            Logger.TraceEnter();
+            try
+            {
+                _dataService.SaveItems(Items);
+                Logger.Info("TaskViewModel", "Task data saved successfully");
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("TaskViewModel", $"Failed to save task data: {ex.Message}");
+                throw; // Re-throw so caller knows save failed
+            }
+            Logger.TraceExit();
+        }
+
+        #endregion
 
         public event PropertyChangedEventHandler? PropertyChanged;
 

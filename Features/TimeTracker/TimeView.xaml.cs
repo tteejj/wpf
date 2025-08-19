@@ -109,6 +109,16 @@ namespace PraxisWpf.Features.TimeTracker
                             }
                         }
                         break;
+
+                    case Key.E:
+                        // E key exports weekly timesheet to clipboard
+                        Logger.Critical("TimeView", "🔥 E KEY - EXPORT WEEKLY TIMESHEET");
+                        if (viewModel?.ExportWeeklyTimesheetCommand.CanExecute(null) == true)
+                        {
+                            viewModel.ExportWeeklyTimesheetCommand.Execute(null);
+                            e.Handled = true;
+                        }
+                        break;
                 }
 
                 if (!e.Handled)

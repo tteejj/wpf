@@ -107,6 +107,48 @@ Log levels available:
 - Enable performance tracking by setting log level to "Trace"
 - Look for performance markers in log files showing operation timing
 
+## Deployment (Framework-Dependent)
+
+For deploying to machines that have .NET 8 installed but not the SDK:
+
+### 1. Build Minimal Deployment Package
+```bash
+dotnet publish -c Release -r win-x64 --self-contained false
+```
+
+This creates a lightweight package in:
+`bin/Release/net8.0-windows/win-x64/publish/`
+
+### 2. Email-Safe Deployment (Zip + Base64)
+
+Use the included `Deploy.ps1` script to create email-friendly deployments:
+
+**To Encode (for sending):**
+```powershell
+.\Deploy.ps1 Encode
+```
+
+**To Decode (on target machine):**
+```powershell
+.\Deploy.ps1 Decode
+```
+
+### 3. Deployment Process
+
+1. Build the release version
+2. Run `.\Deploy.ps1 Encode` to create `deployment.txt`
+3. Email the `deployment.txt` file (and `Deploy.ps1` script)
+4. On target machine: Run `.\Deploy.ps1 Decode`
+5. Run `.\PraxisWpf\PraxisWpf.exe`
+
+### Package Contents
+- `PraxisWpf.exe` (150KB) - Main executable
+- `PraxisWpf.dll` (585KB) - Application logic  
+- `PraxisWpf.deps.json` - Dependencies metadata
+- `PraxisWpf.runtimeconfig.json` - Runtime configuration
+
+**Total size:** ~777KB (compresses to ~200KB in base64 text file)
+
 ## Development Notes
 
 ### Architecture

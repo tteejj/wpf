@@ -1,0 +1,5 @@
+/home/teej/projects/github/wpf/bin/Release/net8.0-windows/win-x64/publish/PraxisWpf.exe
+/home/teej/projects/github/wpf/bin/Release/net8.0-windows/win-x64/publish/PraxisWpf.dll
+/home/teej/projects/github/wpf/bin/Release/net8.0-windows/win-x64/publish/PraxisWpf.deps.json
+/home/teej/projects/github/wpf/bin/Release/net8.0-windows/win-x64/publish/PraxisWpf.runtimeconfig.json
+/home/teej/projects/github/wpf/bin/Release/net8.0-windows/win-x64/publish/PraxisWpf.pdb

@@ -10,17 +10,21 @@ using PraxisWpf.Models;
 
 namespace PraxisWpf.Services
 {
-    public class JsonDataService : IDataService
+    public class JsonDataService : IDataService, IAutoSaveable
     {
         private readonly string _dataFilePath;
         private readonly JsonSerializerOptions _jsonOptions;
         private readonly ProjectDataService _projectDataService;
+        private readonly SafeFileWriter _safeWriter;
+        private ObservableCollection<IDisplayableItem>? _lastSavedData;
+        private DateTime _lastSaveTime = DateTime.MinValue;
 
         public JsonDataService(string dataFilePath = "data.json")
         {
             Logger.TraceEnter(parameters: new object[] { dataFilePath });
             
             _dataFilePath = dataFilePath;
+            _safeWriter = new SafeFileWriter(dataFilePath);
             _projectDataService = new ProjectDataService();
             _jsonOptions = new JsonSerializerOptions
             {
@@ -163,8 +167,12 @@ namespace PraxisWpf.Services
                 var jsonString = JsonSerializer.Serialize(dataStructure, _jsonOptions);
                 Logger.Trace("JsonDataService", $"Serialized to {jsonString.Length} characters");
 
-                Logger.TraceData("Write", "JSON to file", _dataFilePath);
-                File.WriteAllText(_dataFilePath, jsonString);
+                Logger.TraceData("SafeWrite", "JSON to file", _dataFilePath);
+                _safeWriter.SafeWrite(jsonString);
+                
+                // Update tracking for auto-save
+                _lastSavedData = new ObservableCollection<IDisplayableItem>(items);
+                _lastSaveTime = DateTime.Now;
                 
                 Logger.Info("JsonDataService", $"Successfully saved {items.Count} tasks and {dataStructure.ProjectData.Count} project data items to {_dataFilePath}");
                 Logger.TraceExit();
@@ -206,6 +214,44 @@ namespace PraxisWpf.Services
         {
             return _projectDataService;
         }
+
+        #region IAutoSaveable Implementation
+
+        public string ServiceName => "JsonDataService";
+
+        public bool HasUnsavedChanges()
+        {
+            // For now, we'll assume changes if no previous save time
+            if (_lastSaveTime == DateTime.MinValue)
+                return true;
+
+            // In a more sophisticated implementation, we could track individual item changes
+            // For now, consider changes if save is older than 5 minutes
+            return DateTime.Now - _lastSaveTime > TimeSpan.FromMinutes(5);
+        }
+
+        public void AutoSave()
+        {
+            Logger.TraceEnter();
+            try
+            {
+                // Auto-save would need access to current data
+                // This is a simplified implementation - in practice, we'd need the current items
+                Logger.Info("JsonDataService", "Auto-save triggered - would save current data if available");
+                
+                // Note: This would need to be called from a context that has access to current items
+                // The TaskViewModel would need to provide this data or register itself with auto-save
+                
+                Logger.TraceExit();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("JsonDataService", "Auto-save failed", ex);
+                throw;
+            }
+        }
+
+        #endregion
     }
 
     public class DataFileStructure

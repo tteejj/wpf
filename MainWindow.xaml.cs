@@ -13,6 +13,7 @@ namespace PraxisWpf
         private TimeViewModel? _timeViewModel;
         private DataProcessingViewModel? _dataProcessingViewModel;
         private MainViewModel? _mainViewModel;
+        private DataSafetyService? _dataSafetyService;
 
         public MainWindow()
         {
@@ -24,10 +25,19 @@ namespace PraxisWpf
                 Logger.Debug("MainWindow", "Initializing WPF components");
                 InitializeComponent();
 
+                Logger.Debug("MainWindow", "Initializing data safety service");
+                _dataSafetyService = new DataSafetyService();
+
                 Logger.Debug("MainWindow", "Creating ViewModels");
                 _taskViewModel = new TaskViewModel();
                 _timeViewModel = new TimeViewModel();
                 _dataProcessingViewModel = new DataProcessingViewModel();
+                
+                // Register services for auto-save
+                // Note: We'll need to update the services to implement IAutoSaveable properly
+                Logger.Debug("MainWindow", "Starting data safety services");
+                _dataSafetyService.Start();
+                _dataSafetyService.SetAutoSaveInterval(2); // 2 minute auto-save
                 
                 // Create a main view model to hold all ViewModels
                 _mainViewModel = new MainViewModel 
@@ -136,7 +146,11 @@ namespace PraxisWpf
             Logger.TraceEnter();
             try
             {
-                Logger.Info("MainWindow", "Window closing");
+                Logger.Info("MainWindow", "Window closing - disposing data safety service");
+                
+                // Dispose data safety service to ensure clean shutdown
+                _dataSafetyService?.Dispose();
+                
                 base.OnClosed(e);
                 Logger.TraceExit();
             }

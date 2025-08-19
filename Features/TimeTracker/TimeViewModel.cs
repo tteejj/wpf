@@ -2,6 +2,8 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
+using System.Windows;
 using System.Windows.Input;
 using PraxisWpf.Commands;
 using PraxisWpf.Interfaces;
@@ -28,6 +30,7 @@ namespace PraxisWpf.Features.TimeTracker
         public ICommand PreviousDayCommand { get; }
         public ICommand NextDayCommand { get; }
         public ICommand TodayCommand { get; }
+        public ICommand ExportWeeklyTimesheetCommand { get; }
 
         public TimeViewModel() : this(new TimeDataService())
         {
@@ -75,6 +78,7 @@ namespace PraxisWpf.Features.TimeTracker
             PreviousDayCommand = new RelayCommand(ExecutePreviousDay);
             NextDayCommand = new RelayCommand(ExecuteNextDay);
             TodayCommand = new RelayCommand(ExecuteToday);
+            ExportWeeklyTimesheetCommand = new RelayCommand(ExecuteExportWeeklyTimesheet);
 
             Logger.Debug("TimeViewModel", "All commands initialized");
             Logger.TraceExit();
@@ -360,6 +364,109 @@ namespace PraxisWpf.Features.TimeTracker
             
             SelectedDate = today;
             Logger.Info("TimeViewModel", $"Navigated to today: {SelectedDate:yyyy-MM-dd}");
+            Logger.TraceExit();
+        }
+
+        private void ExecuteExportWeeklyTimesheet()
+        {
+            Logger.TraceEnter();
+            using var perfTracker = Logger.TracePerformance("ExecuteExportWeeklyTimesheet");
+
+            try
+            {
+                var weekStart = WeekStartDate;
+                var weekEnd = weekStart.AddDays(4); // Monday + 4 = Friday
+                
+                Logger.Info("TimeViewModel", $"Exporting timesheet for week {weekStart:yyyy-MM-dd} to {weekEnd:yyyy-MM-dd}");
+
+                // Get all time entries for the current week
+                var weekEntries = TimeEntries.Where(entry => 
+                    entry.Date >= weekStart && entry.Date <= weekEnd).ToList();
+
+                if (!weekEntries.Any())
+                {
+                    Logger.Warning("TimeViewModel", "No time entries found for current week");
+                    MessageBox.Show("No time entries found for the current week.", "Export Timesheet", 
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
+                // Group by Id1 and Id2 combination
+                var groupedEntries = weekEntries
+                    .GroupBy(entry => new { entry.Id1, entry.Id2 })
+                    .ToList();
+
+                var exportLines = new StringBuilder();
+
+                foreach (var group in groupedEntries)
+                {
+                    var id1 = group.Key.Id1;
+                    var id2 = group.Key.Id2;
+                    
+                    // Skip entries without Id2 (generic timecodes)
+                    if (!id2.HasValue)
+                    {
+                        Logger.Debug("TimeViewModel", $"Skipping generic timecode Id1={id1}");
+                        continue;
+                    }
+
+                    // Calculate daily hours (Mon-Fri)
+                    var dailyHours = new decimal[5]; // Mon=0, Tue=1, Wed=2, Thu=3, Fri=4
+                    
+                    foreach (var entry in group)
+                    {
+                        var dayOfWeek = entry.Date.DayOfWeek;
+                        if (dayOfWeek >= DayOfWeek.Monday && dayOfWeek <= DayOfWeek.Friday)
+                        {
+                            var dayIndex = (int)dayOfWeek - 1; // Monday = 0
+                            dailyHours[dayIndex] += entry.Hours;
+                        }
+                    }
+
+                    // Skip if no hours for this project
+                    if (dailyHours.All(h => h == 0))
+                        continue;
+
+                    // Format Id2 with special formatting: V + padded zeros + Id2 + S (total length 12)
+                    var id2String = id2.Value.ToString();
+                    var paddingLength = 10 - id2String.Length; // V..S takes 2 chars, so 12-2=10 for the number part
+                    if (paddingLength < 0) paddingLength = 0; // Don't pad if Id2 is already too long
+                    
+                    var formattedId2 = $"V{new string('0', paddingLength)}{id2String}S";
+                    
+                    Logger.Debug("TimeViewModel", $"Formatted Id2: {id2.Value} → {formattedId2}");
+
+                    // Build the export line: id1,tab,formattedId2,tab,tab,tab,tab,mon,tab,tue,tab,wed,tab,thu,tab,fri
+                    var line = $"{id1}\t{formattedId2}\t\t\t\t{dailyHours[0]}\t{dailyHours[1]}\t{dailyHours[2]}\t{dailyHours[3]}\t{dailyHours[4]}";
+                    exportLines.AppendLine(line);
+                    
+                    Logger.Debug("TimeViewModel", $"Export line: {line.Replace('\t', '|')}"); // Replace tabs with pipes for logging
+                }
+
+                if (exportLines.Length == 0)
+                {
+                    Logger.Warning("TimeViewModel", "No valid project entries found for export");
+                    MessageBox.Show("No valid project entries found for export.", "Export Timesheet", 
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
+                // Copy to clipboard
+                var exportText = exportLines.ToString().TrimEnd();
+                Clipboard.SetText(exportText);
+                
+                Logger.Info("TimeViewModel", $"Exported {groupedEntries.Count} project entries to clipboard");
+                
+                MessageBox.Show($"Weekly timesheet exported to clipboard!\n\nExported {groupedEntries.Count} project entries for week of {weekStart:MMM dd, yyyy}", 
+                    "Export Complete", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("TimeViewModel", "Error exporting weekly timesheet", ex);
+                MessageBox.Show($"Error exporting timesheet: {ex.Message}", "Export Error", 
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
             Logger.TraceExit();
         }
 
