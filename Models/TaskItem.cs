@@ -117,12 +117,12 @@ namespace PraxisWpf.Models
 
         // JSON-specific property that serializes/deserializes concrete TaskItem types
         [JsonPropertyName("children")]
-        public List<TaskItem> ChildrenForJson
+        public List<TaskItem>? ChildrenForJson
         {
             get
             {
                 Logger.Trace("TaskItem", $"Getting ChildrenForJson for Id1={Id1}, Count={Children.Count}");
-                return Children.Cast<TaskItem>().ToList();
+                return Children.OfType<TaskItem>().ToList();
             }
             set
             {

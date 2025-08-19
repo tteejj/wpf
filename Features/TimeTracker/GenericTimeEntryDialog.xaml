@@ -1,0 +1,76 @@
+<Window x:Class="PraxisWpf.Features.TimeTracker.GenericTimeEntryDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Add Generic Time Entry" Height="250" Width="450"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="{DynamicResource CyberControlBrush}" 
+                BorderBrush="{DynamicResource CyberBorderBrush}" 
+                BorderThickness="0,0,0,1" Padding="10">
+            <TextBlock Text="╔═══ ADD GENERIC TIME ENTRY ═══╗" 
+                       Style="{DynamicResource CyberHeaderText}" 
+                       HorizontalAlignment="Center"/>
+        </Border>
+
+        <!-- Entry form -->
+        <Border Grid.Row="1" Padding="20" Background="{DynamicResource CyberBackgroundBrush}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Timecode ID -->
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Timecode ID:" 
+                           Foreground="{DynamicResource CyberAccentBrush}" 
+                           FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="0" Grid.Column="2" Name="TimecodeTextBox" 
+                         Text="{Binding TimecodeId}" VerticalAlignment="Center"/>
+
+                <!-- Hours -->
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Hours:" 
+                           Foreground="{DynamicResource CyberAccentBrush}" 
+                           FontWeight="Bold" VerticalAlignment="Center"/>
+                <ComboBox Grid.Row="2" Grid.Column="2" Name="HoursComboBox" 
+                          SelectedItem="{Binding Hours}" VerticalAlignment="Center"/>
+
+                <!-- Description -->
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="Description:" 
+                           Foreground="{DynamicResource CyberAccentBrush}" 
+                           FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="4" Grid.Column="2" Name="DescriptionTextBox" 
+                         Text="{Binding Description}" VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+
+        <!-- Buttons -->
+        <Border Grid.Row="2" Background="{DynamicResource CyberControlBrush}" 
+                BorderBrush="{DynamicResource CyberBorderBrush}" 
+                BorderThickness="0,1,0,0" Padding="20,10">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Add Entry" Name="AddButton" 
+                        Click="AddButton_Click" Margin="0,0,10,0" 
+                        Padding="20,5" IsDefault="True"/>
+                <Button Content="Cancel" Name="CancelButton" 
+                        Click="CancelButton_Click" Padding="20,5" 
+                        IsCancel="True"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

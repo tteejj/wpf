@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
+using PraxisWpf.Commands;
 using PraxisWpf.Interfaces;
 using PraxisWpf.Models;
 using PraxisWpf.Services;
@@ -43,6 +44,7 @@ namespace PraxisWpf.Features.TaskViewer
         public ICommand CollapseCommand { get; }
         public ICommand ExpandAllCommand { get; }
         public ICommand CollapseAllCommand { get; }
+        public ICommand OpenNotesCommand { get; }
 
         public TaskViewModel() : this(new JsonDataService())
         {
@@ -68,6 +70,10 @@ namespace PraxisWpf.Features.TaskViewer
                 SelectedItem = Items[0];
                 Logger.Info("TaskViewModel", $"Auto-selected first item: {SelectedItem.DisplayName}");
             }
+            else
+            {
+                Logger.Info("TaskViewModel", "No items loaded - no initial selection");
+            }
 
             // Wire up collection change events
             Items.CollectionChanged += (s, e) => {
@@ -86,6 +92,7 @@ namespace PraxisWpf.Features.TaskViewer
             CollapseCommand = new RelayCommand(ExecuteCollapse, CanExecuteCollapse);
             ExpandAllCommand = new RelayCommand(ExecuteExpandAll);
             CollapseAllCommand = new RelayCommand(ExecuteCollapseAll);
+            OpenNotesCommand = new RelayCommand(ExecuteOpenNotes, CanExecuteOpenNotes);
             Logger.Debug("TaskViewModel", "All commands initialized");
 
             Logger.TraceExit();
@@ -97,44 +104,30 @@ namespace PraxisWpf.Features.TaskViewer
             using var perfTracker = Logger.TracePerformance("ExecuteNew");
 
             var nextId = GetNextId1();
-            Logger.Debug("TaskViewModel", $"Creating new task with Id1={nextId}");
+            Logger.Debug("TaskViewModel", $"Creating new project with Id1={nextId}");
 
-            var newTask = new TaskItem
+            var newProject = new TaskItem
             {
                 Id1 = nextId,
                 Id2 = 1,
-                Name = "New Task",
+                Name = "New Project",
                 IsInEditMode = true,
                 Priority = PriorityType.Medium,
                 AssignedDate = DateTime.Now,
-                DueDate = DateTime.Today.AddDays(7), // Default due date 1 week from now
-                BringForwardDate = DateTime.Today.AddDays(1) // Default bring forward tomorrow
+                DueDate = DateTime.Today.AddDays(30), // Default due date 1 month from now for projects
+                BringForwardDate = DateTime.Today.AddDays(1)
             };
-            Logger.Debug("TaskViewModel", $"New task created: Id1={newTask.Id1}, Name={newTask.Name}");
+            Logger.Debug("TaskViewModel", $"New project created: Id1={newProject.Id1}, Name={newProject.Name}");
 
-            if (SelectedItem != null)
-            {
-                Logger.Info("TaskViewModel", $"Adding new task as child of '{SelectedItem.DisplayName}'");
-                SelectedItem.Children.Add(newTask);
-                SelectedItem.IsExpanded = true;
-                Logger.TraceData("Add", "child task", $"Parent: {SelectedItem.DisplayName}");
-            }
-            else
-            {
-                Logger.Info("TaskViewModel", "Adding new task as root item");
-                Items.Add(newTask);
-                Logger.TraceData("Add", "root task");
-            }
+            // N key ALWAYS creates top-level projects
+            Logger.Info("TaskViewModel", "Adding new project as root item");
+            Items.Add(newProject);
+            Logger.TraceData("Add", "root project");
 
-            SelectedItem = newTask;
-            Logger.Critical("TaskViewModel", $"🔥 NEW TASK CREATED: Id1={newTask.Id1}, Name='{newTask.Name}', IsInEditMode={newTask.IsInEditMode}");
+            SelectedItem = newProject;
+            Logger.Critical("TaskViewModel", $"🔥 NEW PROJECT CREATED: Id1={newProject.Id1}, Name='{newProject.Name}', IsInEditMode={newProject.IsInEditMode}");
             Logger.Critical("TaskViewModel", $"🔥 SELECTED ITEM SET TO: {SelectedItem?.DisplayName ?? "NULL"}");
             Logger.Critical("TaskViewModel", $"🔥 TOTAL ROOT ITEMS: {Items.Count}");
-            if (SelectedItem != null)
-            {
-                Logger.Critical("TaskViewModel", $"🔥 SELECTED ITEM CHILDREN: {SelectedItem.Children.Count}");
-                Logger.Critical("TaskViewModel", $"🔥 SELECTED ITEM EXPANDED: {SelectedItem.IsExpanded}");
-            }
             Logger.TraceExit();
         }
 
@@ -405,40 +398,68 @@ namespace PraxisWpf.Features.TaskViewer
             return max;
         }
 
+        private void ExecuteOpenNotes()
+        {
+            Logger.TraceEnter();
+            using var perfTracker = Logger.TracePerformance("ExecuteOpenNotes");
+
+            if (SelectedItem == null)
+            {
+                Logger.Warning("TaskViewModel", "Cannot open notes: no item selected");
+                return;
+            }
+
+            try
+            {
+                Logger.Info("TaskViewModel", $"Opening notes editor for task: {SelectedItem.DisplayName}");
+                
+                // Cast to TaskItem to access the concrete implementation
+                if (SelectedItem is TaskItem taskItem)
+                {
+                    var notesDialog = new NotesDialog(taskItem);
+                    
+                    // Set owner to current main window for proper modal behavior
+                    var mainWindow = System.Windows.Application.Current.MainWindow;
+                    if (mainWindow != null)
+                    {
+                        notesDialog.Owner = mainWindow;
+                    }
+                    
+                    Logger.Debug("TaskViewModel", "Showing notes dialog");
+                    var result = notesDialog.ShowDialog();
+                    
+                    Logger.Info("TaskViewModel", $"Notes dialog closed with result: {result}");
+                }
+                else
+                {
+                    Logger.Error("TaskViewModel", "Selected item is not a TaskItem - cannot open notes");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("TaskViewModel", "Failed to open notes editor", ex);
+                System.Windows.MessageBox.Show(
+                    $"Failed to open notes editor: {ex.Message}", 
+                    "Error", 
+                    System.Windows.MessageBoxButton.OK, 
+                    System.Windows.MessageBoxImage.Error);
+            }
+
+            Logger.TraceExit();
+        }
+
+        private bool CanExecuteOpenNotes()
+        {
+            var canExecute = SelectedItem != null;
+            Logger.Trace("TaskViewModel", $"CanExecuteOpenNotes: {canExecute}");
+            return canExecute;
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
-
-    // Simple RelayCommand implementation
-    public class RelayCommand : ICommand
-    {
-        private readonly System.Action _execute;
-        private readonly System.Func<bool>? _canExecute;
-
-        public RelayCommand(System.Action execute, System.Func<bool>? canExecute = null)
-        {
-            _execute = execute ?? throw new System.ArgumentNullException(nameof(execute));
-            _canExecute = canExecute;
-        }
-
-        public event System.EventHandler? CanExecuteChanged
-        {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
-        }
-
-        public bool CanExecute(object? parameter)
-        {
-            return _canExecute?.Invoke() ?? true;
-        }
-
-        public void Execute(object? parameter)
-        {
-            _execute();
         }
     }
 }

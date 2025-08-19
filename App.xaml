@@ -19,6 +19,9 @@
             
             <!-- Date display converter -->
             <converters:DateDisplayConverter x:Key="DateDisplayConverter"/>
+            
+            <!-- Inverse boolean converter -->
+            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -184,27 +184,6 @@ namespace PraxisWpf.Features.TaskViewer
                         }
                         break;
 
-                    case Key.P:
-                        Logger.Critical("TaskView", "🔥 P KEY CASE HIT!");
-                        // P key creates new project
-                        if (viewModel.NewProjectCommand.CanExecute(null))
-                        {
-                            Logger.Critical("TaskView", "🔥 P KEY - EXECUTING NEW PROJECT COMMAND");
-                            viewModel.NewProjectCommand.Execute(null);
-                            Logger.Critical("TaskView", "🔥 P KEY - NEW PROJECT COMMAND EXECUTED");
-                            
-                            // Focus the newly created project's TextBox after a brief delay
-                            Dispatcher.BeginInvoke(new Action(() => {
-                                FocusEditTextBoxForSelectedItem();
-                            }), System.Windows.Threading.DispatcherPriority.Render);
-                            
-                            e.Handled = true;
-                        }
-                        else
-                        {
-                            Logger.Critical("TaskView", "🔥 P KEY - NEW PROJECT COMMAND CAN'T EXECUTE!");
-                        }
-                        break;
 
                     case Key.E:
                         Logger.Critical("TaskView", "🔥 E KEY CASE HIT!");
@@ -388,6 +367,38 @@ namespace PraxisWpf.Features.TaskViewer
                             }
                         }
                         break;
+
+                    case Key.T:
+                        // T key opens time entry screen
+                        Logger.Critical("TaskView", "🔥 T KEY CASE HIT!");
+                        var mainWindow = System.Windows.Window.GetWindow(this) as MainWindow;
+                        if (mainWindow != null)
+                        {
+                            Logger.Critical("TaskView", "🔥 T KEY - SWITCHING TO TIME ENTRY");
+                            mainWindow.ShowTimeEntry();
+                            e.Handled = true;
+                        }
+                        else
+                        {
+                            Logger.Critical("TaskView", "🔥 T KEY - MAIN WINDOW NOT FOUND!");
+                        }
+                        break;
+
+                    case Key.O:
+                        // O key opens notes editor
+                        Logger.Critical("TaskView", "🔥 O KEY CASE HIT!");
+                        if (viewModel.OpenNotesCommand.CanExecute(null))
+                        {
+                            Logger.Critical("TaskView", "🔥 O KEY - EXECUTING OPEN NOTES COMMAND");
+                            viewModel.OpenNotesCommand.Execute(null);
+                            Logger.Critical("TaskView", "🔥 O KEY - OPEN NOTES COMMAND EXECUTED");
+                            e.Handled = true;
+                        }
+                        else
+                        {
+                            Logger.Critical("TaskView", "🔥 O KEY - OPEN NOTES COMMAND CAN'T EXECUTE!");
+                        }
+                        break;
                 }
 
                 Logger.TraceExit();
@@ -468,6 +479,29 @@ namespace PraxisWpf.Features.TaskViewer
                         }
                         e.Handled = true;
                         break;
+
+                    case Key.Tab:
+                        // Tab moves to next edit field
+                        Logger.Info("TaskView", "Tab pressed in TextBox - moving to next field");
+                        var treeViewItem = FindParent<TreeViewItem>(textBox);
+                        if (treeViewItem != null)
+                        {
+                            // Find next focusable control
+                            var datePicker = FindVisualChild<DatePicker>(treeViewItem);
+                            var comboBox = FindVisualChild<ComboBox>(treeViewItem);
+                            
+                            if (datePicker != null && datePicker.Visibility == Visibility.Visible)
+                            {
+                                datePicker.Focus();
+                                e.Handled = true;
+                            }
+                            else if (comboBox != null && comboBox.Visibility == Visibility.Visible)
+                            {
+                                comboBox.Focus();
+                                e.Handled = true;
+                            }
+                        }
+                        break;
                 }
 
                 Logger.TraceExit();
@@ -499,6 +533,21 @@ namespace PraxisWpf.Features.TaskViewer
             return null;
         }
 
+        // Helper method to find visual parents
+        private static T FindParent<T>(DependencyObject child) where T : DependencyObject
+        {
+            var parent = VisualTreeHelper.GetParent(child);
+            while (parent != null)
+            {
+                if (parent is T result)
+                {
+                    return result;
+                }
+                parent = VisualTreeHelper.GetParent(parent);
+            }
+            return null;
+        }
+
         private void FocusEditTextBoxForSelectedItem()
         {
             try
@@ -510,13 +559,47 @@ namespace PraxisWpf.Features.TaskViewer
                     return;
                 }
 
+                // Try multiple times with increasing delays to handle UI generation timing
+                FocusEditTextBoxWithRetry(viewModel.SelectedItem, 0);
+            }
+            catch (Exception ex)
+            {
+                Logger.Critical("TaskView", "🔥 FocusEditTextBoxForSelectedItem: Exception", ex);
+            }
+        }
+
+        private void FocusEditTextBoxWithRetry(IDisplayableItem selectedItem, int attempt)
+        {
+            const int maxAttempts = 5;
+            
+            if (attempt >= maxAttempts)
+            {
+                Logger.Critical("TaskView", $"🔥 FocusEditTextBoxWithRetry: Max attempts ({maxAttempts}) reached");
+                return;
+            }
+
+            try
+            {
+                // Update the TreeView items to ensure containers are generated
+                TaskTreeView.UpdateLayout();
+                
                 // Find the TreeViewItem for the selected item
-                var treeViewItem = TaskTreeView.ItemContainerGenerator.ContainerFromItem(viewModel.SelectedItem) as TreeViewItem;
+                var treeViewItem = TaskTreeView.ItemContainerGenerator.ContainerFromItem(selectedItem) as TreeViewItem;
                 if (treeViewItem == null)
                 {
-                    Logger.Critical("TaskView", "🔥 FocusEditTextBoxForSelectedItem: TreeViewItem not found");
+                    Logger.Critical("TaskView", $"🔥 FocusEditTextBoxWithRetry: TreeViewItem not found on attempt {attempt + 1}");
+                    
+                    // Retry with a delay
+                    var delay = TimeSpan.FromMilliseconds(50 * (attempt + 1));
+                    Dispatcher.BeginInvoke(new Action(() => {
+                        FocusEditTextBoxWithRetry(selectedItem, attempt + 1);
+                    }), System.Windows.Threading.DispatcherPriority.Background, delay);
                     return;
                 }
+
+                // Ensure the TreeViewItem is selected and visible
+                treeViewItem.IsSelected = true;
+                treeViewItem.BringIntoView();
 
                 // Find the EditTextBox within this TreeViewItem
                 var editTextBox = FindVisualChild<TextBox>(treeViewItem);
@@ -524,16 +607,22 @@ namespace PraxisWpf.Features.TaskViewer
                 {
                     var focusResult = editTextBox.Focus();
                     editTextBox.SelectAll();
-                    Logger.Critical("TaskView", $"🔥 FocusEditTextBoxForSelectedItem: Focus={focusResult}, IsFocused={editTextBox.IsFocused}");
+                    Logger.Critical("TaskView", $"🔥 FocusEditTextBoxWithRetry: SUCCESS on attempt {attempt + 1}! Focus={focusResult}, IsFocused={editTextBox.IsFocused}");
                 }
                 else
                 {
-                    Logger.Critical("TaskView", "🔥 FocusEditTextBoxForSelectedItem: EditTextBox not found in TreeViewItem");
+                    Logger.Critical("TaskView", $"🔥 FocusEditTextBoxWithRetry: EditTextBox not found in TreeViewItem on attempt {attempt + 1}");
+                    
+                    // Retry with a delay
+                    var delay = TimeSpan.FromMilliseconds(50 * (attempt + 1));
+                    Dispatcher.BeginInvoke(new Action(() => {
+                        FocusEditTextBoxWithRetry(selectedItem, attempt + 1);
+                    }), System.Windows.Threading.DispatcherPriority.Background, delay);
                 }
             }
             catch (Exception ex)
             {
-                Logger.Critical("TaskView", "🔥 FocusEditTextBoxForSelectedItem: Exception", ex);
+                Logger.Critical("TaskView", $"🔥 FocusEditTextBoxWithRetry: Exception on attempt {attempt + 1}", ex);
             }
         }
     }

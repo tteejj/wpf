@@ -2,7 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:taskViewer="clr-namespace:PraxisWpf.Features.TaskViewer"
-        Title="Praxis WPF Task Manager" Height="600" Width="800">
+        xmlns:timeTracker="clr-namespace:PraxisWpf.Features.TimeTracker"
+        Title="Praxis WPF Task Manager" Height="600" Width="1000">
     
     <!-- No Window.InputBindings - all key handling at data level -->
     
@@ -17,17 +18,39 @@
         <Border Grid.Row="0" Background="{DynamicResource CyberControlBrush}" 
                 BorderBrush="{DynamicResource CyberBorderBrush}" 
                 BorderThickness="0,0,0,2" Padding="10">
-            <TextBlock Text="╔═══ PRAXIS TASK MANAGER ═══╗" 
-                       Style="{DynamicResource CyberHeaderText}"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <Button Grid.Column="0" Content="Tasks (Esc)" Name="TasksButton" 
+                        Click="TasksButton_Click" Margin="0,0,10,0" Padding="8,2"/>
+                        
+                <TextBlock Grid.Column="1" Text="╔═══ PRAXIS TASK MANAGER ═══╗" 
+                           Style="{DynamicResource CyberHeaderText}" HorizontalAlignment="Center"/>
+                           
+                <Button Grid.Column="2" Content="Time Entry (T)" Name="TimeButton" 
+                        Click="TimeButton_Click" Margin="10,0,0,0" Padding="8,2"/>
+            </Grid>
         </Border>
 
-        <!-- Main content -->
-        <taskViewer:TaskView Grid.Row="1" DataContext="{Binding}"/>
+        <!-- Main content area with switching views -->
+        <Grid Grid.Row="1">
+            <taskViewer:TaskView Name="TaskViewControl" DataContext="{Binding TaskViewModel}" 
+                                 Visibility="Visible"/>
+            <timeTracker:TimeView Name="TimeViewControl" DataContext="{Binding TimeViewModel}" 
+                                  Visibility="Collapsed"/>
+        </Grid>
 
         <!-- Status bar -->
         <StatusBar Grid.Row="2">
-            <StatusBarItem>
-                <TextBlock Text="N: New Task | P: New Project | S: New Subtask | E: Edit | Del: Delete | +/-: Expand/Collapse | Ctrl+S: Save"/>
+            <StatusBarItem Name="TaskStatusBar">
+                <TextBlock Text="N: New Project | S: New Subtask | E: Edit | O: Notes | T: Time Entry | Del: Delete | +/-: Expand/Collapse | Ctrl+S: Save"/>
+            </StatusBarItem>
+            <StatusBarItem Name="TimeStatusBar" Visibility="Collapsed">
+                <TextBlock Text="Esc: Back to Tasks | P: Project Time | N: Generic Time | Del: Delete | Ctrl+S: Save"/>
             </StatusBarItem>
         </StatusBar>
     </Grid>

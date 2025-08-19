@@ -79,7 +79,8 @@
 
                         <!-- Due Date -->
                         <TextBlock Grid.Column="3" VerticalAlignment="Center"
-                                   Text="{Binding DueDate, Converter={StaticResource DateDisplayConverter}}">
+                                   Text="{Binding DueDate, Converter={StaticResource DateDisplayConverter}}"
+                                   Visibility="{Binding IsInEditMode, Converter={StaticResource InverseBoolToVisibilityConverter}}">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                                     <Setter Property="Foreground" Value="{DynamicResource CyberDimCyanBrush}"/>
@@ -92,9 +93,13 @@
                                 </Style>
                             </TextBlock.Style>
                         </TextBlock>
+                        <DatePicker Grid.Column="3" SelectedDate="{Binding DueDate, UpdateSourceTrigger=PropertyChanged}" 
+                                    Visibility="{Binding IsInEditMode, Converter={StaticResource BoolToVisibilityConverter}}"
+                                    VerticalAlignment="Center" FontSize="10"/>
 
                         <!-- Priority with single character -->
-                        <TextBlock Grid.Column="4" VerticalAlignment="Center">
+                        <TextBlock Grid.Column="4" VerticalAlignment="Center"
+                                   Visibility="{Binding IsInEditMode, Converter={StaticResource InverseBoolToVisibilityConverter}}">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                                     <Style.Triggers>
@@ -115,6 +120,15 @@
                                 </Style>
                             </TextBlock.Style>
                         </TextBlock>
+                        <ComboBox Grid.Column="4" SelectedItem="{Binding Priority, UpdateSourceTrigger=PropertyChanged}" 
+                                  Visibility="{Binding IsInEditMode, Converter={StaticResource BoolToVisibilityConverter}}"
+                                  VerticalAlignment="Center" FontSize="10" Width="15">
+                            <ComboBox.Items>
+                                <models:PriorityType>High</models:PriorityType>
+                                <models:PriorityType>Medium</models:PriorityType>
+                                <models:PriorityType>Low</models:PriorityType>
+                            </ComboBox.Items>
+                        </ComboBox>
 
                         <!-- Sub-tasks indicator (placeholder for now) -->
                         <TextBlock Grid.Column="5" Text="-" VerticalAlignment="Center"
@@ -123,7 +137,8 @@
                         <!-- Name column - switches between TextBlock and TextBox -->
                         <TextBlock Grid.Column="6" Text="{Binding Name}" 
                                    Visibility="{Binding IsInEditMode, Converter={StaticResource InverseBoolToVisibilityConverter}}" 
-                                   VerticalAlignment="Center"/>
+                                   VerticalAlignment="Center"
+                                   Foreground="{DynamicResource CyberAccentBrush}"/>
                         <TextBox Grid.Column="6" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
                                  Visibility="{Binding IsInEditMode, Converter={StaticResource BoolToVisibilityConverter}}"
                                  BorderThickness="1" VerticalAlignment="Center"

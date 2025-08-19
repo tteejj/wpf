@@ -1,0 +1,101 @@
+<Window x:Class="PraxisWpf.Features.TimeTracker.ProjectTimeEntryDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Add Project Time Entry" Height="300" Width="500"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="{DynamicResource CyberControlBrush}" 
+                BorderBrush="{DynamicResource CyberBorderBrush}" 
+                BorderThickness="0,0,0,1" Padding="10">
+            <TextBlock Text="╔═══ ADD PROJECT TIME ENTRY ═══╗" 
+                       Style="{DynamicResource CyberHeaderText}" 
+                       HorizontalAlignment="Center"/>
+        </Border>
+
+        <!-- Project selection -->
+        <Border Grid.Row="1" Padding="20" Background="{DynamicResource CyberBackgroundBrush}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="Select Project:" 
+                           Foreground="{DynamicResource CyberAccentBrush}" 
+                           FontWeight="Bold" Margin="0,0,0,10"/>
+
+                <ListBox Grid.Row="1" Name="ProjectListBox" 
+                         ItemsSource="{Binding AvailableProjects}"
+                         SelectedItem="{Binding SelectedProject}"
+                         Background="{DynamicResource CyberBackgroundBrush}"
+                         BorderBrush="{DynamicResource CyberBorderBrush}"
+                         SelectionMode="Single">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Foreground="{DynamicResource CyberAccentBrush}" Padding="5">
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}{0}.{1} - {2}">
+                                        <Binding Path="Id1"/>
+                                        <Binding Path="Id2"/>
+                                        <Binding Path="Name"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </Border>
+
+        <!-- Time and description entry -->
+        <Border Grid.Row="2" Padding="20" Background="{DynamicResource CyberBackgroundBrush}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" Text="Hours:" 
+                           Foreground="{DynamicResource CyberAccentBrush}" 
+                           FontWeight="Bold" VerticalAlignment="Center"/>
+
+                <ComboBox Grid.Column="1" Name="HoursComboBox" 
+                          SelectedItem="{Binding Hours}" Margin="5,0,0,0"/>
+
+                <TextBlock Grid.Column="3" Text="Description:" 
+                           Foreground="{DynamicResource CyberAccentBrush}" 
+                           FontWeight="Bold" VerticalAlignment="Center"/>
+
+                <TextBox Grid.Column="4" Name="DescriptionTextBox" 
+                         Text="{Binding Description}" Margin="5,0,0,0" 
+                         VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+
+        <!-- Buttons -->
+        <Border Grid.Row="3" Background="{DynamicResource CyberControlBrush}" 
+                BorderBrush="{DynamicResource CyberBorderBrush}" 
+                BorderThickness="0,1,0,0" Padding="20,10">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Add Entry" Name="AddButton" 
+                        Click="AddButton_Click" Margin="0,0,10,0" 
+                        Padding="20,5" IsDefault="True"/>
+                <Button Content="Cancel" Name="CancelButton" 
+                        Click="CancelButton_Click" Padding="20,5" 
+                        IsCancel="True"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
