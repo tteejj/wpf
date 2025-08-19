@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-/home/teej/projects/github/wpf/obj/Debug/net8.0-windows/
+C:\Users\jhnhe\OneDrive\Documents\GitHub\wpf\obj\Debug\net8.0-windows\
 PraxisWpf
 none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
-/home/teej/projects/github/wpf/App.xaml
-9414324878
+C:\Users\jhnhe\OneDrive\Documents\GitHub\wpf\App.xaml
+91922121566
 
-34-1548957199
-198-891690674
-Features/DataProcessing/DataProcessingView.xaml;Features/TaskViewer/NotesDialog.xaml;Features/TaskViewer/TaskView.xaml;Features/TimeTracker/GenericTimeEntryDialog.xaml;Features/TimeTracker/ProjectTimeEntryDialog.xaml;Features/TimeTracker/TimeView.xaml;MainWindow.xaml;Themes/Cyberpunk.xaml;Themes/MinimalTheme.xaml;
+351015446845
+198-2136442823
+Features\DataProcessing\DataProcessingView.xaml;Features\TaskViewer\NotesDialog.xaml;Features\TaskViewer\TaskView.xaml;Features\TimeTracker\GenericTimeEntryDialog.xaml;Features\TimeTracker\ProjectTimeEntryDialog.xaml;Features\TimeTracker\TimeView.xaml;MainWindow.xaml;Themes\Cyberpunk.xaml;Themes\MinimalTheme.xaml;
 
 False
 

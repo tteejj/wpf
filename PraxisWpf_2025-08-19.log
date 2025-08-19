@@ -1,0 +1,132 @@
+2025-08-19 10:32:23.307 [T01]INFO     Logger               Logger initialized | Level=Info, StackTrace=False, ThreadId=True, Path=PraxisWpf_2025-08-19.log
+2025-08-19 10:32:23.311 [T01]INFO     Logger               Logger initialized | Level=Debug, StackTrace=True, ThreadId=True, Path=PraxisWpf_2025-08-19.log
+2025-08-19 10:32:23.312 [T01]INFO     AppConfig            Configuration loaded from app-config.json
+2025-08-19 10:32:23.312 [T01]INFO     App                  Application starting up
+2025-08-19 10:32:23.312 [T01]DEBUG    App                  Command line args: 
+2025-08-19 10:32:23.312 [T01]INFO     App                  Application startup completed successfully
+2025-08-19 10:32:23.323 [T01]DEBUG    MainWindow           Initializing WPF components
+2025-08-19 10:32:23.456 [T01]DEBUG    TaskView             Initializing XAML components
+2025-08-19 10:32:23.473 [T01]INFO     TaskView             TaskView initialized successfully
+2025-08-19 10:32:23.475 [T01]DEBUG    TaskView.xaml        PERF END: TaskView Constructor | Duration: 17.38ms
+2025-08-19 10:32:23.477 [T01]DEBUG    TimeView             Initializing XAML components
+2025-08-19 10:32:23.501 [T01]INFO     TimeView             TimeView initialized successfully
+2025-08-19 10:32:23.501 [T01]DEBUG    TimeView.xaml        PERF END: TimeView Constructor | Duration: 23.90ms
+2025-08-19 10:32:23.502 [T01]DEBUG    DataProcessingView   Initializing XAML components
+2025-08-19 10:32:23.545 [T01]INFO     DataProcessingView   DataProcessingView initialized successfully
+2025-08-19 10:32:23.545 [T01]DEBUG    DataProcessingView.xaml PERF END: DataProcessingView Constructor | Duration: 43.88ms
+2025-08-19 10:32:23.548 [T01]DEBUG    MainWindow           Initializing data safety service
+2025-08-19 10:32:23.549 [T01]INFO     BackupManager        Initialized - Directory: , Max backups: 5
+2025-08-19 10:32:23.549 [T01]INFO     AutoSaveService      Initialized with 2 minute interval
+2025-08-19 10:32:23.550 [T01]DEBUG    DataSafetyService    No recovery flag found - clean startup
+2025-08-19 10:32:23.550 [T01]INFO     DataSafetyService    Data safety service initialized with comprehensive protection
+2025-08-19 10:32:23.550 [T01]DEBUG    MainWindow           Creating ViewModels
+2025-08-19 10:32:23.550 [T01]INFO     JsonDataService      Initialized with data file: data.json
+2025-08-19 10:32:23.550 [T01]DEBUG    JsonDataService      JSON options configured | WriteIndented=true, CamelCase=true, StringEnumConverter=true
+2025-08-19 10:32:23.551 [T01]DEBUG    TaskViewModel        Data service initialized: JsonDataService
+2025-08-19 10:32:23.552 [T01]DEBUG    JsonDataService      Reading data file: data.json
+2025-08-19 10:32:23.586 [T01]ERROR    JsonDataService      JSON deserialization failed | File: data.json Exception: JsonException: The JSON value could not be converted to PraxisWpf.Services.DataFileStructure. Path: $ | LineNumber: 0 | BytePositionInLine: 1.
+Stack:    at System.Text.Json.ThrowHelper.ThrowJsonException_DeserializeUnableToConvertValue(Type propertyType)
+   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryRead(Utf8JsonReader& reader, Type typeToConvert, JsonSerializerOptions options, ReadStack& state, T& value)
+   at System.Text.Json.Serialization.JsonConverter`1.TryRead(Utf8JsonReader& reader, Type typeToConvert, JsonSerializerOptions options, ReadStack& state, T& value, Boolean& isPopulatedValue)
+   at System.Text.Json.Serialization.JsonConverter`1.ReadCore(Utf8JsonReader& reader, JsonSerializerOptions options, ReadStack& state)
+   at System.Text.Json.JsonSerializer.ReadFromSpan[TValue](ReadOnlySpan`1 utf8Json, JsonTypeInfo`1 jsonTypeInfo, Nullable`1 actualByteCount)
+   at System.Text.Json.JsonSerializer.ReadFromSpan[TValue](ReadOnlySpan`1 json, JsonTypeInfo`1 jsonTypeInfo)
+   at System.Text.Json.JsonSerializer.Deserialize[TValue](String json, JsonSerializerOptions options)
+   at PraxisWpf.Services.JsonDataService.LoadItems() in C:\Users\jhnhe\OneDrive\Documents\GitHub\wpf\Services\JsonDataService.cs:line 71
+2025-08-19 10:32:23.586 [T01]DEBUG    JsonDataService      PERF END: LoadItems | Duration: 34.32ms
+2025-08-19 10:32:23.586 [T01]INFO     TaskViewModel        Loaded 0 root items
+2025-08-19 10:32:23.586 [T01]INFO     TaskViewModel        No items loaded - no initial selection
+2025-08-19 10:32:23.587 [T01]DEBUG    TaskViewModel        All commands initialized
+2025-08-19 10:32:23.587 [T01]DEBUG    TaskViewModel        PERF END: TaskViewModel Constructor | Duration: 35.54ms
+2025-08-19 10:32:23.587 [T01]INFO     JsonDataService      Initialized with data file: data.json
+2025-08-19 10:32:23.587 [T01]DEBUG    JsonDataService      JSON options configured | WriteIndented=true, CamelCase=true, StringEnumConverter=true
+2025-08-19 10:32:23.588 [T01]WARNING  TimeDataService      Time data file not found: time-data.json
+2025-08-19 10:32:23.588 [T01]DEBUG    TimeDataService      PERF END: LoadTimeEntries | Duration: 0.12ms
+2025-08-19 10:32:23.588 [T01]INFO     TimeDataService      Initialized with time data file: time-data.json
+2025-08-19 10:32:23.588 [T01]DEBUG    TimeDataService      Loaded 0 existing time entries
+2025-08-19 10:32:23.589 [T01]DEBUG    TimeViewModel        Time data service initialized: TimeDataService
+2025-08-19 10:32:23.589 [T01]WARNING  TimeDataService      Time data file not found: time-data.json
+2025-08-19 10:32:23.589 [T01]DEBUG    TimeDataService      PERF END: LoadTimeEntries | Duration: 0.04ms
+2025-08-19 10:32:23.590 [T01]DEBUG    TimeViewModel        Created 96 hour increment options
+2025-08-19 10:32:23.591 [T01]DEBUG    JsonDataService      Reading data file: data.json
+2025-08-19 10:32:23.593 [T01]ERROR    JsonDataService      JSON deserialization failed | File: data.json Exception: JsonException: The JSON value could not be converted to PraxisWpf.Services.DataFileStructure. Path: $ | LineNumber: 0 | BytePositionInLine: 1.
+Stack:    at System.Text.Json.ThrowHelper.ThrowJsonException_DeserializeUnableToConvertValue(Type propertyType)
+   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryRead(Utf8JsonReader& reader, Type typeToConvert, JsonSerializerOptions options, ReadStack& state, T& value)
+   at System.Text.Json.Serialization.JsonConverter`1.TryRead(Utf8JsonReader& reader, Type typeToConvert, JsonSerializerOptions options, ReadStack& state, T& value, Boolean& isPopulatedValue)
+   at System.Text.Json.Serialization.JsonConverter`1.ReadCore(Utf8JsonReader& reader, JsonSerializerOptions options, ReadStack& state)
+   at System.Text.Json.JsonSerializer.ReadFromSpan[TValue](ReadOnlySpan`1 utf8Json, JsonTypeInfo`1 jsonTypeInfo, Nullable`1 actualByteCount)
+   at System.Text.Json.JsonSerializer.ReadFromSpan[TValue](ReadOnlySpan`1 json, JsonTypeInfo`1 jsonTypeInfo)
+   at System.Text.Json.JsonSerializer.Deserialize[TValue](String json, JsonSerializerOptions options)
+   at PraxisWpf.Services.JsonDataService.LoadItems() in C:\Users\jhnhe\OneDrive\Documents\GitHub\wpf\Services\JsonDataService.cs:line 71
+2025-08-19 10:32:23.593 [T01]DEBUG    JsonDataService      PERF END: LoadItems | Duration: 2.26ms
+2025-08-19 10:32:23.596 [T01]DEBUG    TimeDataService      Found 0 available projects
+2025-08-19 10:32:23.596 [T01]DEBUG    TimeViewModel        Refreshed 0 available projects
+2025-08-19 10:32:23.596 [T01]INFO     TimeViewModel        Initialized to week of 2025-08-19
+2025-08-19 10:32:23.596 [T01]DEBUG    TimeViewModel        All commands initialized
+2025-08-19 10:32:23.596 [T01]DEBUG    TimeViewModel        PERF END: TimeViewModel Constructor | Duration: 7.10ms
+2025-08-19 10:32:23.597 [T01]INFO     ProjectDataService   Returning 0 cached project data items
+2025-08-19 10:32:23.597 [T01]INFO     DataProcessingViewModel Loaded 0 project IDs
+2025-08-19 10:32:23.597 [T01]DEBUG    MainWindow           Starting data safety services
+2025-08-19 10:32:23.598 [T01]DEBUG    DataSafetyService    Created recovery flag
+2025-08-19 10:32:23.598 [T01]INFO     AutoSaveService      Auto-save timer started
+2025-08-19 10:32:23.601 [T01]INFO     BackupManager        Created backup: backup_data.json_20250819_103223
+2025-08-19 10:32:23.606 [T01]ERROR    BackupManager        Failed to get backups |  Exception: ArgumentException: The path is empty. (Parameter 'path')
+Stack:    at System.IO.Path.GetFullPath(String path)
+   at System.IO.Enumeration.FileSystemEnumerator`1..ctor(String directory, Boolean isNormalized, EnumerationOptions options)
+   at System.IO.Enumeration.FileSystemEnumerable`1..ctor(String directory, FindTransform transform, EnumerationOptions options, Boolean isNormalized)
+   at System.IO.Enumeration.FileSystemEnumerableFactory.UserFiles(String directory, String expression, EnumerationOptions options)
+   at System.IO.Directory.InternalEnumeratePaths(String path, String searchPattern, SearchTarget searchTarget, EnumerationOptions options)
+   at System.IO.Directory.GetFiles(String path, String searchPattern, EnumerationOptions enumerationOptions)
+   at PraxisWpf.Services.BackupManager.GetBackups(String baseFileName) in C:\Users\jhnhe\OneDrive\Documents\GitHub\wpf\Services\BackupManager.cs:line 79
+2025-08-19 10:32:23.606 [T01]DEBUG    BackupManager        No cleanup needed - 0 backups <= 5 max
+2025-08-19 10:32:23.606 [T01]INFO     DataSafetyService    Task data backed up to: backup_data.json_20250819_103223
+2025-08-19 10:32:23.606 [T01]INFO     DataSafetyService    Backup completed successfully
+2025-08-19 10:32:23.607 [T01]INFO     DataSafetyService    Data safety services started
+2025-08-19 10:32:23.608 [T01]INFO     AutoSaveService      Auto-save interval set to 2 minutes
+2025-08-19 10:32:23.608 [T04]INFO     DataSafetyService    Startup backup completed
+2025-08-19 10:32:23.608 [T01]DEBUG    MainViewModel        TaskViewModel changed
+2025-08-19 10:32:23.608 [T01]DEBUG    MainViewModel        TimeViewModel changed
+2025-08-19 10:32:23.608 [T01]DEBUG    MainViewModel        DataProcessingViewModel changed
+2025-08-19 10:32:23.608 [T01]INFO     MainWindow           MainWindow initialized successfully
+2025-08-19 10:32:23.608 [T01]DEBUG    MainWindow.xaml      PERF END: MainWindow Constructor | Duration: 284.82ms
+2025-08-19 10:32:23.678 [T01]DEBUG    TaskView             Applying template and setting foolproof data focus
+2025-08-19 10:32:23.696 [T01]DEBUG    MainWindow           Window source initialized
+2025-08-19 10:32:23.777 [T01]DEBUG    TimeDataService      Found 0 time entries for week 2025-08-18 to 2025-08-22
+2025-08-19 10:32:23.779 [T01]DEBUG    TimeDataService      Week total for week of 2025-08-18: 0h
+2025-08-19 10:32:23.786 [T01]CRITICAL TaskView             🔥 TREEVIEW FOCUS ON LOAD: Success=True, IsFocused=True, IsKeyboardFocused=True
+2025-08-19 10:32:23.786 [T01]CRITICAL TaskView             🔥 WINDOW ACTIVATION HANDLER ATTACHED
+2025-08-19 10:32:23.786 [T01]CRITICAL TimeView             🔥 TIMEVIEW FOCUS ON LOAD: Success=False, IsFocused=False, IsKeyboardFocused=False
+2025-08-19 10:32:23.787 [T01]CRITICAL DataProcessingView   🔥 DATAPROCESSINGVIEW FOCUS ON LOAD: Success=False, IsFocused=False, IsKeyboardFocused=False
+2025-08-19 10:32:32.580 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=T, Handled=False, Source=TreeView, OriginalSource=TreeView
+2025-08-19 10:32:32.580 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: T, IsInEditMode: False
+2025-08-19 10:32:32.580 [T01]CRITICAL TaskView             🔥 T KEY CASE HIT!
+2025-08-19 10:32:32.580 [T01]CRITICAL TaskView             🔥 T KEY - SWITCHING TO TIME ENTRY
+2025-08-19 10:32:32.581 [T01]INFO     MainWindow           Switched to time entry view
+2025-08-19 10:32:36.543 [T01]CRITICAL TimeView             🔥 TIMEVIEW KEYDOWN: Key=N, Handled=False
+2025-08-19 10:32:36.543 [T01]CRITICAL TimeView             🔥 N KEY - ADD GENERIC TIME
+2025-08-19 10:32:36.551 [T01]INFO     GenericTimeEntryDialog Dialog initialized for date 2025-08-19
+2025-08-19 10:33:31.749 [T01]DEBUG    TaskView             TreeView focused on window activation (foolproof data focus)
+2025-08-19 10:33:42.217 [T01]CRITICAL TimeView             🔥 TIMEVIEW KEYDOWN: Key=P, Handled=False
+2025-08-19 10:33:42.217 [T01]CRITICAL TimeView             🔥 P KEY - ADD PROJECT TIME
+2025-08-19 10:33:42.224 [T01]INFO     ProjectTimeEntryDialog Dialog initialized for date 2025-08-19 with 0 projects
+2025-08-19 10:33:50.350 [T01]DEBUG    TaskView             TreeView focused on window activation (foolproof data focus)
+2025-08-19 10:33:53.197 [T01]CRITICAL TimeView             🔥 TIMEVIEW KEYDOWN: Key=T, Handled=False
+2025-08-19 10:33:56.404 [T01]CRITICAL TimeView             🔥 TIMEVIEW KEYDOWN: Key=Escape, Handled=False
+2025-08-19 10:33:56.404 [T01]CRITICAL TimeView             🔥 ESCAPE KEY - SWITCHING TO TASKS
+2025-08-19 10:33:56.404 [T01]CRITICAL TimeView             🔥 ESCAPE KEY - EXECUTING SHOW TASKS
+2025-08-19 10:33:56.404 [T01]INFO     MainWindow           Switched to task view
+2025-08-19 10:34:20.733 [T01]INFO     MainWindow           Window closing - disposing data safety service
+2025-08-19 10:34:20.733 [T01]INFO     DataSafetyService    Performing shutdown save
+2025-08-19 10:34:20.734 [T01]INFO     AutoSaveService      Manual save started - 0 services
+2025-08-19 10:34:20.734 [T01]DEBUG    AutoSaveService      Manual save completed - No changes detected
+2025-08-19 10:34:20.734 [T01]DEBUG    AutoSaveService      PERF END: PerformAutoSave | Duration: 0.04ms
+2025-08-19 10:34:20.735 [T01]DEBUG    DataSafetyService    Removed recovery flag
+2025-08-19 10:34:20.735 [T01]INFO     DataSafetyService    Shutdown save completed
+2025-08-19 10:34:20.735 [T01]INFO     AutoSaveService      Auto-save timer stopped
+2025-08-19 10:34:20.736 [T01]DEBUG    AutoSaveService      Auto-save timer already stopped
+2025-08-19 10:34:20.736 [T01]INFO     AutoSaveService      Manual save started - 0 services
+2025-08-19 10:34:20.736 [T01]DEBUG    AutoSaveService      Manual save completed - No changes detected
+2025-08-19 10:34:20.736 [T01]DEBUG    AutoSaveService      PERF END: PerformAutoSave | Duration: 0.03ms
+2025-08-19 10:34:20.736 [T01]INFO     AutoSaveService      AutoSaveService disposed
+2025-08-19 10:34:20.736 [T01]INFO     DataSafetyService    Data safety service disposed
+2025-08-19 10:34:20.740 [T01]INFO     App                  Application shutting down with exit code: 0
