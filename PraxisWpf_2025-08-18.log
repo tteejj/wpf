@@ -7174,3 +7174,255 @@ Stack:    at System.Reflection.MethodBaseInvoker.ThrowTargetParameterCountExcept
 2025-08-18 22:49:31.171 [T01]DEBUG    TaskView             TreeView focused on window activation (foolproof data focus)
 2025-08-18 22:49:42.294 [T01]INFO     MainWindow           Window closing
 2025-08-18 22:49:42.296 [T01]INFO     App                  Application shutting down with exit code: 0
+2025-08-18 23:03:45.774 [T01]INFO     Logger               Logger initialized | Level=Info, StackTrace=False, ThreadId=True, Path=PraxisWpf_2025-08-18.log
+2025-08-18 23:03:45.778 [T01]INFO     Logger               Logger initialized | Level=Debug, StackTrace=True, ThreadId=True, Path=PraxisWpf_2025-08-18.log
+2025-08-18 23:03:45.778 [T01]INFO     AppConfig            Configuration loaded from app-config.json
+2025-08-18 23:03:45.778 [T01]INFO     App                  Application starting up
+2025-08-18 23:03:45.779 [T01]DEBUG    App                  Command line args: 
+2025-08-18 23:03:45.779 [T01]INFO     App                  Application startup completed successfully
+2025-08-18 23:03:45.785 [T01]DEBUG    MainWindow           Initializing WPF components
+2025-08-18 23:03:45.857 [T01]DEBUG    TaskView             Initializing XAML components
+2025-08-18 23:03:45.870 [T01]INFO     TaskView             TaskView initialized successfully
+2025-08-18 23:03:45.873 [T01]DEBUG    TaskView.xaml        PERF END: TaskView Constructor | Duration: 13.72ms
+2025-08-18 23:03:45.874 [T01]DEBUG    TimeView             Initializing XAML components
+2025-08-18 23:03:45.892 [T01]INFO     TimeView             TimeView initialized successfully
+2025-08-18 23:03:45.892 [T01]DEBUG    TimeView.xaml        PERF END: TimeView Constructor | Duration: 17.97ms
+2025-08-18 23:03:45.899 [T01]DEBUG    MainWindow           Creating ViewModels
+2025-08-18 23:03:45.899 [T01]INFO     JsonDataService      Initialized with data file: data.json
+2025-08-18 23:03:45.899 [T01]DEBUG    JsonDataService      JSON options configured | WriteIndented=true, CamelCase=true, StringEnumConverter=true
+2025-08-18 23:03:45.900 [T01]DEBUG    TaskViewModel        Data service initialized: JsonDataService
+2025-08-18 23:03:45.901 [T01]DEBUG    JsonDataService      Reading data file: data.json
+2025-08-18 23:03:45.917 [T01]DEBUG    TaskItem             Name changed: '' → 'esd' for Id1=1
+2025-08-18 23:03:45.920 [T01]DEBUG    TaskItem             Priority changed: Medium → High for Id1=1, Name=esd
+2025-08-18 23:03:45.921 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=1, Name=esd
+2025-08-18 23:03:45.921 [T01]DEBUG    TaskItem             Name changed: '' → 'Sub-task A' for Id1=1
+2025-08-18 23:03:45.921 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=1, Name=Sub-task A
+2025-08-18 23:03:45.921 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=1, Name=Sub-task A
+2025-08-18 23:03:45.923 [T01]DEBUG    TaskItem             Name changed: '' → 'Sample Task 2' for Id1=2
+2025-08-18 23:03:45.923 [T01]DEBUG    TaskItem             Priority changed: Medium → Low for Id1=2, Name=Sample Task 2
+2025-08-18 23:03:45.923 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=2, Name=Sample Task 2
+2025-08-18 23:03:45.923 [T01]DEBUG    TaskItem             Name changed: '' → 'New Task' for Id1=3
+2025-08-18 23:03:45.923 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=3, Name=New Task
+2025-08-18 23:03:45.923 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=3, Name=New Task
+2025-08-18 23:03:45.923 [T01]DEBUG    TaskItem             Name changed: '' → 'New Task' for Id1=4
+2025-08-18 23:03:45.923 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=4, Name=New Task
+2025-08-18 23:03:45.923 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=4, Name=New Task
+2025-08-18 23:03:45.923 [T01]DEBUG    TaskItem             Name changed: '' → 'w ' for Id1=5
+2025-08-18 23:03:45.923 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=5, Name=w 
+2025-08-18 23:03:45.923 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=5, Name=w 
+2025-08-18 23:03:45.924 [T01]DEBUG    TaskItem             Name changed: '' → 'New Task' for Id1=6
+2025-08-18 23:03:45.924 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=6, Name=New Task
+2025-08-18 23:03:45.924 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=6, Name=New Task
+2025-08-18 23:03:45.924 [T01]DEBUG    TaskItem             Name changed: '' → 's' for Id1=7
+2025-08-18 23:03:45.924 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=7, Name=s
+2025-08-18 23:03:45.924 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=7, Name=s
+2025-08-18 23:03:45.924 [T01]DEBUG    TaskItem             Name changed: '' → '' for Id1=8
+2025-08-18 23:03:45.924 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=8, Name=
+2025-08-18 23:03:45.924 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=8, Name=
+2025-08-18 23:03:45.924 [T01]DEBUG    TaskItem             Name changed: '' → 'New Subtask' for Id1=9
+2025-08-18 23:03:45.924 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=9, Name=New Subtask
+2025-08-18 23:03:45.924 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=9, Name=New Subtask
+2025-08-18 23:03:45.924 [T01]DEBUG    JsonDataService      Deserialized 2 items from JSON
+2025-08-18 23:03:45.924 [T01]INFO     JsonDataService      Successfully loaded 2 root items
+2025-08-18 23:03:45.924 [T01]DEBUG    JsonDataService      PERF END: LoadItems | Duration: 23.49ms
+2025-08-18 23:03:45.924 [T01]INFO     TaskViewModel        Loaded 2 root items
+2025-08-18 23:03:45.925 [T01]INFO     TaskViewModel        Selection changed: 'null' → 'esd'
+2025-08-18 23:03:45.925 [T01]INFO     TaskViewModel        Auto-selected first item: esd
+2025-08-18 23:03:45.925 [T01]DEBUG    TaskViewModel        All commands initialized
+2025-08-18 23:03:45.925 [T01]DEBUG    TaskViewModel        PERF END: TaskViewModel Constructor | Duration: 24.90ms
+2025-08-18 23:03:45.925 [T01]INFO     JsonDataService      Initialized with data file: data.json
+2025-08-18 23:03:45.925 [T01]DEBUG    JsonDataService      JSON options configured | WriteIndented=true, CamelCase=true, StringEnumConverter=true
+2025-08-18 23:03:45.926 [T01]WARNING  TimeDataService      Time data file not found: time-data.json
+2025-08-18 23:03:45.926 [T01]DEBUG    TimeDataService      PERF END: LoadTimeEntries | Duration: 0.15ms
+2025-08-18 23:03:45.926 [T01]INFO     TimeDataService      Initialized with time data file: time-data.json
+2025-08-18 23:03:45.926 [T01]DEBUG    TimeDataService      Loaded 0 existing time entries
+2025-08-18 23:03:45.927 [T01]DEBUG    TimeViewModel        Time data service initialized: TimeDataService
+2025-08-18 23:03:45.927 [T01]WARNING  TimeDataService      Time data file not found: time-data.json
+2025-08-18 23:03:45.927 [T01]DEBUG    TimeDataService      PERF END: LoadTimeEntries | Duration: 0.06ms
+2025-08-18 23:03:45.929 [T01]DEBUG    TimeViewModel        Created 96 hour increment options
+2025-08-18 23:03:45.930 [T01]DEBUG    JsonDataService      Reading data file: data.json
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             Name changed: '' → 'esd' for Id1=1
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             Priority changed: Medium → High for Id1=1, Name=esd
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=1, Name=esd
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             Name changed: '' → 'Sub-task A' for Id1=1
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=1, Name=Sub-task A
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=1, Name=Sub-task A
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             Name changed: '' → 'Sample Task 2' for Id1=2
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             Priority changed: Medium → Low for Id1=2, Name=Sample Task 2
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=2, Name=Sample Task 2
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             Name changed: '' → 'New Task' for Id1=3
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=3, Name=New Task
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=3, Name=New Task
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             Name changed: '' → 'New Task' for Id1=4
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=4, Name=New Task
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=4, Name=New Task
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             Name changed: '' → 'w ' for Id1=5
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=5, Name=w 
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=5, Name=w 
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             Name changed: '' → 'New Task' for Id1=6
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=6, Name=New Task
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=6, Name=New Task
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             Name changed: '' → 's' for Id1=7
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=7, Name=s
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=7, Name=s
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             Name changed: '' → '' for Id1=8
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=8, Name=
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             IsExpanded changed: False → True for Id1=8, Name=
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             Name changed: '' → 'New Subtask' for Id1=9
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             Priority changed: Medium → Medium for Id1=9, Name=New Subtask
+2025-08-18 23:03:45.931 [T01]DEBUG    TaskItem             IsExpanded changed: False → False for Id1=9, Name=New Subtask
+2025-08-18 23:03:45.931 [T01]DEBUG    JsonDataService      Deserialized 2 items from JSON
+2025-08-18 23:03:45.931 [T01]INFO     JsonDataService      Successfully loaded 2 root items
+2025-08-18 23:03:45.931 [T01]DEBUG    JsonDataService      PERF END: LoadItems | Duration: 1.86ms
+2025-08-18 23:03:45.936 [T01]DEBUG    TimeDataService      Found 10 available projects
+2025-08-18 23:03:45.937 [T01]DEBUG    TimeViewModel        Refreshed 10 available projects
+2025-08-18 23:03:45.937 [T01]INFO     TimeViewModel        Initialized to week of 2025-08-18
+2025-08-18 23:03:45.937 [T01]DEBUG    TimeViewModel        All commands initialized
+2025-08-18 23:03:45.937 [T01]DEBUG    TimeViewModel        PERF END: TimeViewModel Constructor | Duration: 9.58ms
+2025-08-18 23:03:45.937 [T01]DEBUG    MainViewModel        TaskViewModel changed
+2025-08-18 23:03:45.937 [T01]DEBUG    MainViewModel        TimeViewModel changed
+2025-08-18 23:03:45.937 [T01]INFO     MainWindow           MainWindow initialized successfully
+2025-08-18 23:03:45.937 [T01]DEBUG    MainWindow.xaml      PERF END: MainWindow Constructor | Duration: 152.48ms
+2025-08-18 23:03:45.992 [T01]DEBUG    TaskView             Applying template and setting foolproof data focus
+2025-08-18 23:03:46.011 [T01]DEBUG    MainWindow           Window source initialized
+2025-08-18 23:03:46.054 [T01]DEBUG    TimeDataService      Found 0 time entries for week 2025-08-18 to 2025-08-22
+2025-08-18 23:03:46.056 [T01]DEBUG    TimeDataService      Week total for week of 2025-08-18: 0h
+2025-08-18 23:03:46.093 [T01]CRITICAL TaskView             🔥 TREEVIEW FOCUS ON LOAD: Success=True, IsFocused=True, IsKeyboardFocused=True
+2025-08-18 23:03:46.093 [T01]CRITICAL TaskView             🔥 WINDOW ACTIVATION HANDLER ATTACHED
+2025-08-18 23:03:46.093 [T01]CRITICAL TimeView             🔥 TIMEVIEW FOCUS ON LOAD: Success=False, IsFocused=False, IsKeyboardFocused=False
+2025-08-18 23:03:46.129 [T01]CRITICAL TaskView             🔥 EDIT TEXTBOX LOADED: Focus=False, IsFocused=False, Text='esd'
+2025-08-18 23:03:46.129 [T01]CRITICAL TaskView             🔥 EDIT TEXTBOX LOADED: Focus=False, IsFocused=False, Text='Sample Task 2'
+2025-08-18 23:03:51.188 [T01]INFO     TaskView             TreeView selection changed to: esd
+2025-08-18 23:03:51.189 [T01]INFO     TaskViewModel        Selection changed: 'esd' → 'esd'
+2025-08-18 23:03:51.189 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 23:03:51.191 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 23:03:51.204 [T01]DEBUG    TaskView             Selected item brought into view and selected
+2025-08-18 23:03:51.919 [T01]INFO     TaskView             TreeView selection changed to: Sample Task 2
+2025-08-18 23:03:51.919 [T01]INFO     TaskViewModel        Selection changed: 'esd' → 'Sample Task 2'
+2025-08-18 23:03:51.919 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 23:03:51.921 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 23:03:51.935 [T01]DEBUG    TaskView             Selected item brought into view and selected
+2025-08-18 23:03:56.924 [T01]INFO     TaskView             TreeView selection changed to: esd
+2025-08-18 23:03:56.925 [T01]INFO     TaskViewModel        Selection changed: 'Sample Task 2' → 'esd'
+2025-08-18 23:03:56.925 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 23:03:56.927 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 23:03:56.946 [T01]DEBUG    TaskView             Selected item brought into view and selected
+2025-08-18 23:03:59.617 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=LeftShift, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 23:03:59.617 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: LeftShift, IsInEditMode: False
+2025-08-18 23:03:59.819 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=O, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 23:03:59.820 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: O, IsInEditMode: False
+2025-08-18 23:03:59.820 [T01]CRITICAL TaskView             🔥 SHIFT+O KEY CASE HIT!
+2025-08-18 23:03:59.820 [T01]CRITICAL TaskView             🔥 SHIFT+O KEY - EXECUTING OPEN NOTES2 COMMAND
+2025-08-18 23:03:59.821 [T01]INFO     TaskViewModel        Opening notes2 editor for task: esd
+2025-08-18 23:03:59.825 [T01]DEBUG    NotesDialog          Notes directory ensured: C:\Users\jhnhe\OneDrive\Documents\GitHub\wpf\bin\Debug\net8.0-windows\Notes
+2025-08-18 23:03:59.825 [T01]INFO     NotesDialog          Notes file path: C:\Users\jhnhe\OneDrive\Documents\GitHub\wpf\bin\Debug\net8.0-windows\Notes\1_esd_notes2.txt
+2025-08-18 23:03:59.825 [T01]INFO     NotesDialog          Created default notes content for new file
+2025-08-18 23:03:59.825 [T01]INFO     NotesDialog          Notes editor setup completed successfully
+2025-08-18 23:03:59.826 [T01]DEBUG    NotesDialog.xaml     PERF END: SetupNotesEditor | Duration: 0.73ms
+2025-08-18 23:03:59.826 [T01]DEBUG    TaskViewModel        Showing notes2 dialog
+2025-08-18 23:04:02.277 [T01]INFO     NotesDialog          Escape pressed - closing with save prompt
+2025-08-18 23:04:02.277 [T01]INFO     NotesDialog          Notes dialog closing
+2025-08-18 23:04:02.282 [T01]DEBUG    TaskView             TreeView focused on window activation (foolproof data focus)
+2025-08-18 23:04:02.285 [T01]INFO     TaskViewModel        Notes2 dialog closed with result: False
+2025-08-18 23:04:02.285 [T01]DEBUG    TaskViewModel        PERF END: ExecuteOpenNotes2 | Duration: 2464.69ms
+2025-08-18 23:04:02.285 [T01]CRITICAL TaskView             🔥 SHIFT+O KEY - OPEN NOTES2 COMMAND EXECUTED
+2025-08-18 23:04:03.571 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=O, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 23:04:03.572 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: O, IsInEditMode: False
+2025-08-18 23:04:03.572 [T01]CRITICAL TaskView             🔥 O KEY CASE HIT!
+2025-08-18 23:04:03.572 [T01]CRITICAL TaskView             🔥 O KEY - EXECUTING OPEN NOTES COMMAND
+2025-08-18 23:04:03.572 [T01]INFO     TaskViewModel        Opening notes editor for task: esd
+2025-08-18 23:04:03.575 [T01]DEBUG    NotesDialog          Notes directory ensured: C:\Users\jhnhe\OneDrive\Documents\GitHub\wpf\bin\Debug\net8.0-windows\Notes
+2025-08-18 23:04:03.575 [T01]INFO     NotesDialog          Notes file path: C:\Users\jhnhe\OneDrive\Documents\GitHub\wpf\bin\Debug\net8.0-windows\Notes\1_esd_notes.txt
+2025-08-18 23:04:03.575 [T01]INFO     NotesDialog          Created default notes content for new file
+2025-08-18 23:04:03.575 [T01]INFO     NotesDialog          Notes editor setup completed successfully
+2025-08-18 23:04:03.575 [T01]DEBUG    NotesDialog.xaml     PERF END: SetupNotesEditor | Duration: 0.32ms
+2025-08-18 23:04:03.575 [T01]DEBUG    TaskViewModel        Showing notes dialog
+2025-08-18 23:04:12.106 [T01]INFO     NotesDialog          Ctrl+S pressed - saving notes
+2025-08-18 23:04:12.108 [T01]INFO     NotesDialog          Notes saved successfully to C:\Users\jhnhe\OneDrive\Documents\GitHub\wpf\bin\Debug\net8.0-windows\Notes\1_esd_notes.txt
+2025-08-18 23:04:12.108 [T01]DEBUG    NotesDialog.xaml     PERF END: SaveNotes | Duration: 0.76ms
+2025-08-18 23:04:14.898 [T01]INFO     NotesDialog          Escape pressed - closing with save prompt
+2025-08-18 23:04:14.898 [T01]INFO     NotesDialog          Notes dialog closing
+2025-08-18 23:04:14.902 [T01]DEBUG    TaskView             TreeView focused on window activation (foolproof data focus)
+2025-08-18 23:04:14.904 [T01]INFO     TaskViewModel        Notes dialog closed with result: False
+2025-08-18 23:04:14.904 [T01]DEBUG    TaskViewModel        PERF END: ExecuteOpenNotes | Duration: 11331.59ms
+2025-08-18 23:04:14.904 [T01]CRITICAL TaskView             🔥 O KEY - OPEN NOTES COMMAND EXECUTED
+2025-08-18 23:04:16.885 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=LeftShift, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 23:04:16.885 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: LeftShift, IsInEditMode: False
+2025-08-18 23:04:17.136 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=O, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 23:04:17.137 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: O, IsInEditMode: False
+2025-08-18 23:04:17.137 [T01]CRITICAL TaskView             🔥 SHIFT+O KEY CASE HIT!
+2025-08-18 23:04:17.137 [T01]CRITICAL TaskView             🔥 SHIFT+O KEY - EXECUTING OPEN NOTES2 COMMAND
+2025-08-18 23:04:17.137 [T01]INFO     TaskViewModel        Opening notes2 editor for task: esd
+2025-08-18 23:04:17.138 [T01]DEBUG    NotesDialog          Notes directory ensured: C:\Users\jhnhe\OneDrive\Documents\GitHub\wpf\bin\Debug\net8.0-windows\Notes
+2025-08-18 23:04:17.138 [T01]INFO     NotesDialog          Notes file path: C:\Users\jhnhe\OneDrive\Documents\GitHub\wpf\bin\Debug\net8.0-windows\Notes\1_esd_notes2.txt
+2025-08-18 23:04:17.138 [T01]INFO     NotesDialog          Created default notes content for new file
+2025-08-18 23:04:17.138 [T01]INFO     NotesDialog          Notes editor setup completed successfully
+2025-08-18 23:04:17.138 [T01]DEBUG    NotesDialog.xaml     PERF END: SetupNotesEditor | Duration: 0.31ms
+2025-08-18 23:04:17.138 [T01]DEBUG    TaskViewModel        Showing notes2 dialog
+2025-08-18 23:04:22.702 [T01]INFO     NotesDialog          Ctrl+S pressed - saving notes
+2025-08-18 23:04:22.704 [T01]INFO     NotesDialog          Notes saved successfully to C:\Users\jhnhe\OneDrive\Documents\GitHub\wpf\bin\Debug\net8.0-windows\Notes\1_esd_notes2.txt
+2025-08-18 23:04:22.704 [T01]DEBUG    NotesDialog.xaml     PERF END: SaveNotes | Duration: 1.90ms
+2025-08-18 23:04:23.362 [T01]INFO     NotesDialog          Escape pressed - closing with save prompt
+2025-08-18 23:04:23.362 [T01]INFO     NotesDialog          Notes dialog closing
+2025-08-18 23:04:23.365 [T01]DEBUG    TaskView             TreeView focused on window activation (foolproof data focus)
+2025-08-18 23:04:23.368 [T01]INFO     TaskViewModel        Notes2 dialog closed with result: False
+2025-08-18 23:04:23.368 [T01]DEBUG    TaskViewModel        PERF END: ExecuteOpenNotes2 | Duration: 6231.07ms
+2025-08-18 23:04:23.368 [T01]CRITICAL TaskView             🔥 SHIFT+O KEY - OPEN NOTES2 COMMAND EXECUTED
+2025-08-18 23:04:25.324 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=O, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 23:04:25.324 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: O, IsInEditMode: False
+2025-08-18 23:04:25.324 [T01]CRITICAL TaskView             🔥 O KEY CASE HIT!
+2025-08-18 23:04:25.324 [T01]CRITICAL TaskView             🔥 O KEY - EXECUTING OPEN NOTES COMMAND
+2025-08-18 23:04:25.324 [T01]INFO     TaskViewModel        Opening notes editor for task: esd
+2025-08-18 23:04:25.326 [T01]DEBUG    NotesDialog          Notes directory ensured: C:\Users\jhnhe\OneDrive\Documents\GitHub\wpf\bin\Debug\net8.0-windows\Notes
+2025-08-18 23:04:25.326 [T01]INFO     NotesDialog          Notes file path: C:\Users\jhnhe\OneDrive\Documents\GitHub\wpf\bin\Debug\net8.0-windows\Notes\1_esd_notes.txt
+2025-08-18 23:04:25.326 [T01]INFO     NotesDialog          Loaded existing notes file with 137 characters
+2025-08-18 23:04:25.327 [T01]INFO     NotesDialog          Notes editor setup completed successfully
+2025-08-18 23:04:25.327 [T01]DEBUG    NotesDialog.xaml     PERF END: SetupNotesEditor | Duration: 0.52ms
+2025-08-18 23:04:25.327 [T01]DEBUG    TaskViewModel        Showing notes dialog
+2025-08-18 23:04:27.357 [T01]INFO     NotesDialog          Escape pressed - closing with save prompt
+2025-08-18 23:04:27.358 [T01]INFO     NotesDialog          Notes dialog closing
+2025-08-18 23:04:27.360 [T01]DEBUG    TaskView             TreeView focused on window activation (foolproof data focus)
+2025-08-18 23:04:27.363 [T01]INFO     TaskViewModel        Notes dialog closed with result: False
+2025-08-18 23:04:27.363 [T01]DEBUG    TaskViewModel        PERF END: ExecuteOpenNotes | Duration: 2038.11ms
+2025-08-18 23:04:27.363 [T01]CRITICAL TaskView             🔥 O KEY - OPEN NOTES COMMAND EXECUTED
+2025-08-18 23:04:28.841 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=LeftShift, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 23:04:28.841 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: LeftShift, IsInEditMode: False
+2025-08-18 23:04:28.958 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=O, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 23:04:28.958 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: O, IsInEditMode: False
+2025-08-18 23:04:28.958 [T01]CRITICAL TaskView             🔥 SHIFT+O KEY CASE HIT!
+2025-08-18 23:04:28.958 [T01]CRITICAL TaskView             🔥 SHIFT+O KEY - EXECUTING OPEN NOTES2 COMMAND
+2025-08-18 23:04:28.958 [T01]INFO     TaskViewModel        Opening notes2 editor for task: esd
+2025-08-18 23:04:28.960 [T01]DEBUG    NotesDialog          Notes directory ensured: C:\Users\jhnhe\OneDrive\Documents\GitHub\wpf\bin\Debug\net8.0-windows\Notes
+2025-08-18 23:04:28.960 [T01]INFO     NotesDialog          Notes file path: C:\Users\jhnhe\OneDrive\Documents\GitHub\wpf\bin\Debug\net8.0-windows\Notes\1_esd_notes2.txt
+2025-08-18 23:04:28.960 [T01]INFO     NotesDialog          Loaded existing notes file with 137 characters
+2025-08-18 23:04:28.960 [T01]INFO     NotesDialog          Notes editor setup completed successfully
+2025-08-18 23:04:28.960 [T01]DEBUG    NotesDialog.xaml     PERF END: SetupNotesEditor | Duration: 0.43ms
+2025-08-18 23:04:28.960 [T01]DEBUG    TaskViewModel        Showing notes2 dialog
+2025-08-18 23:04:30.214 [T01]INFO     NotesDialog          Escape pressed - closing with save prompt
+2025-08-18 23:04:30.214 [T01]INFO     NotesDialog          Notes dialog closing
+2025-08-18 23:04:30.218 [T01]DEBUG    TaskView             TreeView focused on window activation (foolproof data focus)
+2025-08-18 23:04:30.220 [T01]INFO     TaskViewModel        Notes2 dialog closed with result: False
+2025-08-18 23:04:30.220 [T01]DEBUG    TaskViewModel        PERF END: ExecuteOpenNotes2 | Duration: 1261.39ms
+2025-08-18 23:04:30.220 [T01]CRITICAL TaskView             🔥 SHIFT+O KEY - OPEN NOTES2 COMMAND EXECUTED
+2025-08-18 23:04:33.433 [T01]INFO     TaskView             TreeView selection changed to: Sample Task 2
+2025-08-18 23:04:33.433 [T01]INFO     TaskViewModel        Selection changed: 'esd' → 'Sample Task 2'
+2025-08-18 23:04:33.433 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 23:04:33.434 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 23:04:33.447 [T01]DEBUG    TaskView             Selected item brought into view and selected
+2025-08-18 23:04:34.818 [T01]INFO     TaskView             TreeView selection changed to: esd
+2025-08-18 23:04:34.818 [T01]INFO     TaskViewModel        Selection changed: 'Sample Task 2' → 'esd'
+2025-08-18 23:04:34.818 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 23:04:34.819 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 23:04:34.829 [T01]DEBUG    TaskView             Selected item brought into view and selected
+2025-08-18 23:04:41.087 [T01]INFO     TaskView             TreeView selection changed to: Sample Task 2
+2025-08-18 23:04:41.087 [T01]INFO     TaskViewModel        Selection changed: 'esd' → 'Sample Task 2'
+2025-08-18 23:04:41.087 [T01]DEBUG    TaskView             ViewModel.SelectedItem updated
+2025-08-18 23:04:41.088 [T01]DEBUG    TaskView             TreeView focused for keyboard navigation
+2025-08-18 23:04:41.108 [T01]DEBUG    TaskView             Selected item brought into view and selected
+2025-08-18 23:04:45.009 [T01]CRITICAL TaskView             🔥 TREEVIEW KEYDOWN: Key=T, Handled=False, Source=TreeView, OriginalSource=TreeViewItem
+2025-08-18 23:04:45.009 [T01]CRITICAL TaskView             🔥 ABOUT TO PROCESS KEY: T, IsInEditMode: False
+2025-08-18 23:04:45.009 [T01]CRITICAL TaskView             🔥 T KEY CASE HIT!
+2025-08-18 23:04:45.009 [T01]CRITICAL TaskView             🔥 T KEY - SWITCHING TO TIME ENTRY
+2025-08-18 23:04:45.010 [T01]INFO     MainWindow           Switched to time entry view
+2025-08-18 23:04:57.223 [T01]INFO     MainWindow           Window closing
+2025-08-18 23:04:57.225 [T01]INFO     App                  Application shutting down with exit code: 0
