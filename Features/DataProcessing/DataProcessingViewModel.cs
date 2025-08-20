@@ -30,7 +30,7 @@ namespace PraxisWpf.Features.DataProcessing
             try
             {
                 _projectDataService = new ProjectDataService();
-                _loadingService = new LoadingIndicatorService();
+                _loadingService = LoadingIndicatorService.Instance;
 
                 ProjectIds = new ObservableCollection<string>();
                 ProjectDataFields = new ObservableCollection<ProjectDataField>();

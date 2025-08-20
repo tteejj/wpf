@@ -138,8 +138,8 @@
                                Margin="0,0,0,10"/>
                     
                     <!-- Progress Bar (when enabled) -->
-                    <ProgressBar Value="{Binding Source={x:Static services:LoadingIndicatorService.Instance}, Path=ProgressValue, FallbackValue=0, TargetNullValue=0}"
-                                Maximum="{Binding Source={x:Static services:LoadingIndicatorService.Instance}, Path=ProgressMaximum, FallbackValue=100, TargetNullValue=100}"
+                    <ProgressBar Value="0"
+                                Maximum="100"
                                 Height="6"
                                 Background="{DynamicResource CyberControlBrush}"
                                 Foreground="{DynamicResource CyberAccentBrush}"
