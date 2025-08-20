@@ -139,12 +139,6 @@ C:/Users/jhnhe/OneDrive/Documents/GitHub/wpf/obj/Debug/net8.0-windows/Themes/Hig
 C:/Users/jhnhe/OneDrive/Documents/GitHub/wpf/obj/Debug/net8.0-windows/Features/ThemeSelector/ThemeView.g.cs
 C:/Users/jhnhe/OneDrive/Documents/GitHub/wpf/obj/Debug/net8.0-windows/Features/ThemeSelector/ThemeView.baml
 /home/teej/projects/github/wpf/obj/Debug/net8.0-windows/PraxisWpf.csproj.AssemblyReference.cache
-/home/teej/projects/github/wpf/bin/Debug/net8.0-windows/ClosedXML.dll
-/home/teej/projects/github/wpf/bin/Debug/net8.0-windows/DocumentFormat.OpenXml.dll
-/home/teej/projects/github/wpf/bin/Debug/net8.0-windows/ExcelNumberFormat.dll
-/home/teej/projects/github/wpf/bin/Debug/net8.0-windows/Irony.dll
-/home/teej/projects/github/wpf/bin/Debug/net8.0-windows/SixLabors.Fonts.dll
-/home/teej/projects/github/wpf/bin/Debug/net8.0-windows/XLParser.dll
 /home/teej/projects/github/wpf/obj/Debug/net8.0-windows/PraxisWpf.csproj.Up2Date
 C:/Users/jhnhe/OneDrive/Documents/GitHub/wpf/bin/Debug/net8.0-windows/ClosedXML.dll
 C:/Users/jhnhe/OneDrive/Documents/GitHub/wpf/bin/Debug/net8.0-windows/DocumentFormat.OpenXml.dll
@@ -156,3 +150,4 @@ C:/Users/jhnhe/OneDrive/Documents/GitHub/wpf/obj/Debug/net8.0-windows/PraxisWpf.
 C:/Users/jhnhe/OneDrive/Documents/GitHub/wpf/obj/Debug/net8.0-windows/PraxisWpf.csproj.Up2Date
 /home/teej/projects/github/wpf/obj/Debug/net8.0-windows/Features/DataProcessing/ExcelMappingDialog.baml
 /home/teej/projects/github/wpf/obj/Debug/net8.0-windows/Features/DataProcessing/ExcelMappingDialog.g.cs
+/home/teej/projects/github/wpf/bin/Debug/net8.0-windows/Microsoft.Office.Interop.Excel.dll

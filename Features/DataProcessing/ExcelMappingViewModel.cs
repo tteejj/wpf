@@ -16,7 +16,7 @@ namespace PraxisWpf.Features.DataProcessing
 {
     public class ExcelMappingViewModel : INotifyPropertyChanged
     {
-        private readonly ExcelMappingService _mappingService;
+        private readonly ExcelComService _mappingService;
         private string _sourceFilePath = string.Empty;
         private string _destinationFilePath = string.Empty;
         private string _selectedSourceSheet = string.Empty;
@@ -95,7 +95,7 @@ namespace PraxisWpf.Features.DataProcessing
         {
             Logger.TraceEnter();
             
-            _mappingService = new ExcelMappingService();
+            _mappingService = new ExcelComService();
             FieldMappings = new ObservableCollection<ExcelFieldMapping>();
             SourceSheets = new ObservableCollection<string>();
             DestinationSheets = new ObservableCollection<string>();

@@ -240,21 +240,19 @@ namespace PraxisWpf.Services
                     return false;
                 }
 
-                // PowerShell integration removed - use new Excel Mapping Tool instead
-                Logger.Info("ProjectDataService", "Excel export via PowerShell has been replaced with the new Excel Mapping Tool");
-                var exportResult = new { Success = true };
-                
-                if (exportResult.Success)
+                // Simple file export - use Excel Mapping Tool for advanced mapping
+                try
                 {
-                    Logger.Info("ProjectDataService", 
-                        $"Successfully exported project data: {projectId} to {outputPath}");
+                    var jsonData = System.Text.Json.JsonSerializer.Serialize(projectData, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+                    await File.WriteAllTextAsync(outputPath, jsonData);
+                    
+                    Logger.Info("ProjectDataService", $"Exported project data: {projectId} to {outputPath}");
                     Logger.TraceExit();
                     return true;
                 }
-                else
+                catch (Exception exportEx)
                 {
-                    Logger.Error("ProjectDataService", 
-                        "Export failed: PowerShell integration removed");
+                    Logger.Error("ProjectDataService", $"Export failed: {exportEx.Message}");
                     Logger.TraceExit();
                     return false;
                 }
@@ -355,7 +353,6 @@ namespace PraxisWpf.Services
                 
                 _cacheCleanupTimer?.Stop();
                 _cacheCleanupTimer?.Dispose();
-                // PowerShell integration cleanup no longer needed
                 _projectDataCache.Clear();
                 _cacheAccessTimes.Clear();
                 

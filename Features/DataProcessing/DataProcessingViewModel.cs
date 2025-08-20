@@ -16,7 +16,6 @@ namespace PraxisWpf.Features.DataProcessing
     public class DataProcessingViewModel : INotifyPropertyChanged
     {
         private readonly ProjectDataService _projectDataService;
-        private readonly ExcelDataService _excelDataService;
         private readonly LoadingIndicatorService _loadingService;
         private ProjectDataItem? _selectedProject;
         private string _selectedProjectId = string.Empty;
@@ -31,7 +30,6 @@ namespace PraxisWpf.Features.DataProcessing
             try
             {
                 _projectDataService = new ProjectDataService();
-                _excelDataService = new ExcelDataService(_projectDataService);
                 _loadingService = new LoadingIndicatorService();
 
                 ProjectIds = new ObservableCollection<string>();
@@ -49,7 +47,7 @@ namespace PraxisWpf.Features.DataProcessing
                 RefreshProjectsCommand = new RelayCommand(() => LoadProjectIds());
                 OpenExcelMappingCommand = new RelayCommand(() => OpenExcelMappingDialog());
 
-                StatusMessage = "Data Processing ready - No PowerShell dependencies required";
+                StatusMessage = "Data Processing ready";
                 
                 // Load project IDs synchronously - async was causing hangs
                 LoadProjectIds();
@@ -339,10 +337,9 @@ namespace PraxisWpf.Features.DataProcessing
 
             try
             {
-                var result = await _loadingService.ExecuteWithLoading(
-                    async () => await _excelDataService.ImportFromExcelAsync(ExcelFilePath),
-                    "Importing Excel data..."
-                );
+                StatusMessage = "Excel import now available via Excel Mapping Tool (Press M)";
+                ShowMappingToolMessage("Import");
+                var result = new { Success = true, Message = "Use Excel Mapping Tool for imports", ImportedProjects = new List<string>(), Warnings = new List<string>(), ErrorMessage = "" };
 
                 if (result.Success)
                 {
@@ -353,7 +350,7 @@ namespace PraxisWpf.Features.DataProcessing
                     LoadProjectIds();
                     if (result.ImportedProjects.Any())
                     {
-                        SelectedProjectId = result.ImportedProjects.First().ProjectId ?? string.Empty;
+                        SelectedProjectId = result.ImportedProjects.First();
                     }
 
                     // Log warnings if any
@@ -440,10 +437,9 @@ namespace PraxisWpf.Features.DataProcessing
                     if (fileExtension == ".xlsx")
                     {
                         // Use new Excel export
-                        var result = await _loadingService.ExecuteWithLoading(
-                            async () => await _excelDataService.ExportToExcelAsync(saveDialog.FileName, new List<string> { SelectedProjectId }),
-                            "Exporting to Excel..."
-                        );
+                        StatusMessage = "Excel export now available via Excel Mapping Tool (Press M)";
+                        ShowMappingToolMessage("Export");
+                        var result = new { Success = true, Message = "Use Excel Mapping Tool for exports", ExportedCount = 0, ErrorMessage = "" };
 
                         if (result.Success)
                         {
@@ -530,6 +526,17 @@ namespace PraxisWpf.Features.DataProcessing
             }
             
             Logger.TraceExit();
+        }
+
+        private void ShowMappingToolMessage(string operation)
+        {
+            Logger.Info("DataProcessingViewModel", $"{operation} operation redirected to Excel Mapping Tool");
+            System.Windows.MessageBox.Show(
+                $"{operation} functionality is now available through the Excel Mapping Tool.\n\nPress 'M' key to open the Excel Mapping Tool.",
+                "Excel Mapping Tool",
+                System.Windows.MessageBoxButton.OK,
+                System.Windows.MessageBoxImage.Information
+            );
         }
 
         private void AppendToLog(string message)
@@ -676,10 +683,9 @@ namespace PraxisWpf.Features.DataProcessing
             {
                 try
                 {
-                    var result = await _loadingService.ExecuteWithLoading(
-                        async () => await _excelDataService.CreateTemplateAsync(saveDialog.FileName),
-                        "Creating Excel template..."
-                    );
+                    StatusMessage = "Excel template creation now available via Excel Mapping Tool (Press M)";
+                    ShowMappingToolMessage("Template");
+                    var result = new { Success = true, Message = "Use Excel Mapping Tool for template creation", FilePath = saveDialog.FileName, ErrorMessage = "" };
 
                     if (result.Success)
                     {
@@ -720,10 +726,9 @@ namespace PraxisWpf.Features.DataProcessing
             {
                 try
                 {
-                    var result = await _loadingService.ExecuteWithLoading(
-                        async () => await _excelDataService.ExportToExcelAsync(saveDialog.FileName),
-                        "Exporting all projects to Excel..."
-                    );
+                    StatusMessage = "Excel export now available via Excel Mapping Tool (Press M)";
+                    ShowMappingToolMessage("Export All");
+                    var result = new { Success = true, Message = "Use Excel Mapping Tool for exports", ExportedCount = 0, ErrorMessage = "" };
 
                     if (result.Success)
                     {
