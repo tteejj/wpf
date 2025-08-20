@@ -8,38 +8,62 @@
              d:DesignHeight="450" d:DesignWidth="800">
     
     <UserControl.Resources>
-        <!-- Project Data Field Editor Template - PURE WHITE TEXT NO THEMES -->
+        <!-- Boolean to Visibility Converter -->
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
+        
+        <!-- Project Data Field Editor Template with Validation -->
         <DataTemplate x:Key="ProjectDataFieldTemplate">
-            <Border Background="Black" Margin="3" Padding="5">
+            <Border Background="Black" Margin="3" Padding="10">
                 <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="200"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     
-                    <!-- PURE WHITE TEXT LABEL -->
-                    <TextBlock Grid.Column="0" 
+                    <!-- Field Label -->
+                    <TextBlock Grid.Row="0" Grid.Column="0" 
                                Text="{Binding Key}" 
-                               Foreground="White"
-                               Background="Black"
-                               FontWeight="Bold"
-                               FontSize="14"
-                               FontFamily="Arial"
-                               Margin="10"
-                               VerticalAlignment="Center"/>
+                               Style="{DynamicResource CyberLabel}"
+                               Margin="0,0,10,8"
+                               VerticalAlignment="Top"/>
                     
-                    <!-- PURE WHITE TEXT VALUE -->
-                    <TextBox Grid.Column="1"
+                    <!-- Input Field with Error Styling -->
+                    <TextBox Grid.Row="0" Grid.Column="1"
                              Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
-                             Background="Black"
-                             Foreground="White"
-                             BorderBrush="White"
-                             BorderThickness="2"
-                             FontWeight="Bold"
-                             FontSize="14"
-                             FontFamily="Arial"
-                             Margin="10"
-                             Padding="10"/>
+                             Margin="0,0,0,8"
+                             Padding="8"
+                             TabIndex="{Binding TabIndex}"
+                             IsTabStop="True">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding DataContext.SaveProjectCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                            <KeyBinding Key="F2" Command="{Binding DataContext.SaveProjectCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                        </TextBox.InputBindings>
+                        <TextBox.Style>
+                            <Style TargetType="TextBox">
+                                <Setter Property="BorderBrush" Value="White"/>
+                                <Setter Property="BorderThickness" Value="2"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HasError}" Value="True">
+                                        <Setter Property="BorderBrush" Value="#ff4444"/>
+                                        <Setter Property="BorderThickness" Value="3"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+                    
+                    <!-- Validation Error Message -->
+                    <TextBlock Grid.Row="1" Grid.Column="1" 
+                               Text="{Binding ValidationError}"
+                               Style="{DynamicResource CyberCaption}"
+                               Foreground="#ff4444"
+                               FontStyle="Italic"
+                               Margin="0,0,0,8"
+                               Visibility="{Binding HasError, Converter={StaticResource BoolToVisConverter}}"/>
                 </Grid>
             </Border>
         </DataTemplate>
@@ -52,14 +76,51 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         
-        <!-- Header Controls - Removed all buttons per user request -->
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
-            <ComboBox ItemsSource="{Binding ProjectIds}"
-                      SelectedItem="{Binding SelectedProjectId}"
-                      Margin="0,0,10,0"
-                      MinWidth="150"
-                      IsEnabled="{Binding HasProjects}"/>
-        </StackPanel>
+        <!-- Header Controls -->
+        <Grid Grid.Row="0" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <!-- Project Selection -->
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <TextBlock Text="Project:" 
+                           Style="{DynamicResource CyberLabel}"
+                           Margin="0,0,10,0"/>
+                <ComboBox ItemsSource="{Binding ProjectIds}"
+                          SelectedItem="{Binding SelectedProjectId}"
+                          Margin="0,0,10,0"
+                          MinWidth="200"
+                          TabIndex="1"
+                          IsTabStop="True"
+                          IsEnabled="{Binding HasProjects}">
+                    <ComboBox.InputBindings>
+                        <KeyBinding Key="Enter" Command="{Binding SaveProjectCommand}"/>
+                    </ComboBox.InputBindings>
+                </ComboBox>
+            </StackPanel>
+            
+            <!-- Action Buttons -->
+            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <TextBlock Text="[N]ew" 
+                           Style="{DynamicResource CyberLabel}"
+                           Margin="0,0,15,0"/>
+                <TextBlock Text="[S]ave" 
+                           Style="{DynamicResource CyberLabel}"
+                           Margin="0,0,15,0"/>
+                <TextBlock Text="[D]elete" 
+                           Foreground="{DynamicResource CyberWarningBrush}"
+                           FontWeight="Bold" 
+                           VerticalAlignment="Center" 
+                           Margin="0,0,15,0"/>
+                <TextBlock Text="[R]efresh" 
+                           Foreground="{DynamicResource CyberInfoBrush}"
+                           FontWeight="Bold" 
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
         
         <!-- Main Content Area -->
         <TabControl Grid.Row="1" Margin="10,0,10,10">
@@ -75,30 +136,23 @@
                     <!-- Project Summary -->
                     <GroupBox Grid.Column="0" Header="Project Summary" 
                               Margin="0,0,5,0">
-                        <StackPanel>
+                        <StackPanel Margin="10">
                             <TextBlock Text="{Binding SelectedProject.SiteName, StringFormat='Site: {0}'}"
-                                       Foreground="{DynamicResource CyberAccentBrush}"
-                                       FontWeight="Bold"
-                                       Margin="0,5"/>
+                                       Style="{DynamicResource CyberBodyText}"/>
                             <TextBlock Text="{Binding SelectedProject.SiteAddress, StringFormat='Address: {0}'}"
-                                       Foreground="{DynamicResource CyberAccentBrush}"
-                                       FontWeight="Bold"
-                                       Margin="0,5"/>
+                                       Style="{DynamicResource CyberBodyText}"/>
                             <TextBlock Text="{Binding SelectedProject.RequestDate, StringFormat='Request Date: {0}'}"
-                                       Foreground="{DynamicResource CyberAccentBrush}"
-                                       FontWeight="Bold"
-                                       Margin="0,5"/>
+                                       Style="{DynamicResource CyberBodyText}"/>
                             <TextBlock Text="{Binding SelectedProject.Status, StringFormat='Status: {0}'}"
-                                       Foreground="{DynamicResource CyberAccentBrush}"
-                                       FontWeight="Bold"
-                                       Margin="0,5"/>
+                                       Style="{DynamicResource CyberBodyText}"/>
                         </StackPanel>
                     </GroupBox>
                     
                     <!-- Editable Fields -->
                     <GroupBox Grid.Column="1" Header="Project Details" 
                               Margin="5,0,0,0">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                                      TabIndex="2">
                             <ItemsControl ItemsSource="{Binding ProjectDataFields}"
                                           ItemTemplate="{StaticResource ProjectDataFieldTemplate}"/>
                         </ScrollViewer>
@@ -110,6 +164,7 @@
             <TabItem Header="Excel Integration">
                 <Grid>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
@@ -135,8 +190,41 @@
                         </Grid>
                     </GroupBox>
                     
+                    <!-- Excel Operations -->
+                    <GroupBox Grid.Row="1" Header="Excel Operations"
+                              Margin="0,0,0,10">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            
+                            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                                <TextBlock Text="[I]mport Excel" 
+                                           Style="{DynamicResource CyberLabel}"
+                                           Margin="0,0,20,0"/>
+                                <TextBlock Text="[T]emplate" 
+                                           Style="{DynamicResource CyberLabel}"
+                                           Margin="0,0,20,0"/>
+                                <TextBlock Text="[E]xport Current" 
+                                           Style="{DynamicResource CyberLabel}"
+                                           Margin="0,0,20,0"/>
+                                <TextBlock Text="Export [A]ll" 
+                                           Style="{DynamicResource CyberLabel}"/>
+                            </StackPanel>
+                            
+                            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                <TextBlock Text="Instructions:" 
+                                           Style="{DynamicResource CyberLabel}"
+                                           Margin="0,0,10,0"/>
+                                <TextBlock Text="Use Template to create Excel format, Import to load data, Export to save projects" 
+                                           Style="{DynamicResource CyberBodyTextSecondary}"/>
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+                    
                     <!-- Integration Log -->
-                    <GroupBox Grid.Row="1" Header="Integration Log">
+                    <GroupBox Grid.Row="2" Header="Integration Log">
                         <TextBox Text="{Binding IntegrationLog, Mode=OneWay}"
                                  Background="{DynamicResource CyberControlBrush}"
                                  Foreground="{DynamicResource CyberTextBrush}"

@@ -75,7 +75,7 @@ namespace PraxisWpf.Features.TimeTracker {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/PraxisWpf;V1.0.0.0;component/features/timetracker/projecttimeentrydialog.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/PraxisWpf;component/features/timetracker/projecttimeentrydialog.xaml", System.UriKind.Relative);
             
             #line 1 "../../../../../Features/TimeTracker/ProjectTimeEntryDialog.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

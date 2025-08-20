@@ -138,3 +138,11 @@ C:/Users/jhnhe/OneDrive/Documents/GitHub/wpf/obj/Debug/net8.0-windows/Themes/Gre
 C:/Users/jhnhe/OneDrive/Documents/GitHub/wpf/obj/Debug/net8.0-windows/Themes/HighContrast.baml
 C:/Users/jhnhe/OneDrive/Documents/GitHub/wpf/obj/Debug/net8.0-windows/Features/ThemeSelector/ThemeView.g.cs
 C:/Users/jhnhe/OneDrive/Documents/GitHub/wpf/obj/Debug/net8.0-windows/Features/ThemeSelector/ThemeView.baml
+/home/teej/projects/github/wpf/obj/Debug/net8.0-windows/PraxisWpf.csproj.AssemblyReference.cache
+/home/teej/projects/github/wpf/bin/Debug/net8.0-windows/ClosedXML.dll
+/home/teej/projects/github/wpf/bin/Debug/net8.0-windows/DocumentFormat.OpenXml.dll
+/home/teej/projects/github/wpf/bin/Debug/net8.0-windows/ExcelNumberFormat.dll
+/home/teej/projects/github/wpf/bin/Debug/net8.0-windows/Irony.dll
+/home/teej/projects/github/wpf/bin/Debug/net8.0-windows/SixLabors.Fonts.dll
+/home/teej/projects/github/wpf/bin/Debug/net8.0-windows/XLParser.dll
+/home/teej/projects/github/wpf/obj/Debug/net8.0-windows/PraxisWpf.csproj.Up2Date

@@ -25,20 +25,20 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 
-                <TextBlock Grid.Column="0" Text="║ ID1" FontWeight="Bold" 
-                          Foreground="{DynamicResource CyberAccentBrush}"/>
-                <TextBlock Grid.Column="1" Text="║ ID2" FontWeight="Bold" 
-                          Foreground="{DynamicResource CyberAccentBrush}"/>
-                <TextBlock Grid.Column="2" Text="║ ASSIGNED" FontWeight="Bold" 
-                          Foreground="{DynamicResource CyberAccentBrush}"/>
-                <TextBlock Grid.Column="3" Text="║ DUE DATE" FontWeight="Bold" 
-                          Foreground="{DynamicResource CyberAccentBrush}"/>
-                <TextBlock Grid.Column="4" Text="║ BRING FWD" FontWeight="Bold" 
-                          Foreground="{DynamicResource CyberAccentBrush}"/>
-                <TextBlock Grid.Column="5" Text="║P" FontWeight="Bold" 
-                          Foreground="{DynamicResource CyberAccentBrush}"/>
-                <TextBlock Grid.Column="6" Text="║ TASK NAME/DETAIL" FontWeight="Bold" 
-                          Foreground="{DynamicResource CyberAccentBrush}"/>
+                <TextBlock Grid.Column="0" Text="║ ID1" 
+                          Style="{DynamicResource CyberLabel}"/>
+                <TextBlock Grid.Column="1" Text="║ ID2" 
+                          Style="{DynamicResource CyberLabel}"/>
+                <TextBlock Grid.Column="2" Text="║ ASSIGNED" 
+                          Style="{DynamicResource CyberLabel}"/>
+                <TextBlock Grid.Column="3" Text="║ DUE DATE" 
+                          Style="{DynamicResource CyberLabel}"/>
+                <TextBlock Grid.Column="4" Text="║ BRING FWD" 
+                          Style="{DynamicResource CyberLabel}"/>
+                <TextBlock Grid.Column="5" Text="║P" 
+                          Style="{DynamicResource CyberLabel}"/>
+                <TextBlock Grid.Column="6" Text="║ TASK NAME/DETAIL" 
+                          Style="{DynamicResource CyberLabel}"/>
             </Grid>
         </Border>
 

@@ -1,21 +1,37 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Timers;
 using PraxisWpf.Models;
 
 namespace PraxisWpf.Services
 {
-    public class ProjectDataService
+    public class ProjectDataService : IDisposable
     {
         private readonly ExcelIntegrationService _excelService;
-        private readonly Dictionary<string, ProjectDataItem> _projectDataCache;
+        private readonly ConcurrentDictionary<string, ProjectDataItem> _projectDataCache;
+        private readonly ConcurrentDictionary<string, DateTime> _cacheAccessTimes;
+        private readonly Timer _cacheCleanupTimer;
+        private readonly object _lockObject = new object();
+        private const int CACHE_CLEANUP_INTERVAL_MS = 300000; // 5 minutes
+        private const int CACHE_EXPIRY_MINUTES = 30;
+        private const int MAX_CACHE_SIZE = 100;
+        private bool _disposed = false;
 
         public ProjectDataService()
         {
             _excelService = new ExcelIntegrationService();
-            _projectDataCache = new Dictionary<string, ProjectDataItem>();
+            _projectDataCache = new ConcurrentDictionary<string, ProjectDataItem>();
+            _cacheAccessTimes = new ConcurrentDictionary<string, DateTime>();
+            
+            // Set up cache cleanup timer
+            _cacheCleanupTimer = new Timer(CACHE_CLEANUP_INTERVAL_MS);
+            _cacheCleanupTimer.Elapsed += CleanupCache;
+            _cacheCleanupTimer.AutoReset = true;
+            _cacheCleanupTimer.Start();
             
             // Initialize with sample project data for demonstration
             InitializeSampleData();
@@ -81,6 +97,7 @@ namespace PraxisWpf.Services
 
             if (_projectDataCache.TryGetValue(projectId, out var cachedData))
             {
+                UpdateCacheAccess(projectId);
                 Logger.Info("ProjectDataService", $"Returning cached data for project: {projectId}");
                 return cachedData;
             }
@@ -183,6 +200,7 @@ namespace PraxisWpf.Services
             
             projectData.ProjectId = projectId;
             _projectDataCache[projectId] = projectData;
+            UpdateCacheAccess(projectId);
             
             Logger.Info("ProjectDataService", $"Updated project data in cache: {projectId}");
             Logger.TraceExit();
@@ -275,13 +293,102 @@ namespace PraxisWpf.Services
             }
         }
 
-        public void Dispose()
+        private void CleanupCache(object? sender, ElapsedEventArgs e)
+        {
+            if (_disposed) return;
+            
+            Logger.TraceEnter();
+            
+            try
+            {
+                lock (_lockObject)
+                {
+                    var cutoffTime = DateTime.Now.AddMinutes(-CACHE_EXPIRY_MINUTES);
+                    var expiredKeys = _cacheAccessTimes
+                        .Where(kvp => kvp.Value < cutoffTime)
+                        .Select(kvp => kvp.Key)
+                        .ToList();
+                    
+                    foreach (var key in expiredKeys)
+                    {
+                        _projectDataCache.TryRemove(key, out _);
+                        _cacheAccessTimes.TryRemove(key, out _);
+                    }
+                    
+                    // Enforce max cache size by removing least recently used items
+                    if (_projectDataCache.Count > MAX_CACHE_SIZE)
+                    {
+                        var lruKeys = _cacheAccessTimes
+                            .OrderBy(kvp => kvp.Value)
+                            .Take(_projectDataCache.Count - MAX_CACHE_SIZE)
+                            .Select(kvp => kvp.Key)
+                            .ToList();
+                        
+                        foreach (var key in lruKeys)
+                        {
+                            _projectDataCache.TryRemove(key, out _);
+                            _cacheAccessTimes.TryRemove(key, out _);
+                        }
+                    }
+                    
+                    Logger.Info("ProjectDataService", $"Cache cleanup completed. Removed {expiredKeys.Count} expired items. Cache size: {_projectDataCache.Count}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("ProjectDataService", $"Error during cache cleanup: {ex.Message}");
+            }
+            
+            Logger.TraceExit();
+        }
+        
+        private void UpdateCacheAccess(string projectId)
+        {
+            _cacheAccessTimes[projectId] = DateTime.Now;
+        }
+        
+        public void ClearCache()
         {
             Logger.TraceEnter();
-            _excelService?.Cleanup();
-            _projectDataCache.Clear();
-            Logger.Info("ProjectDataService", "Disposed and cleaned up resources");
+            
+            lock (_lockObject)
+            {
+                var count = _projectDataCache.Count;
+                _projectDataCache.Clear();
+                _cacheAccessTimes.Clear();
+                
+                // Re-initialize sample data
+                InitializeSampleData();
+                
+                Logger.Info("ProjectDataService", $"Cache cleared. Removed {count} items and re-initialized sample data");
+            }
+            
             Logger.TraceExit();
+        }
+        
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed && disposing)
+            {
+                Logger.TraceEnter();
+                
+                _cacheCleanupTimer?.Stop();
+                _cacheCleanupTimer?.Dispose();
+                _excelService?.Cleanup();
+                _projectDataCache.Clear();
+                _cacheAccessTimes.Clear();
+                
+                _disposed = true;
+                
+                Logger.Info("ProjectDataService", "Disposed and cleaned up resources");
+                Logger.TraceExit();
+            }
         }
     }
 }

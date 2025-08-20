@@ -99,7 +99,7 @@ namespace PraxisWpf.Features.TaskViewer {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/PraxisWpf;V1.0.0.0;component/features/taskviewer/notesdialog.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/PraxisWpf;component/features/taskviewer/notesdialog.xaml", System.UriKind.Relative);
             
             #line 1 "../../../../../Features/TaskViewer/NotesDialog.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
