@@ -28,19 +28,19 @@
 
     <!-- Glow Effects -->
     <DropShadowEffect x:Key="CyberGlowEffect" 
-                      Color="{StaticResource MatrixBrightBlue}" 
+                      Color="#4080ff" 
                       BlurRadius="8" 
                       ShadowDepth="0" 
                       Opacity="0.8"/>
     
     <DropShadowEffect x:Key="CyberSelectionGlow" 
-                      Color="{StaticResource MatrixBrightCyan}" 
+                      Color="#00ffff" 
                       BlurRadius="6" 
                       ShadowDepth="0" 
                       Opacity="0.9"/>
 
     <DropShadowEffect x:Key="CyberTextGlow" 
-                      Color="{StaticResource MatrixBrightCyan}" 
+                      Color="#00ffff" 
                       BlurRadius="4" 
                       ShadowDepth="0" 
                       Opacity="0.6"/>

@@ -32,19 +32,19 @@
 
     <!-- Glow Effects -->
     <DropShadowEffect x:Key="CyberGlowEffect" 
-                      Color="{StaticResource CyberBrightCyan}" 
+                      Color="#00ffff" 
                       BlurRadius="8" 
                       ShadowDepth="0" 
                       Opacity="0.8"/>
     
     <DropShadowEffect x:Key="CyberSelectionGlow" 
-                      Color="{StaticResource CyberBrightMagenta}" 
+                      Color="#ff00ff" 
                       BlurRadius="6" 
                       ShadowDepth="0" 
                       Opacity="0.9"/>
 
     <DropShadowEffect x:Key="CyberTextGlow" 
-                      Color="{StaticResource CyberBrightGreen}" 
+                      Color="#00ff00" 
                       BlurRadius="4" 
                       ShadowDepth="0" 
                       Opacity="0.6"/>
@@ -176,7 +176,7 @@
 
     <!-- TreeViewItem Style - Subtle outline focus instead of background -->
     <Style TargetType="TreeViewItem">
-        <Setter Property="Foreground" Value="#00ff00"/>
+        <Setter Property="Foreground" Value="{StaticResource CyberBrightGreen}"/>
         <Setter Property="FontFamily" Value="Consolas, Courier New, monospace"/>
         <Setter Property="FontSize" Value="12"/>
         <Setter Property="FontWeight" Value="Bold"/>
@@ -188,18 +188,18 @@
         <Style.Triggers>
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="BorderBrush" Value="{StaticResource CyberAccentBrush}"/>
-                <Setter Property="Foreground" Value="#00ff00"/>
+                <Setter Property="Foreground" Value="{StaticResource CyberBrightGreen}"/>
                 <Setter Property="FontWeight" Value="Bold"/>
                 <Setter Property="Effect" Value="{StaticResource CyberGlowEffect}"/>
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="BorderBrush" Value="{StaticResource CyberBrightCyan}"/>
-                <Setter Property="Foreground" Value="#00ffff"/>
+                <Setter Property="Foreground" Value="{StaticResource CyberBrightCyan}"/>
                 <Setter Property="FontWeight" Value="Bold"/>
             </Trigger>
             <Trigger Property="IsFocused" Value="True">
                 <Setter Property="BorderBrush" Value="{StaticResource CyberBrightMagenta}"/>
-                <Setter Property="Foreground" Value="#ff00ff"/>
+                <Setter Property="Foreground" Value="{StaticResource CyberBrightMagenta}"/>
                 <Setter Property="FontWeight" Value="Bold"/>
                 <Setter Property="Effect" Value="{StaticResource CyberSelectionGlow}"/>
             </Trigger>
@@ -209,7 +209,7 @@
                     <Condition Property="IsSelectionActive" Value="False"/>
                 </MultiTrigger.Conditions>
                 <Setter Property="BorderBrush" Value="{StaticResource CyberMidCyan}"/>
-                <Setter Property="Foreground" Value="#00ff00"/>
+                <Setter Property="Foreground" Value="{StaticResource CyberBrightGreen}"/>
                 <Setter Property="FontWeight" Value="Bold"/>
             </MultiTrigger>
         </Style.Triggers>

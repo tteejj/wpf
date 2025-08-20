@@ -27,19 +27,19 @@
 
     <!-- No Glow Effects for High Contrast -->
     <DropShadowEffect x:Key="CyberGlowEffect" 
-                      Color="{StaticResource ContrastWhite}" 
+                      Color="#ffffff" 
                       BlurRadius="0" 
                       ShadowDepth="0" 
                       Opacity="0"/>
     
     <DropShadowEffect x:Key="CyberSelectionGlow" 
-                      Color="{StaticResource ContrastYellow}" 
+                      Color="#ffff00" 
                       BlurRadius="0" 
                       ShadowDepth="0" 
                       Opacity="0"/>
 
     <DropShadowEffect x:Key="CyberTextGlow" 
-                      Color="{StaticResource ContrastWhite}" 
+                      Color="#ffffff" 
                       BlurRadius="0" 
                       ShadowDepth="0" 
                       Opacity="0"/>

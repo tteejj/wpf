@@ -26,19 +26,19 @@
 
     <!-- Glow Effects -->
     <DropShadowEffect x:Key="CyberGlowEffect" 
-                      Color="{StaticResource ConsoleBrightGreen}" 
+                      Color="#00ff00" 
                       BlurRadius="6" 
                       ShadowDepth="0" 
                       Opacity="0.7"/>
     
     <DropShadowEffect x:Key="CyberSelectionGlow" 
-                      Color="{StaticResource ConsoleMidGreen}" 
+                      Color="#00cc00" 
                       BlurRadius="4" 
                       ShadowDepth="0" 
                       Opacity="0.8"/>
 
     <DropShadowEffect x:Key="CyberTextGlow" 
-                      Color="{StaticResource ConsoleBrightGreen}" 
+                      Color="#00ff00" 
                       BlurRadius="3" 
                       ShadowDepth="0" 
                       Opacity="0.5"/>
