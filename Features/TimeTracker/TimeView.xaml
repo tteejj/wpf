@@ -27,13 +27,13 @@
                 
                 <TextBlock Grid.Column="1" 
                            Text="{Binding WeekStartDate, StringFormat='╔═══ TIME ENTRY - Week of {0:MMM dd, yyyy} ═══╗'}" 
-                           Style="{DynamicResource CyberHeaderText}"
+                           Style="{DynamicResource CyberHeading1}"
                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 
                 <TextBlock Grid.Column="4" 
                            Text="{Binding WeekTotal, StringFormat='Week Total: {0:F2}h'}" 
-                           Foreground="{DynamicResource CyberAccentBrush}"
-                           FontWeight="Bold" VerticalAlignment="Center"/>
+                           Style="{DynamicResource CyberHeading3}"
+                           VerticalAlignment="Center"/>
             </Grid>
         </Border>
 
@@ -50,7 +50,7 @@
                 <!-- Date Display -->
                 <TextBlock Grid.Row="0" 
                            Text="{Binding SelectedDate, StringFormat='Selected Date: {0:ddd, MMM dd, yyyy}'}" 
-                           Foreground="{DynamicResource CyberAccentBrush}" FontWeight="Bold"
+                           Style="{DynamicResource CyberHeading3}"
                            HorizontalAlignment="Center" Margin="0,0,0,10"/>
                 
                 <!-- Inline Entry Controls -->
@@ -68,28 +68,38 @@
                               ItemsSource="{Binding AvailableProjects}" 
                               SelectedItem="{Binding SelectedProject}"
                               DisplayMemberPath="Name"
-                              Margin="0,0,5,0"/>
+                              TabIndex="1"
+                              IsTabStop="True"
+                              Margin="0,0,5,0">
+                    </ComboBox>
                     
                     <!-- Hours Entry -->
                     <ComboBox Grid.Column="1" 
                               ItemsSource="{Binding HourIncrements}" 
                               SelectedItem="{Binding EntryHours}"
+                              TabIndex="2"
+                              IsTabStop="True"
                               Margin="0,0,5,0"/>
                     
                     <!-- Description Entry -->
                     <TextBox Grid.Column="2" 
                              Text="{Binding EntryDescription, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="0,0,5,0"/>
+                             TabIndex="3"
+                             IsTabStop="True"
+                             Margin="0,0,5,0">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding AddProjectTimeCommand}"/>
+                        </TextBox.InputBindings>
+                    </TextBox>
                     
                     <!-- Add Project Entry -->
                     <TextBlock Grid.Column="3" Text="[P]roject" 
-                               Foreground="{DynamicResource CyberAccentBrush}"
-                               FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                               Style="{DynamicResource CyberLabel}"
+                               Margin="0,0,10,0"/>
                     
                     <!-- Add Generic Entry -->
                     <TextBlock Grid.Column="4" Text="[N]ew Generic" 
-                               Foreground="{DynamicResource CyberAccentBrush}"
-                               FontWeight="Bold" VerticalAlignment="Center"/>
+                               Style="{DynamicResource CyberLabel}"/>
                 </Grid>
             </Grid>
         </Border>
@@ -116,16 +126,16 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Column="0" Text="║ Project" FontWeight="Bold" 
-                                   Foreground="{DynamicResource CyberAccentBrush}"/>
-                        <TextBlock Grid.Column="1" Text="║ Description" FontWeight="Bold" 
-                                   Foreground="{DynamicResource CyberAccentBrush}"/>
-                        <TextBlock Grid.Column="2" Text="║ Hours" FontWeight="Bold" 
-                                   Foreground="{DynamicResource CyberAccentBrush}"/>
-                        <TextBlock Grid.Column="3" Text="║ Date" FontWeight="Bold" 
-                                   Foreground="{DynamicResource CyberAccentBrush}"/>
-                        <TextBlock Grid.Column="4" Text="║ Day Total" FontWeight="Bold" 
-                                   Foreground="{DynamicResource CyberAccentBrush}"/>
+                        <TextBlock Grid.Column="0" Text="║ Project" 
+                                   Style="{DynamicResource CyberLabel}"/>
+                        <TextBlock Grid.Column="1" Text="║ Description" 
+                                   Style="{DynamicResource CyberLabel}"/>
+                        <TextBlock Grid.Column="2" Text="║ Hours" 
+                                   Style="{DynamicResource CyberLabel}"/>
+                        <TextBlock Grid.Column="3" Text="║ Date" 
+                                   Style="{DynamicResource CyberLabel}"/>
+                        <TextBlock Grid.Column="4" Text="║ Day Total" 
+                                   Style="{DynamicResource CyberLabel}"/>
                     </Grid>
                 </Border>
 

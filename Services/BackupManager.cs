@@ -73,6 +73,12 @@ namespace PraxisWpf.Services
 
             try
             {
+                if (string.IsNullOrWhiteSpace(baseFileName))
+                {
+                    Logger.Warning("BackupManager", "GetBackups called with empty baseFileName");
+                    return new List<BackupInfo>();
+                }
+
                 var pattern = $@"^{Regex.Escape(_backupPrefix)}{Regex.Escape(baseFileName)}_(\d{8}_\d{6})$";
                 var regex = new Regex(pattern);
 

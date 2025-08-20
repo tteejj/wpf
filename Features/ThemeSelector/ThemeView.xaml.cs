@@ -66,16 +66,32 @@ namespace PraxisWpf.Features.ThemeSelector
                     case Key.Escape:
                         // Escape key goes back to task view
                         Logger.Critical("ThemeView", "🔥 ESCAPE KEY - SWITCHING TO TASKS");
-                        var mainWindow = System.Windows.Window.GetWindow(this) as MainWindow;
-                        if (mainWindow != null)
+                        try
                         {
-                            Logger.Critical("ThemeView", "🔥 ESCAPE KEY - EXECUTING SHOW TASKS");
-                            mainWindow.ShowTasks();
-                            e.Handled = true;
+                            // Clear focus from this control first
+                            Keyboard.ClearFocus();
+                            
+                            var mainWindow = System.Windows.Window.GetWindow(this) as MainWindow;
+                            if (mainWindow != null)
+                            {
+                                Logger.Critical("ThemeView", "🔥 ESCAPE KEY - EXECUTING SHOW TASKS");
+                                
+                                // Use dispatcher to ensure UI thread safety
+                                Dispatcher.BeginInvoke(new System.Action(() =>
+                                {
+                                    mainWindow.ShowTasks();
+                                }), System.Windows.Threading.DispatcherPriority.Input);
+                                
+                                e.Handled = true;
+                            }
+                            else
+                            {
+                                Logger.Critical("ThemeView", "🔥 ESCAPE KEY - MAIN WINDOW NOT FOUND!");
+                            }
                         }
-                        else
+                        catch (System.Exception ex)
                         {
-                            Logger.Critical("ThemeView", "🔥 ESCAPE KEY - MAIN WINDOW NOT FOUND!");
+                            Logger.Error("ThemeView", $"Error handling Escape key: {ex.Message}");
                         }
                         break;
 

@@ -74,9 +74,91 @@ namespace PraxisWpf.Features.DataProcessing
                             themeMainWindow.ShowThemes();
                             e.Handled = true;
                         }
-                        else
+                        break;
+
+                    case Key.N:
+                        // N key creates new project
+                        Logger.Critical("DataProcessingView", "🔥 N KEY - CREATING NEW PROJECT");
+                        if (DataContext is DataProcessingViewModel viewModel)
                         {
-                            Logger.Critical("DataProcessingView", "🔥 H KEY - MAIN WINDOW NOT FOUND!");
+                            viewModel.CreateProjectCommand.Execute(null);
+                            e.Handled = true;
+                        }
+                        break;
+
+                    case Key.S:
+                        // S key saves current project
+                        Logger.Critical("DataProcessingView", "🔥 S KEY - SAVING PROJECT");
+                        if (DataContext is DataProcessingViewModel saveViewModel)
+                        {
+                            if (saveViewModel.SaveProjectCommand.CanExecute(null))
+                            {
+                                saveViewModel.SaveProjectCommand.Execute(null);
+                            }
+                            e.Handled = true;
+                        }
+                        break;
+
+                    case Key.D:
+                        // D key deletes current project
+                        Logger.Critical("DataProcessingView", "🔥 D KEY - DELETING PROJECT");
+                        if (DataContext is DataProcessingViewModel deleteViewModel)
+                        {
+                            if (deleteViewModel.DeleteProjectCommand.CanExecute(null))
+                            {
+                                deleteViewModel.DeleteProjectCommand.Execute(null);
+                            }
+                            e.Handled = true;
+                        }
+                        break;
+
+                    case Key.R:
+                        // R key refreshes project list
+                        Logger.Critical("DataProcessingView", "🔥 R KEY - REFRESHING PROJECTS");
+                        if (DataContext is DataProcessingViewModel refreshViewModel)
+                        {
+                            refreshViewModel.RefreshProjectsCommand.Execute(null);
+                            e.Handled = true;
+                        }
+                        break;
+
+                    case Key.I:
+                        // I key imports Excel data
+                        Logger.Critical("DataProcessingView", "🔥 I KEY - IMPORTING EXCEL");
+                        if (DataContext is DataProcessingViewModel importViewModel)
+                        {
+                            importViewModel.ImportExcelCommand.Execute(null);
+                            e.Handled = true;
+                        }
+                        break;
+
+                    case Key.T:
+                        // T key creates Excel template
+                        Logger.Critical("DataProcessingView", "🔥 T KEY - CREATING TEMPLATE");
+                        if (DataContext is DataProcessingViewModel templateViewModel)
+                        {
+                            templateViewModel.CreateTemplateCommand.Execute(null);
+                            e.Handled = true;
+                        }
+                        break;
+
+                    case Key.E:
+                        // E key exports current project
+                        Logger.Critical("DataProcessingView", "🔥 E KEY - EXPORTING PROJECT");
+                        if (DataContext is DataProcessingViewModel exportViewModel)
+                        {
+                            exportViewModel.ExportDataCommand.Execute(null);
+                            e.Handled = true;
+                        }
+                        break;
+
+                    case Key.A:
+                        // A key exports all projects
+                        Logger.Critical("DataProcessingView", "🔥 A KEY - EXPORTING ALL PROJECTS");
+                        if (DataContext is DataProcessingViewModel exportAllViewModel)
+                        {
+                            exportAllViewModel.ExportAllProjectsCommand.Execute(null);
+                            e.Handled = true;
                         }
                         break;
                 }

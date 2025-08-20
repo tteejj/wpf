@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -16,6 +17,9 @@ namespace PraxisWpf.Services
         private readonly JsonSerializerOptions _jsonOptions;
         private readonly IDataService _taskDataService;
         private ObservableCollection<TimeEntry> _timeEntries;
+        private readonly ConcurrentDictionary<DateTime, List<TimeEntry>> _weeklyCache;
+        private readonly object _lockObject = new object();
+        private const int MAX_CACHED_WEEKS = 8; // Cache last 8 weeks for performance
 
         public TimeDataService(string timeDataFilePath = "time-data.json", IDataService? taskDataService = null)
         {
@@ -23,6 +27,7 @@ namespace PraxisWpf.Services
             
             _timeDataFilePath = timeDataFilePath;
             _taskDataService = taskDataService ?? new JsonDataService();
+            _weeklyCache = new ConcurrentDictionary<DateTime, List<TimeEntry>>();
             _jsonOptions = new JsonSerializerOptions
             {
                 WriteIndented = true,
@@ -131,8 +136,9 @@ namespace PraxisWpf.Services
                 Logger.TraceData("Write", "JSON to file", _timeDataFilePath);
                 File.WriteAllText(_timeDataFilePath, jsonString);
                 
-                // Update internal cache
+                // Update internal cache and invalidate weekly cache
                 _timeEntries = timeEntries;
+                ClearTimeDataCache();
                 
                 Logger.Info("TimeDataService", $"Successfully saved {timeEntries.Count} time entries to {_timeDataFilePath}");
                 Logger.TraceExit();
@@ -171,11 +177,41 @@ namespace PraxisWpf.Services
         {
             Logger.TraceEnter(parameters: new object[] { weekStartDate });
             var startDate = weekStartDate.Date;
-            var endDate = startDate.AddDays(4); // Monday to Friday
-            var entries = _timeEntries.Where(e => e.Date >= startDate && e.Date <= endDate).ToList();
-            Logger.Debug("TimeDataService", $"Found {entries.Count} time entries for week {startDate:yyyy-MM-dd} to {endDate:yyyy-MM-dd}");
-            Logger.TraceExit(returnValue: $"{entries.Count} entries");
-            return entries;
+            
+            // Check cache first
+            if (_weeklyCache.TryGetValue(startDate, out var cachedEntries))
+            {
+                Logger.Debug("TimeDataService", $"Returning cached entries for week {startDate:yyyy-MM-dd}");
+                Logger.TraceExit(returnValue: $"{cachedEntries.Count} cached entries");
+                return cachedEntries;
+            }
+            
+            // Not in cache, compute and cache
+            lock (_lockObject)
+            {
+                // Double-check pattern
+                if (_weeklyCache.TryGetValue(startDate, out cachedEntries))
+                {
+                    return cachedEntries;
+                }
+                
+                var endDate = startDate.AddDays(4); // Monday to Friday
+                var entries = _timeEntries.Where(e => e.Date >= startDate && e.Date <= endDate).ToList();
+                
+                // Cache the result
+                _weeklyCache[startDate] = entries;
+                
+                // Cleanup old cache entries if we exceed max
+                if (_weeklyCache.Count > MAX_CACHED_WEEKS)
+                {
+                    var oldestKey = _weeklyCache.Keys.OrderBy(k => k).First();
+                    _weeklyCache.TryRemove(oldestKey, out _);
+                }
+                
+                Logger.Debug("TimeDataService", $"Computed and cached {entries.Count} time entries for week {startDate:yyyy-MM-dd} to {endDate:yyyy-MM-dd}");
+                Logger.TraceExit(returnValue: $"{entries.Count} entries");
+                return entries;
+            }
         }
 
         public IEnumerable<TimeEntry> GetTimeEntriesForProject(int id1, int? id2)
@@ -280,6 +316,16 @@ namespace PraxisWpf.Services
                 {
                     CollectProjectsRecursive(item.Children, projects);
                 }
+            }
+        }
+        
+        public void ClearTimeDataCache()
+        {
+            lock (_lockObject)
+            {
+                var count = _weeklyCache.Count;
+                _weeklyCache.Clear();
+                Logger.Info("TimeDataService", $"Cleared {count} cached weeks from time data cache");
             }
         }
     }

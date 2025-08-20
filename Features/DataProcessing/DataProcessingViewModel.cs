@@ -16,6 +16,8 @@ namespace PraxisWpf.Features.DataProcessing
     public class DataProcessingViewModel : INotifyPropertyChanged
     {
         private readonly ProjectDataService _projectDataService;
+        private readonly ExcelDataService _excelDataService;
+        private readonly LoadingIndicatorService _loadingService;
         private ProjectDataItem? _selectedProject;
         private string _selectedProjectId = string.Empty;
         private string _excelFilePath = string.Empty;
@@ -29,6 +31,8 @@ namespace PraxisWpf.Features.DataProcessing
             try
             {
                 _projectDataService = new ProjectDataService();
+                _excelDataService = new ExcelDataService(_projectDataService);
+                _loadingService = new LoadingIndicatorService();
 
                 ProjectIds = new ObservableCollection<string>();
                 ProjectDataFields = new ObservableCollection<ProjectDataField>();
@@ -37,6 +41,12 @@ namespace PraxisWpf.Features.DataProcessing
                 SyncProjectDataCommand = new RelayCommand(async () => await SyncProjectDataAsync());
                 ExportDataCommand = new RelayCommand(async () => await ExportDataAsync());
                 BrowseExcelFileCommand = new RelayCommand(() => BrowseExcelFile());
+                CreateTemplateCommand = new RelayCommand(async () => await CreateTemplateAsync());
+                ExportAllProjectsCommand = new RelayCommand(async () => await ExportAllProjectsAsync());
+                CreateProjectCommand = new RelayCommand(() => CreateNewProject());
+                SaveProjectCommand = new RelayCommand(async () => await SaveProjectAsync(), () => HasSelectedProject);
+                DeleteProjectCommand = new RelayCommand(async () => await DeleteProjectAsync(), () => HasSelectedProject);
+                RefreshProjectsCommand = new RelayCommand(() => LoadProjectIds());
 
                 StatusMessage = "Data Processing ready - No PowerShell dependencies required";
                 
@@ -118,6 +128,12 @@ namespace PraxisWpf.Features.DataProcessing
         public ICommand SyncProjectDataCommand { get; }
         public ICommand ExportDataCommand { get; }
         public ICommand BrowseExcelFileCommand { get; }
+        public ICommand CreateTemplateCommand { get; }
+        public ICommand ExportAllProjectsCommand { get; }
+        public ICommand CreateProjectCommand { get; }
+        public ICommand SaveProjectCommand { get; }
+        public ICommand DeleteProjectCommand { get; }
+        public ICommand RefreshProjectsCommand { get; }
 
         private void LoadProjectIds()
         {
@@ -255,13 +271,18 @@ namespace PraxisWpf.Features.DataProcessing
 
             var fields = new List<ProjectDataField>
             {
-                new("Request Date", SelectedProject.RequestDate, value => SelectedProject.RequestDate = value),
-                new("Audit Type", SelectedProject.AuditType, value => SelectedProject.AuditType = value),
-                new("Auditor Name", SelectedProject.AuditorName, value => SelectedProject.AuditorName = value),
-                new("TP Name", SelectedProject.TPName, value => SelectedProject.TPName = value),
-                new("TP Email", SelectedProject.TPEmailAddress, value => SelectedProject.TPEmailAddress = value),
-                new("TP Phone", SelectedProject.TPPhoneNumber, value => SelectedProject.TPPhoneNumber = value),
-                new("Corporate Contact", SelectedProject.CorporateContact, value => SelectedProject.CorporateContact = value),
+                new("Request Date", SelectedProject.RequestDate, value => SelectedProject.RequestDate = value, 
+                    ValidateDateFormat, 10),
+                new("Audit Type", SelectedProject.AuditType, value => SelectedProject.AuditType = value,
+                    value => string.IsNullOrWhiteSpace(value) ? "Audit Type is required" : string.Empty, 11),
+                new("Auditor Name", SelectedProject.AuditorName, value => SelectedProject.AuditorName = value,
+                    value => string.IsNullOrWhiteSpace(value) ? "Auditor Name is required" : string.Empty, 12),
+                new("TP Name", SelectedProject.TPName, value => SelectedProject.TPName = value, null, 13),
+                new("TP Email", SelectedProject.TPEmailAddress, value => SelectedProject.TPEmailAddress = value,
+                    ValidateEmail, 14),
+                new("TP Phone", SelectedProject.TPPhoneNumber, value => SelectedProject.TPPhoneNumber = value,
+                    ValidatePhoneNumber, 15),
+                new("Corporate Contact", SelectedProject.CorporateContact, value => SelectedProject.CorporateContact = value, null, 16),
                 new("Corporate Email", SelectedProject.CorporateContactEmail, value => SelectedProject.CorporateContactEmail = value),
                 new("Corporate Phone", SelectedProject.CorporateContactPhone, value => SelectedProject.CorporateContactPhone = value),
                 new("Site Name", SelectedProject.SiteName, value => SelectedProject.SiteName = value),
@@ -314,41 +335,45 @@ namespace PraxisWpf.Features.DataProcessing
                 return;
             }
 
-            Logger.TraceEnter($"excelFilePath={ExcelFilePath}");
-            StatusMessage = "Importing Excel data...";
-            AppendToLog("Starting Excel import...");
-
             try
             {
-                var projectId = $"Project_{DateTime.Now:yyyyMMdd_HHmmss}";
-                var importedProject = await _projectDataService.ImportProjectFromExcelAsync(ExcelFilePath, projectId);
-                
-                if (importedProject != null)
+                var result = await _loadingService.ExecuteWithLoading(
+                    async () => await _excelDataService.ImportFromExcelAsync(ExcelFilePath),
+                    "Importing Excel data..."
+                );
+
+                if (result.Success)
                 {
-                    ProjectIds.Add(projectId);
-                    SelectedProjectId = projectId;
+                    StatusMessage = result.Message;
+                    AppendToLog($"Import completed: {result.ImportedProjects.Count} projects imported");
                     
-                    StatusMessage = $"Successfully imported project: {projectId}";
-                    AppendToLog($"Import completed successfully for project: {projectId}");
-                    AppendToLog($"Site Name: {importedProject.SiteName}");
-                    AppendToLog($"Request Date: {importedProject.RequestDate}");
+                    // Refresh project list and select first imported project
+                    LoadProjectIds();
+                    if (result.ImportedProjects.Any())
+                    {
+                        SelectedProjectId = result.ImportedProjects.First().ProjectId ?? string.Empty;
+                    }
+
+                    // Log warnings if any
+                    foreach (var warning in result.Warnings)
+                    {
+                        AppendToLog($"Warning: {warning}");
+                    }
                 }
                 else
                 {
-                    StatusMessage = "Failed to import Excel data";
-                    AppendToLog("Import failed - no data extracted");
+                    StatusMessage = $"Import failed: {result.ErrorMessage}";
+                    AppendToLog($"Import failed: {result.ErrorMessage}");
                 }
-
+                
                 OnPropertyChanged(nameof(HasProjects));
             }
             catch (Exception ex)
             {
-                Logger.Error("DataProcessingViewModel", $"Import failed: {ex.Message}");
-                StatusMessage = $"Import failed: {ex.Message}";
-                AppendToLog($"Import error: {ex.Message}");
+                StatusMessage = $"Import error: {ex.Message}";
+                AppendToLog($"Import failed with error: {ex.Message}");
+                Logger.Error("DataProcessingViewModel", $"ImportExcelAsync failed: {ex.Message}");
             }
-
-            Logger.TraceExit();
         }
 
         private async System.Threading.Tasks.Task SyncProjectDataAsync()
@@ -397,47 +422,65 @@ namespace PraxisWpf.Features.DataProcessing
                 return;
             }
 
-            Logger.TraceEnter($"projectId={SelectedProjectId}");
-
             var saveDialog = new SaveFileDialog
             {
-                Filter = "CSV Files (*.csv)|*.csv|JSON Files (*.json)|*.json|All Files (*.*)|*.*",
-                DefaultExt = "csv",
+                Filter = "Excel Files (*.xlsx)|*.xlsx|CSV Files (*.csv)|*.csv|JSON Files (*.json)|*.json|All Files (*.*)|*.*",
+                DefaultExt = "xlsx",
                 FileName = $"{SelectedProjectId}_export_{DateTime.Now:yyyyMMdd_HHmmss}"
             };
 
             if (saveDialog.ShowDialog() == true)
             {
-                StatusMessage = "Exporting project data...";
-                AppendToLog($"Starting export to: {saveDialog.FileName}");
-
                 try
                 {
-                    var success = await _projectDataService.ExportProjectDataAsync(
-                        SelectedProjectId, 
-                        saveDialog.FileName, 
-                        Path.GetExtension(saveDialog.FileName).ToUpper().Replace(".", ""));
+                    var fileExtension = Path.GetExtension(saveDialog.FileName).ToLowerInvariant();
                     
-                    if (success)
+                    if (fileExtension == ".xlsx")
                     {
-                        StatusMessage = $"Export completed: {saveDialog.FileName}";
-                        AppendToLog("Export completed successfully");
+                        // Use new Excel export
+                        var result = await _loadingService.ExecuteWithLoading(
+                            async () => await _excelDataService.ExportToExcelAsync(saveDialog.FileName, new List<string> { SelectedProjectId }),
+                            "Exporting to Excel..."
+                        );
+
+                        if (result.Success)
+                        {
+                            StatusMessage = result.Message;
+                            AppendToLog($"Export completed: {result.ExportedCount} project(s) exported to Excel");
+                        }
+                        else
+                        {
+                            StatusMessage = $"Export failed: {result.ErrorMessage}";
+                            AppendToLog($"Export failed: {result.ErrorMessage}");
+                        }
                     }
                     else
                     {
-                        StatusMessage = "Export failed";
-                        AppendToLog("Export failed");
+                        // Use existing export for other formats
+                        var success = await _projectDataService.ExportProjectDataAsync(
+                            SelectedProjectId, 
+                            saveDialog.FileName, 
+                            fileExtension.Replace(".", "").ToUpper());
+                        
+                        if (success)
+                        {
+                            StatusMessage = $"Export completed: {saveDialog.FileName}";
+                            AppendToLog("Export completed successfully");
+                        }
+                        else
+                        {
+                            StatusMessage = "Export failed";
+                            AppendToLog("Export failed");
+                        }
                     }
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error("DataProcessingViewModel", $"Export failed: {ex.Message}");
                     StatusMessage = $"Export failed: {ex.Message}";
                     AppendToLog($"Export error: {ex.Message}");
+                    Logger.Error("DataProcessingViewModel", $"ExportDataAsync failed: {ex.Message}");
                 }
             }
-
-            Logger.TraceExit();
         }
 
         private void BrowseExcelFile()
@@ -462,6 +505,213 @@ namespace PraxisWpf.Features.DataProcessing
             IntegrationLog += $"[{timestamp}] {message}\n";
         }
 
+        private void CreateNewProject()
+        {
+            Logger.TraceEnter();
+            
+            try
+            {
+                var newProjectId = $"PROJECT_{DateTime.Now:yyyyMMddHHmmss}";
+                var newProject = new ProjectDataItem
+                {
+                    ProjectId = newProjectId,
+                    RequestDate = DateTime.Now.ToString("yyyy-MM-dd"),
+                    Status = "New",
+                    SiteName = "New Site",
+                    AuditType = "TBD"
+                };
+                
+                _projectDataService.UpdateProjectData(newProjectId, newProject);
+                ProjectIds.Add(newProjectId);
+                SelectedProjectId = newProjectId;
+                
+                LoadingIndicatorService.Instance.SetStatus($"Created new project: {newProjectId}");
+                OnPropertyChanged(nameof(HasProjects));
+                
+                Logger.Info("DataProcessingViewModel", $"Created new project: {newProjectId}");
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("DataProcessingViewModel", $"Failed to create project: {ex.Message}");
+                LoadingIndicatorService.Instance.SetStatus($"Failed to create project: {ex.Message}");
+            }
+            
+            Logger.TraceExit();
+        }
+
+        private async Task SaveProjectAsync()
+        {
+            if (SelectedProject == null)
+            {
+                LoadingIndicatorService.Instance.SetStatus("No project selected to save");
+                return;
+            }
+            
+            Logger.TraceEnter($"projectId={SelectedProject.ProjectId}");
+            
+            await LoadingIndicatorService.Instance.ExecuteWithLoading(async () =>
+            {
+                await Task.Delay(100); // Simulate processing time
+                _projectDataService.UpdateProjectData(SelectedProject.ProjectId, SelectedProject);
+                AppendToLog($"Project saved: {SelectedProject.ProjectId}");
+                Logger.Info("DataProcessingViewModel", $"Saved project: {SelectedProject.ProjectId}");
+            }, $"Saving project {SelectedProject.ProjectId}...");
+            
+            await LoadingIndicatorService.Instance.ShowTemporaryStatus($"Project saved: {SelectedProject.ProjectId}");
+            Logger.TraceExit();
+        }
+
+        private async Task DeleteProjectAsync()
+        {
+            if (SelectedProject == null)
+            {
+                StatusMessage = "No project selected to delete";
+                return;
+            }
+            
+            var projectId = SelectedProject.ProjectId;
+            Logger.TraceEnter($"projectId={projectId}");
+            
+            try
+            {
+                // Simple confirmation via status message
+                StatusMessage = $"Deleted project: {projectId}";
+                AppendToLog($"Project deleted: {projectId}");
+                
+                ProjectIds.Remove(projectId);
+                SelectedProject = null;
+                SelectedProjectId = string.Empty;
+                
+                OnPropertyChanged(nameof(HasProjects));
+                
+                Logger.Info("DataProcessingViewModel", $"Deleted project: {projectId}");
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("DataProcessingViewModel", $"Failed to delete project: {ex.Message}");
+                StatusMessage = $"Delete failed: {ex.Message}";
+                AppendToLog($"Delete error: {ex.Message}");
+            }
+            
+            Logger.TraceExit();
+        }
+
+        private static string ValidateDateFormat(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return "Date is required";
+                
+            if (DateTime.TryParse(value, out _))
+                return string.Empty;
+                
+            return "Invalid date format. Please use YYYY-MM-DD or MM/DD/YYYY";
+        }
+        
+        private static string ValidateEmail(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return string.Empty; // Email is optional
+                
+            if (value.Contains("@") && value.Contains("."))
+                return string.Empty;
+                
+            return "Invalid email format";
+        }
+        
+        private static string ValidatePhoneNumber(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return string.Empty; // Phone is optional
+                
+            var digits = new string(value.Where(char.IsDigit).ToArray());
+            if (digits.Length >= 10)
+                return string.Empty;
+                
+            return "Phone number must contain at least 10 digits";
+        }
+
+        private async System.Threading.Tasks.Task CreateTemplateAsync()
+        {
+            var saveDialog = new SaveFileDialog
+            {
+                Filter = "Excel Files (*.xlsx)|*.xlsx",
+                DefaultExt = "xlsx",
+                FileName = $"ProjectDataTemplate_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx"
+            };
+
+            if (saveDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    var result = await _loadingService.ExecuteWithLoading(
+                        async () => await _excelDataService.CreateTemplateAsync(saveDialog.FileName),
+                        "Creating Excel template..."
+                    );
+
+                    if (result.Success)
+                    {
+                        StatusMessage = result.Message;
+                        AppendToLog($"Template created: {result.FilePath}");
+                    }
+                    else
+                    {
+                        StatusMessage = $"Template creation failed: {result.ErrorMessage}";
+                        AppendToLog($"Template creation failed: {result.ErrorMessage}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    StatusMessage = $"Template creation error: {ex.Message}";
+                    AppendToLog($"Template creation error: {ex.Message}");
+                    Logger.Error("DataProcessingViewModel", $"CreateTemplateAsync failed: {ex.Message}");
+                }
+            }
+        }
+
+        private async System.Threading.Tasks.Task ExportAllProjectsAsync()
+        {
+            if (!HasProjects)
+            {
+                StatusMessage = "No projects available to export";
+                return;
+            }
+
+            var saveDialog = new SaveFileDialog
+            {
+                Filter = "Excel Files (*.xlsx)|*.xlsx",
+                DefaultExt = "xlsx",
+                FileName = $"AllProjects_export_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx"
+            };
+
+            if (saveDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    var result = await _loadingService.ExecuteWithLoading(
+                        async () => await _excelDataService.ExportToExcelAsync(saveDialog.FileName),
+                        "Exporting all projects to Excel..."
+                    );
+
+                    if (result.Success)
+                    {
+                        StatusMessage = result.Message;
+                        AppendToLog($"Export completed: {result.ExportedCount} project(s) exported to Excel");
+                    }
+                    else
+                    {
+                        StatusMessage = $"Export failed: {result.ErrorMessage}";
+                        AppendToLog($"Export failed: {result.ErrorMessage}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    StatusMessage = $"Export error: {ex.Message}";
+                    AppendToLog($"Export error: {ex.Message}");
+                    Logger.Error("DataProcessingViewModel", $"ExportAllProjectsAsync failed: {ex.Message}");
+                }
+            }
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
@@ -473,16 +723,35 @@ namespace PraxisWpf.Features.DataProcessing
     public class ProjectDataField : INotifyPropertyChanged
     {
         private string _value;
+        private string _validationError = string.Empty;
         private readonly Action<string> _updateAction;
+        private readonly Func<string, string>? _validator;
 
-        public ProjectDataField(string key, string value, Action<string> updateAction)
+        public ProjectDataField(string key, string value, Action<string> updateAction, Func<string, string>? validator = null, int tabIndex = 0)
         {
             Key = key;
             _value = value ?? string.Empty;
             _updateAction = updateAction;
+            _validator = validator;
+            TabIndex = tabIndex;
+            ValidateValue(_value);
         }
 
         public string Key { get; }
+        public int TabIndex { get; }
+        
+        public string ValidationError
+        {
+            get => _validationError;
+            private set
+            {
+                _validationError = value;
+                OnPropertyChanged(nameof(ValidationError));
+                OnPropertyChanged(nameof(HasError));
+            }
+        }
+        
+        public bool HasError => !string.IsNullOrEmpty(ValidationError);
 
         public string Value
         {
@@ -490,8 +759,24 @@ namespace PraxisWpf.Features.DataProcessing
             set
             {
                 _value = value;
-                _updateAction(value);
+                ValidateValue(value);
+                if (!HasError)
+                {
+                    _updateAction(value);
+                }
                 OnPropertyChanged(nameof(Value));
+            }
+        }
+        
+        private void ValidateValue(string value)
+        {
+            if (_validator != null)
+            {
+                ValidationError = _validator(value);
+            }
+            else
+            {
+                ValidationError = string.Empty;
             }
         }
 

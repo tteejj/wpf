@@ -5,9 +5,14 @@
         xmlns:timeTracker="clr-namespace:PraxisWpf.Features.TimeTracker"
         xmlns:dataProcessing="clr-namespace:PraxisWpf.Features.DataProcessing"
         xmlns:themeSelector="clr-namespace:PraxisWpf.Features.ThemeSelector"
+        xmlns:services="clr-namespace:PraxisWpf.Services"
         Title="Praxis WPF Task Manager" Height="600" Width="1000">
     
     <!-- No Window.InputBindings - all key handling at data level -->
+    
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
+    </Window.Resources>
     
     <Grid>
         <Grid.RowDefinitions>
@@ -73,11 +78,83 @@
                 <TextBlock Text="Esc: Back to Tasks | P: Project Time | N: Generic Time | E: Export Weekly Timesheet | H: Themes | Del: Delete | Ctrl+S: Save"/>
             </StatusBarItem>
             <StatusBarItem Name="DataStatusBar" Visibility="Collapsed">
-                <TextBlock Text="Esc: Back to Tasks | H: Themes | Import Excel | Sync Project Data | Export Data | Browse Files"/>
+                <TextBlock Text="N: New Project | S: Save | D: Delete | R: Refresh | H: Themes | Esc: Back to Tasks"/>
             </StatusBarItem>
             <StatusBarItem Name="ThemeStatusBar" Visibility="Collapsed">
                 <TextBlock Text="Esc: Back to Tasks | 1-5: Select Theme | A: Apply Theme | R: Refresh | Mouse: Click to Select"/>
             </StatusBarItem>
+            
+            <!-- Status Message -->
+            <StatusBarItem HorizontalAlignment="Right">
+                <TextBlock Text="{Binding Source={x:Static services:LoadingIndicatorService.Instance}, Path=StatusMessage}"
+                           Foreground="{DynamicResource CyberInfoBrush}"
+                           FontStyle="Italic"/>
+            </StatusBarItem>
         </StatusBar>
+        
+        <!-- Loading Overlay -->
+        <Grid Grid.RowSpan="3" 
+              Background="#80000000" 
+              Visibility="{Binding Source={x:Static services:LoadingIndicatorService.Instance}, Path=IsLoading, Converter={StaticResource BoolToVisConverter}}">
+            <Border Background="{DynamicResource CyberControlBrush}"
+                    BorderBrush="{DynamicResource CyberAccentBrush}"
+                    BorderThickness="2"
+                    CornerRadius="5"
+                    Padding="20"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    MinWidth="200">
+                <StackPanel>
+                    <!-- Loading Spinner -->
+                    <Grid Height="40" Width="40" Margin="0,0,0,10">
+                        <Ellipse Fill="{DynamicResource CyberAccentBrush}" Opacity="0.3"/>
+                        <Ellipse Fill="{DynamicResource CyberAccentBrush}" 
+                                Width="30" Height="30"
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Center">
+                            <Ellipse.RenderTransform>
+                                <RotateTransform x:Name="SpinnerRotate" CenterX="15" CenterY="15"/>
+                            </Ellipse.RenderTransform>
+                            <Ellipse.Triggers>
+                                <EventTrigger RoutedEvent="Loaded">
+                                    <BeginStoryboard>
+                                        <Storyboard RepeatBehavior="Forever">
+                                            <DoubleAnimation Storyboard.TargetName="SpinnerRotate"
+                                                           Storyboard.TargetProperty="Angle"
+                                                           From="0" To="360"
+                                                           Duration="0:0:1"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Ellipse.Triggers>
+                        </Ellipse>
+                    </Grid>
+                    
+                    <!-- Loading Message -->
+                    <TextBlock Text="{Binding Source={x:Static services:LoadingIndicatorService.Instance}, Path=LoadingMessage}"
+                               Foreground="{DynamicResource CyberAccentBrush}"
+                               FontWeight="Bold"
+                               TextAlignment="Center"
+                               Margin="0,0,0,10"/>
+                    
+                    <!-- Progress Bar (when enabled) -->
+                    <ProgressBar Value="{Binding Source={x:Static services:LoadingIndicatorService.Instance}, Path=ProgressValue}"
+                                Maximum="{Binding Source={x:Static services:LoadingIndicatorService.Instance}, Path=ProgressMaximum}"
+                                Height="6"
+                                Background="{DynamicResource CyberControlBrush}"
+                                Foreground="{DynamicResource CyberAccentBrush}"
+                                BorderBrush="{DynamicResource CyberBorderBrush}"
+                                Visibility="{Binding Source={x:Static services:LoadingIndicatorService.Instance}, Path=ShowProgress, Converter={StaticResource BoolToVisConverter}}"/>
+                    
+                    <!-- Progress Percentage -->
+                    <TextBlock Text="{Binding Source={x:Static services:LoadingIndicatorService.Instance}, Path=ProgressPercentage}"
+                               Foreground="{DynamicResource CyberTextBrush}"
+                               FontSize="10"
+                               TextAlignment="Center"
+                               Margin="0,5,0,0"
+                               Visibility="{Binding Source={x:Static services:LoadingIndicatorService.Instance}, Path=ShowProgress, Converter={StaticResource BoolToVisConverter}}"/>
+                </StackPanel>
+            </Border>
+        </Grid>
     </Grid>
 </Window>
