@@ -879,3 +879,41 @@ Stack:    at System.IO.Path.GetFullPath(String path)
 2025-08-20 05:08:40.700 [T01]INFO     ActionBasedAutoSaveService Action-based auto-save service disposed
 2025-08-20 05:08:40.700 [T01]INFO     DataSafetyService    Data safety service disposed
 2025-08-20 05:08:40.703 [T01]INFO     App                  Application shutting down with exit code: 0
+2025-08-20 05:12:14.173 [T01]INFO     Logger               Logger initialized | Level=Info, StackTrace=False, ThreadId=True, Path=PraxisWpf_2025-08-20.log
+2025-08-20 05:12:14.177 [T01]INFO     Logger               Logger initialized | Level=Debug, StackTrace=True, ThreadId=True, Path=PraxisWpf_2025-08-20.log
+2025-08-20 05:12:14.178 [T01]INFO     AppConfig            Configuration loaded from app-config.json
+2025-08-20 05:12:14.178 [T01]INFO     App                  Application starting up
+2025-08-20 05:12:14.178 [T01]DEBUG    App                  Command line args: 
+2025-08-20 05:12:14.178 [T01]INFO     App                  Application startup completed successfully
+2025-08-20 05:12:14.183 [T01]DEBUG    MainWindow           Initializing WPF components
+2025-08-20 05:12:14.240 [T01]DEBUG    TaskView             Initializing XAML components
+2025-08-20 05:12:14.254 [T01]INFO     TaskView             TaskView initialized successfully
+2025-08-20 05:12:14.256 [T01]DEBUG    TaskView.xaml        PERF END: TaskView Constructor | Duration: 13.60ms
+2025-08-20 05:12:14.257 [T01]DEBUG    TimeView             Initializing XAML components
+2025-08-20 05:12:14.294 [T01]INFO     TimeView             TimeView initialized successfully
+2025-08-20 05:12:14.294 [T01]DEBUG    TimeView.xaml        PERF END: TimeView Constructor | Duration: 36.97ms
+2025-08-20 05:12:14.295 [T01]DEBUG    DataProcessingView   Initializing XAML components
+2025-08-20 05:12:14.310 [T01]INFO     DataProcessingView   DataProcessingView initialized successfully
+2025-08-20 05:12:14.310 [T01]DEBUG    DataProcessingView.xaml PERF END: DataProcessingView Constructor | Duration: 14.82ms
+2025-08-20 05:12:14.311 [T01]DEBUG    ThemeView            Initializing XAML components
+2025-08-20 05:12:14.315 [T01]INFO     ThemeView            ThemeView initialized successfully
+2025-08-20 05:12:14.315 [T01]DEBUG    ThemeView.xaml       PERF END: ThemeView Constructor | Duration: 4.14ms
+2025-08-20 05:12:14.323 [T01]DEBUG    MainWindow.xaml      PERF END: MainWindow Constructor | Duration: 139.84ms
+2025-08-20 05:12:14.340 [T01]CRITICAL MainWindow           Failed to initialize MainWindow |  Exception: XamlParseException: 'Set property 'System.Windows.Controls.Primitives.RangeBase.Value' threw an exception.' Line number '141' and line position '34'.
+Stack:    at System.Windows.Markup.XamlReader.RewrapException(Exception e, IXamlLineInfo lineInfo, Uri baseUri)
+   at System.Windows.Markup.WpfXamlLoader.Load(XamlReader xamlReader, IXamlObjectWriterFactory writerFactory, Boolean skipJournaledProperties, Object rootObject, XamlObjectWriterSettings settings, Uri baseUri)
+   at System.Windows.Markup.WpfXamlLoader.LoadBaml(XamlReader xamlReader, Boolean skipJournaledProperties, Object rootObject, XamlAccessLevel accessLevel, Uri baseUri)
+   at System.Windows.Markup.XamlReader.LoadBaml(Stream stream, ParserContext parserContext, Object parent, Boolean closeStream)
+   at System.Windows.Application.LoadComponent(Object component, Uri resourceLocator)
+   at PraxisWpf.MainWindow.InitializeComponent() in C:\Users\jhnhe\OneDrive\Documents\GitHub\wpf\MainWindow.xaml:line 1
+   at PraxisWpf.MainWindow..ctor() in C:\Users\jhnhe\OneDrive\Documents\GitHub\wpf\MainWindow.xaml.cs:line 28
+2025-08-20 05:12:14.342 [T01]CRITICAL App                  Unhandled UI thread exception |  Exception: XamlParseException: 'Set property 'System.Windows.Controls.Primitives.RangeBase.Value' threw an exception.' Line number '141' and line position '34'.
+Stack:    at System.Windows.Markup.XamlReader.RewrapException(Exception e, IXamlLineInfo lineInfo, Uri baseUri)
+   at System.Windows.Markup.WpfXamlLoader.Load(XamlReader xamlReader, IXamlObjectWriterFactory writerFactory, Boolean skipJournaledProperties, Object rootObject, XamlObjectWriterSettings settings, Uri baseUri)
+   at System.Windows.Markup.WpfXamlLoader.LoadBaml(XamlReader xamlReader, Boolean skipJournaledProperties, Object rootObject, XamlAccessLevel accessLevel, Uri baseUri)
+   at System.Windows.Markup.XamlReader.LoadBaml(Stream stream, ParserContext parserContext, Object parent, Boolean closeStream)
+   at System.Windows.Application.LoadBamlStreamWithSyncInfo(Stream stream, ParserContext pc)
+   at System.Windows.Application.DoStartup()
+   at System.Windows.Application.<.ctor>b__1_0(Object unused)
+   at System.Windows.Threading.ExceptionWrapper.InternalRealCall(Delegate callback, Object args, Int32 numArgs)
+   at System.Windows.Threading.ExceptionWrapper.TryCatchWhen(Object source, Delegate callback, Object args, Int32 numArgs, Delegate catchHandler)
