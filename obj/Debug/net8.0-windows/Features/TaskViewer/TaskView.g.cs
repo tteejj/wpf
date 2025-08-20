@@ -61,7 +61,7 @@ namespace PraxisWpf.Features.TaskViewer {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/PraxisWpf;component/features/taskviewer/taskview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/PraxisWpf;V1.0.0.0;component/features/taskviewer/taskview.xaml", System.UriKind.Relative);
             
             #line 1 "../../../../../Features/TaskViewer/TaskView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

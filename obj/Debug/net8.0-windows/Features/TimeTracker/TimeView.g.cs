@@ -53,7 +53,7 @@ namespace PraxisWpf.Features.TimeTracker {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/PraxisWpf;component/features/timetracker/timeview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/PraxisWpf;V1.0.0.0;component/features/timetracker/timeview.xaml", System.UriKind.Relative);
             
             #line 1 "../../../../../Features/TimeTracker/TimeView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

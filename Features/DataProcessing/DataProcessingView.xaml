@@ -8,38 +8,40 @@
              d:DesignHeight="450" d:DesignWidth="800">
     
     <UserControl.Resources>
-        <!-- Project Data Field Editor Template -->
+        <!-- Project Data Field Editor Template - PURE WHITE TEXT NO THEMES -->
         <DataTemplate x:Key="ProjectDataFieldTemplate">
-            <Grid Margin="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                
-                <!-- Field Label - FORCE VISIBLE -->
-                <TextBlock Grid.Column="0" 
-                           Text="{Binding Key}" 
-                           Foreground="#00ff00"
-                           FontWeight="Bold"
-                           FontSize="12"
-                           FontFamily="Consolas"
-                           Margin="5,5,15,5"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Left"/>
-                
-                <!-- Field Value TextBox - FORCE VISIBLE -->
-                <TextBox Grid.Column="1"
-                         Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
-                         Background="#000000"
-                         Foreground="#00ffff"
-                         BorderBrush="#00ff00"
-                         BorderThickness="1"
-                         FontWeight="Bold"
-                         FontSize="11"
-                         FontFamily="Consolas"
-                         Margin="5"
-                         Padding="8,4"/>
-            </Grid>
+            <Border Background="Black" Margin="3" Padding="5">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- PURE WHITE TEXT LABEL -->
+                    <TextBlock Grid.Column="0" 
+                               Text="{Binding Key}" 
+                               Foreground="White"
+                               Background="Black"
+                               FontWeight="Bold"
+                               FontSize="14"
+                               FontFamily="Arial"
+                               Margin="10"
+                               VerticalAlignment="Center"/>
+                    
+                    <!-- PURE WHITE TEXT VALUE -->
+                    <TextBox Grid.Column="1"
+                             Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
+                             Background="Black"
+                             Foreground="White"
+                             BorderBrush="White"
+                             BorderThickness="2"
+                             FontWeight="Bold"
+                             FontSize="14"
+                             FontFamily="Arial"
+                             Margin="10"
+                             Padding="10"/>
+                </Grid>
+            </Border>
         </DataTemplate>
     </UserControl.Resources>
     

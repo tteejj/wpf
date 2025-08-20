@@ -16,6 +16,63 @@ namespace PraxisWpf.Services
         {
             _excelService = new ExcelIntegrationService();
             _projectDataCache = new Dictionary<string, ProjectDataItem>();
+            
+            // Initialize with sample project data for demonstration
+            InitializeSampleData();
+        }
+        
+        private void InitializeSampleData()
+        {
+            Logger.TraceEnter();
+            
+            try
+            {
+                // Create sample project data based on common project patterns
+                var sampleProjects = new[]
+                {
+                    new ProjectDataItem
+                    {
+                        ProjectId = "P001",
+                        RequestDate = "2024-08-15",
+                        AuditType = "Environmental Compliance",
+                        AuditorName = "John Smith",
+                        SiteName = "Main Manufacturing Site",
+                        SiteAddress = "123 Industrial Blvd",
+                        SiteCity = "Manufacturing City",
+                        SiteState = "CA",
+                        SiteZip = "90210",
+                        Status = "In Progress",
+                        Comments = "Sample project for demonstration"
+                    },
+                    new ProjectDataItem
+                    {
+                        ProjectId = "P002", 
+                        RequestDate = "2024-08-10",
+                        AuditType = "Safety Inspection",
+                        AuditorName = "Jane Doe",
+                        SiteName = "Warehouse Facility",
+                        SiteAddress = "456 Storage Ave",
+                        SiteCity = "Warehouse Town",
+                        SiteState = "TX",
+                        SiteZip = "75001",
+                        Status = "Completed",
+                        Comments = "Second sample project"
+                    }
+                };
+                
+                foreach (var project in sampleProjects)
+                {
+                    _projectDataCache[project.ProjectId] = project;
+                }
+                
+                Logger.Info("ProjectDataService", $"Initialized {sampleProjects.Length} sample projects");
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("ProjectDataService", $"Failed to initialize sample data: {ex.Message}");
+            }
+            
+            Logger.TraceExit();
         }
 
         public async Task<ProjectDataItem?> GetProjectDataAsync(string projectId)

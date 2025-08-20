@@ -107,20 +107,22 @@
 
     <!-- TreeViewItem Style -->
     <Style TargetType="TreeViewItem">
-        <Setter Property="Foreground" Value="{StaticResource CyberTextBrush}"/>
+        <Setter Property="Foreground" Value="#00ff00"/>
         <Setter Property="FontFamily" Value="Consolas, Courier New, monospace"/>
         <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="Padding" Value="2"/>
         <Setter Property="Margin" Value="0,1"/>
         <Style.Triggers>
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Background" Value="{StaticResource CyberHighlightBrush}"/>
-                <Setter Property="Foreground" Value="{StaticResource CyberSelectionBrush}"/>
-                <Setter Property="Effect" Value="{StaticResource CyberSelectionGlow}"/>
+                <Setter Property="Foreground" Value="#00ff00"/>
+                <Setter Property="FontWeight" Value="Bold"/>
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource CyberHoverBrush}"/>
-                <Setter Property="Foreground" Value="{StaticResource CyberAccentBrush}"/>
+                <Setter Property="Foreground" Value="#00ff00"/>
+                <Setter Property="FontWeight" Value="Bold"/>
             </Trigger>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
@@ -128,7 +130,8 @@
                     <Condition Property="IsSelectionActive" Value="False"/>
                 </MultiTrigger.Conditions>
                 <Setter Property="Background" Value="{StaticResource CyberControlBrush}"/>
-                <Setter Property="Foreground" Value="{StaticResource CyberDimCyan}"/>
+                <Setter Property="Foreground" Value="#00ff00"/>
+                <Setter Property="FontWeight" Value="Bold"/>
             </MultiTrigger>
         </Style.Triggers>
     </Style>
