@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PraxisWpf")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+61b88dc145a666337c45c8ab88805f03c803f801")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4c1fbc62a0cbeef5aaab37f7e0ee6892357f54f3")]
 [assembly: System.Reflection.AssemblyProductAttribute("PraxisWpf")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PraxisWpf")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
