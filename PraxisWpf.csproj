@@ -12,8 +12,5 @@
     <PackageReference Include="ClosedXML" Version="0.102.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\ExcelDataFlow\**\*.ps1" />
-  </ItemGroup>
 
 </Project>

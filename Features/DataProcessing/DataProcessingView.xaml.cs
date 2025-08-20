@@ -161,6 +161,16 @@ namespace PraxisWpf.Features.DataProcessing
                             e.Handled = true;
                         }
                         break;
+
+                    case Key.M:
+                        // M key opens Excel mapping dialog
+                        Logger.Critical("DataProcessingView", "🔥 M KEY - OPENING EXCEL MAPPING");
+                        if (DataContext is DataProcessingViewModel mappingViewModel)
+                        {
+                            mappingViewModel.OpenExcelMappingCommand.Execute(null);
+                            e.Handled = true;
+                        }
+                        break;
                 }
 
                 base.OnKeyDown(e);

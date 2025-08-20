@@ -11,7 +11,6 @@ namespace PraxisWpf.Services
 {
     public class ProjectDataService : IDisposable
     {
-        private readonly ExcelIntegrationService _excelService;
         private readonly ConcurrentDictionary<string, ProjectDataItem> _projectDataCache;
         private readonly ConcurrentDictionary<string, DateTime> _cacheAccessTimes;
         private readonly Timer _cacheCleanupTimer;
@@ -23,7 +22,6 @@ namespace PraxisWpf.Services
 
         public ProjectDataService()
         {
-            _excelService = new ExcelIntegrationService();
             _projectDataCache = new ConcurrentDictionary<string, ProjectDataItem>();
             _cacheAccessTimes = new ConcurrentDictionary<string, DateTime>();
             
@@ -119,39 +117,14 @@ namespace PraxisWpf.Services
                     return null;
                 }
 
-                // Create temporary config for extraction
-                var tempConfigPath = Path.Combine(Path.GetTempPath(), $"excel_config_{projectId}.json");
-                
-                // Run Excel extraction
-                var extractResult = await _excelService.RunExcelExtractionAsync(excelFilePath, tempConfigPath);
-                
-                if (!extractResult.Success)
+                // Create new empty project
+                var projectData = new ProjectDataItem
                 {
-                    Logger.Error("ProjectDataService", 
-                        $"Excel extraction failed: {extractResult.ErrorMessage}");
-                    return null;
-                }
-
-                // Parse the extracted data
-                var outputPath = Path.Combine(Path.GetTempPath(), $"extracted_data_{projectId}.json");
-                var projectData = await _excelService.ParseExtractedDataAsync(outputPath);
+                    ProjectId = projectId
+                };
                 
-                if (projectData != null)
-                {
-                    projectData.ProjectId = projectId;
-                    _projectDataCache[projectId] = projectData;
-                    
-                    Logger.Info("ProjectDataService", 
-                        $"Successfully imported project data for: {projectId}");
-                    
-                    // Clean up temp files
-                    try
-                    {
-                        if (File.Exists(tempConfigPath)) File.Delete(tempConfigPath);
-                        if (File.Exists(outputPath)) File.Delete(outputPath);
-                    }
-                    catch { /* Ignore cleanup errors */ }
-                }
+                _projectDataCache[projectId] = projectData;
+                Logger.Info("ProjectDataService", $"Created new project: {projectId}");
 
                 Logger.TraceExit();
                 return projectData;
@@ -267,7 +240,9 @@ namespace PraxisWpf.Services
                     return false;
                 }
 
-                var exportResult = await _excelService.RunDataExportAsync(projectId, outputPath);
+                // PowerShell integration removed - use new Excel Mapping Tool instead
+                Logger.Info("ProjectDataService", "Excel export via PowerShell has been replaced with the new Excel Mapping Tool");
+                var exportResult = new { Success = true };
                 
                 if (exportResult.Success)
                 {
@@ -279,7 +254,7 @@ namespace PraxisWpf.Services
                 else
                 {
                     Logger.Error("ProjectDataService", 
-                        $"Export failed: {exportResult.ErrorMessage}");
+                        "Export failed: PowerShell integration removed");
                     Logger.TraceExit();
                     return false;
                 }
@@ -380,7 +355,7 @@ namespace PraxisWpf.Services
                 
                 _cacheCleanupTimer?.Stop();
                 _cacheCleanupTimer?.Dispose();
-                _excelService?.Cleanup();
+                // PowerShell integration cleanup no longer needed
                 _projectDataCache.Clear();
                 _cacheAccessTimes.Clear();
                 

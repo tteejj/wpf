@@ -19,8 +19,32 @@ namespace PraxisWpf.Services
         {
             Logger.TraceEnter($"dataFilePath={dataFilePath}, maxBackups={maxBackups}");
 
-            _baseDirectory = Path.GetDirectoryName(dataFilePath) ?? ".";
+            if (string.IsNullOrWhiteSpace(dataFilePath))
+            {
+                Logger.Warning("BackupManager", "Empty dataFilePath provided, using current directory");
+                _baseDirectory = Directory.GetCurrentDirectory();
+            }
+            else
+            {
+                _baseDirectory = Path.GetDirectoryName(dataFilePath) ?? ".";
+            }
+            
             _maxBackups = Math.Max(1, maxBackups); // At least 1 backup
+
+            // Ensure the backup directory exists
+            if (!Directory.Exists(_baseDirectory))
+            {
+                try
+                {
+                    Directory.CreateDirectory(_baseDirectory);
+                    Logger.Info("BackupManager", $"Created backup directory: {_baseDirectory}");
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error("BackupManager", $"Failed to create backup directory: {_baseDirectory}", ex);
+                    _baseDirectory = Directory.GetCurrentDirectory();
+                }
+            }
 
             Logger.Info("BackupManager", $"Initialized - Directory: {_baseDirectory}, Max backups: {_maxBackups}");
             Logger.TraceExit();

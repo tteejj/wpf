@@ -18,7 +18,18 @@ namespace PraxisWpf.Services
         private int _progressMaximum = 100;
         private bool _showProgress;
 
-        public static LoadingIndicatorService Instance => _instance ??= new LoadingIndicatorService();
+        public static LoadingIndicatorService Instance 
+        { 
+            get 
+            { 
+                if (_instance == null)
+                {
+                    _instance = new LoadingIndicatorService();
+                    Logger.Info("LoadingIndicatorService", "Singleton instance created");
+                }
+                return _instance;
+            } 
+        }
 
         public bool IsLoading
         {

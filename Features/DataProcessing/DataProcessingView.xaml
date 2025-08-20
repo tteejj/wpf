@@ -210,6 +210,9 @@
                                            Style="{DynamicResource CyberLabel}"
                                            Margin="0,0,20,0"/>
                                 <TextBlock Text="Export [A]ll" 
+                                           Style="{DynamicResource CyberLabel}"
+                                           Margin="0,0,20,0"/>
+                                <TextBlock Text="[M]apping Tool" 
                                            Style="{DynamicResource CyberLabel}"/>
                             </StackPanel>
                             
@@ -217,7 +220,7 @@
                                 <TextBlock Text="Instructions:" 
                                            Style="{DynamicResource CyberLabel}"
                                            Margin="0,0,10,0"/>
-                                <TextBlock Text="Use Template to create Excel format, Import to load data, Export to save projects" 
+                                <TextBlock Text="Use Template to create Excel format, Import to load data, Export to save projects, Mapping Tool for advanced field mapping" 
                                            Style="{DynamicResource CyberBodyTextSecondary}"/>
                             </StackPanel>
                         </Grid>

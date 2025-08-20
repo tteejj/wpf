@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using PraxisWpf.Interfaces;
@@ -13,7 +14,8 @@ namespace PraxisWpf.Services
     public class DataSafetyService : IDisposable
     {
         private readonly ActionBasedAutoSaveService _actionBasedAutoSaveService;
-        private readonly BackupManager _backupManager;
+        private readonly BackupManager _taskBackupManager;
+        private readonly BackupManager _timeBackupManager;
         private readonly SafeFileWriter _taskDataWriter;
         private readonly SafeFileWriter _timeDataWriter;
         private readonly string _taskDataPath;
@@ -25,13 +27,17 @@ namespace PraxisWpf.Services
         {
             Logger.TraceEnter($"taskDataPath={taskDataPath}, timeDataPath={timeDataPath}");
 
-            _taskDataPath = taskDataPath;
-            _timeDataPath = timeDataPath;
+            // Validate and ensure paths are not empty
+            _taskDataPath = string.IsNullOrWhiteSpace(taskDataPath) ? "data.json" : taskDataPath;
+            _timeDataPath = string.IsNullOrWhiteSpace(timeDataPath) ? "time-data.json" : timeDataPath;
             _recoveryFlagPath = "recovery.flag";
+
+            Logger.Info("DataSafetyService", $"Using validated paths - Task: {_taskDataPath}, Time: {_timeDataPath}");
 
             _taskDataWriter = new SafeFileWriter(_taskDataPath);
             _timeDataWriter = new SafeFileWriter(_timeDataPath);
-            _backupManager = new BackupManager(_taskDataPath, maxBackups: 5);
+            _taskBackupManager = new BackupManager(_taskDataPath, maxBackups: 3);
+            _timeBackupManager = new BackupManager(_timeDataPath, maxBackups: 3);
             _actionBasedAutoSaveService = new ActionBasedAutoSaveService(_taskDataPath, _timeDataPath);
 
             // Set up application shutdown handling
@@ -91,7 +97,7 @@ namespace PraxisWpf.Services
                 // Backup task data
                 if (File.Exists(_taskDataPath))
                 {
-                    var taskBackupPath = _backupManager.CreateBackup(_taskDataPath);
+                    var taskBackupPath = _taskBackupManager.CreateBackup(_taskDataPath);
                     if (!string.IsNullOrEmpty(taskBackupPath))
                     {
                         result.TaskDataBackup = taskBackupPath;
@@ -103,7 +109,7 @@ namespace PraxisWpf.Services
                 // Backup time data
                 if (File.Exists(_timeDataPath))
                 {
-                    var timeBackupPath = _backupManager.CreateBackup(_timeDataPath);
+                    var timeBackupPath = _timeBackupManager.CreateBackup(_timeDataPath);
                     if (!string.IsNullOrEmpty(timeBackupPath))
                     {
                         result.TimeDataBackup = timeBackupPath;
@@ -146,14 +152,14 @@ namespace PraxisWpf.Services
             try
             {
                 // Attempt to recover task data
-                if (_backupManager.RestoreLatestBackup(_taskDataPath))
+                if (_taskBackupManager.RestoreLatestBackup(_taskDataPath))
                 {
                     result.TaskDataRecovered = true;
                     Logger.Info("DataSafetyService", "Task data recovered from backup");
                 }
 
                 // Attempt to recover time data
-                if (_backupManager.RestoreLatestBackup(_timeDataPath))
+                if (_timeBackupManager.RestoreLatestBackup(_timeDataPath))
                 {
                     result.TimeDataRecovered = true;
                     Logger.Info("DataSafetyService", "Time data recovered from backup");
@@ -189,10 +195,29 @@ namespace PraxisWpf.Services
         {
             Logger.TraceEnter();
 
+            var taskBackupStats = _taskBackupManager.GetBackupStats();
+            var timeBackupStats = _timeBackupManager.GetBackupStats();
+            
+            var combinedBackupStats = new BackupStats
+            {
+                TotalBackups = taskBackupStats.TotalBackups + timeBackupStats.TotalBackups,
+                TotalSizeBytes = taskBackupStats.TotalSizeBytes + timeBackupStats.TotalSizeBytes,
+                OldestBackup = new[] { taskBackupStats.OldestBackup, timeBackupStats.OldestBackup }
+                    .Where(d => d.HasValue)
+                    .Select(d => d.Value)
+                    .OrderBy(d => d)
+                    .FirstOrDefault(),
+                NewestBackup = new[] { taskBackupStats.NewestBackup, timeBackupStats.NewestBackup }
+                    .Where(d => d.HasValue)
+                    .Select(d => d.Value)
+                    .OrderByDescending(d => d)
+                    .FirstOrDefault()
+            };
+
             var status = new DataSafetyStatus
             {
                 ActionBasedAutoSaveStatus = _actionBasedAutoSaveService.GetStatus(),
-                BackupStats = _backupManager.GetBackupStats(),
+                BackupStats = combinedBackupStats,
                 TaskDataHealthy = _taskDataWriter.IsMainFileHealthy(),
                 TimeDataHealthy = _timeDataWriter.IsMainFileHealthy(),
                 TaskDataBackupInfo = _taskDataWriter.GetBackupInfo(),

@@ -47,6 +47,7 @@ namespace PraxisWpf.Features.DataProcessing
                 SaveProjectCommand = new RelayCommand(async () => await SaveProjectAsync(), () => HasSelectedProject);
                 DeleteProjectCommand = new RelayCommand(async () => await DeleteProjectAsync(), () => HasSelectedProject);
                 RefreshProjectsCommand = new RelayCommand(() => LoadProjectIds());
+                OpenExcelMappingCommand = new RelayCommand(() => OpenExcelMappingDialog());
 
                 StatusMessage = "Data Processing ready - No PowerShell dependencies required";
                 
@@ -134,6 +135,7 @@ namespace PraxisWpf.Features.DataProcessing
         public ICommand SaveProjectCommand { get; }
         public ICommand DeleteProjectCommand { get; }
         public ICommand RefreshProjectsCommand { get; }
+        public ICommand OpenExcelMappingCommand { get; }
 
         private void LoadProjectIds()
         {
@@ -497,6 +499,37 @@ namespace PraxisWpf.Features.DataProcessing
                 StatusMessage = $"Selected Excel file: {Path.GetFileName(ExcelFilePath)}";
                 AppendToLog($"Selected file: {ExcelFilePath}");
             }
+        }
+
+        private void OpenExcelMappingDialog()
+        {
+            Logger.TraceEnter();
+            
+            try
+            {
+                var dialog = new ExcelMappingDialog();
+                dialog.Owner = System.Windows.Application.Current.MainWindow;
+                
+                var result = dialog.ShowDialog();
+                
+                if (result == true)
+                {
+                    StatusMessage = "Excel mapping completed successfully";
+                    Logger.Info("DataProcessingViewModel", "Excel mapping dialog completed successfully");
+                }
+                else
+                {
+                    StatusMessage = "Excel mapping cancelled";
+                    Logger.Info("DataProcessingViewModel", "Excel mapping dialog was cancelled");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("DataProcessingViewModel", "Failed to open Excel mapping dialog", ex);
+                StatusMessage = $"Error opening Excel mapping: {ex.Message}";
+            }
+            
+            Logger.TraceExit();
         }
 
         private void AppendToLog(string message)
