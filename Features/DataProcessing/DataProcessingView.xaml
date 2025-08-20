@@ -48,7 +48,7 @@
                                 <Setter Property="BorderThickness" Value="2"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding HasError}" Value="True">
-                                        <Setter Property="BorderBrush" Value="#ff4444"/>
+                                        <Setter Property="BorderBrush" Value="{DynamicResource CyberErrorBrush}"/>
                                         <Setter Property="BorderThickness" Value="3"/>
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -60,7 +60,7 @@
                     <TextBlock Grid.Row="1" Grid.Column="1" 
                                Text="{Binding ValidationError}"
                                Style="{DynamicResource CyberCaption}"
-                               Foreground="#ff4444"
+                               Foreground="{DynamicResource CyberErrorBrush}"
                                FontStyle="Italic"
                                Margin="0,0,0,8"
                                Visibility="{Binding HasError, Converter={StaticResource BoolToVisConverter}}"/>
