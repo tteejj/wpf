@@ -18,6 +18,15 @@ namespace PraxisWpf.Services
         private int _progressMaximum = 100;
         private bool _showProgress;
 
+        private LoadingIndicatorService()
+        {
+            // Ensure all properties are properly initialized
+            _progressValue = 0;
+            _progressMaximum = 100;
+            _isLoading = false;
+            _showProgress = false;
+        }
+
         public static LoadingIndicatorService Instance 
         { 
             get 
