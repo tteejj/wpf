@@ -1,0 +1,12 @@
+{
+  "logging": {
+    "enabled": true,
+    "level": "Info",
+    "includeStackTrace": false,
+    "includeThreadId": true,
+    "enablePerformanceLogging": false,
+    "logFilePath": ""
+  },
+  "dataFilePath": "data.json",
+  "debugMode": false
+}
