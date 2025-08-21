@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:PraxisWpf.Features.TimeTracker"
              xmlns:models="clr-namespace:PraxisWpf.Models"
+             xmlns:controls="clr-namespace:PraxisWpf.Controls"
              Focusable="True" TabIndex="0">
     
     <Grid>
@@ -11,6 +12,13 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        
+        <!-- Help Overlay (hidden by default) -->
+        <controls:HelpOverlay x:Name="HelpOverlay" 
+                              Grid.RowSpan="3"
+                              Visibility="Collapsed" 
+                              CloseRequested="HelpOverlay_CloseRequested"
+                              Panel.ZIndex="1000"/>
 
         <!-- Header with week navigation -->
         <Border Grid.Row="0" Background="{DynamicResource CyberControlBrush}" 
@@ -94,12 +102,16 @@
                     
                     <!-- Add Project Entry -->
                     <TextBlock Grid.Column="3" Text="[P]roject" 
-                               Style="{DynamicResource CyberLabel}"
+                               Foreground="{DynamicResource CyberTextBrush}"
+                               FontWeight="Bold" FontSize="16"
+                               VerticalAlignment="Center"
                                Margin="0,0,10,0"/>
                     
                     <!-- Add Generic Entry -->
                     <TextBlock Grid.Column="4" Text="[N]ew Generic" 
-                               Style="{DynamicResource CyberLabel}"/>
+                               Foreground="{DynamicResource CyberTextBrush}"
+                               FontWeight="Bold" FontSize="16"
+                               VerticalAlignment="Center"/>
                 </Grid>
             </Grid>
         </Border>
@@ -127,15 +139,20 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Grid.Column="0" Text="║ Project" 
-                                   Style="{DynamicResource CyberLabel}"/>
+                                   Foreground="{DynamicResource CyberTextBrush}"
+                                   FontWeight="Bold" FontSize="14"/>
                         <TextBlock Grid.Column="1" Text="║ Description" 
-                                   Style="{DynamicResource CyberLabel}"/>
+                                   Foreground="{DynamicResource CyberTextBrush}"
+                                   FontWeight="Bold" FontSize="14"/>
                         <TextBlock Grid.Column="2" Text="║ Hours" 
-                                   Style="{DynamicResource CyberLabel}"/>
+                                   Foreground="{DynamicResource CyberTextBrush}"
+                                   FontWeight="Bold" FontSize="14"/>
                         <TextBlock Grid.Column="3" Text="║ Date" 
-                                   Style="{DynamicResource CyberLabel}"/>
+                                   Foreground="{DynamicResource CyberTextBrush}"
+                                   FontWeight="Bold" FontSize="14"/>
                         <TextBlock Grid.Column="4" Text="║ Day Total" 
-                                   Style="{DynamicResource CyberLabel}"/>
+                                   Foreground="{DynamicResource CyberTextBrush}"
+                                   FontWeight="Bold" FontSize="14"/>
                     </Grid>
                 </Border>
 

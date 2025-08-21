@@ -1,0 +1,126 @@
+<Window x:Class="PraxisWpf.Features.TimeTracker.TimeEntryDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Add Time Entry" Height="350" Width="500"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="{DynamicResource CyberControlBrush}" 
+                BorderBrush="{DynamicResource CyberBorderBrush}" 
+                BorderThickness="0,0,0,1" Padding="10">
+            <TextBlock Text="{Binding HeaderText}" 
+                       Style="{DynamicResource CyberHeaderText}" 
+                       HorizontalAlignment="Center"/>
+        </Border>
+
+        <!-- Entry form -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <Border Padding="20" Background="{DynamicResource CyberBackgroundBrush}">
+                <StackPanel>
+                    
+                    <!-- Project selection (visible only for project entries) -->
+                    <Grid Visibility="{Binding IsProjectEntry, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="120"/>
+                            <RowDefinition Height="20"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Text="Select Project:" 
+                                   Foreground="{DynamicResource CyberTextBrush}" 
+                                   FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
+
+                        <ListBox Grid.Row="1" Name="ProjectListBox" 
+                                 ItemsSource="{Binding AvailableProjects}"
+                                 SelectedItem="{Binding SelectedProject}"
+                                 Background="{DynamicResource CyberBackgroundBrush}"
+                                 BorderBrush="{DynamicResource CyberBorderBrush}"
+                                 SelectionMode="Single">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Foreground="{DynamicResource CyberTextBrush}" FontSize="14" Padding="5">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0}.{1} - {2}">
+                                                <Binding Path="Id1"/>
+                                                <Binding Path="Id2"/>
+                                                <Binding Path="Name"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+
+                    <!-- Timecode ID (visible only for generic entries) -->
+                    <Grid Visibility="{Binding IsGenericEntry, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="20"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Timecode ID:" 
+                                   Foreground="{DynamicResource CyberTextBrush}" 
+                                   FontWeight="Bold" FontSize="14" VerticalAlignment="Center"/>
+                        <TextBox Grid.Row="0" Grid.Column="2" Name="TimecodeTextBox" 
+                                 Text="{Binding TimecodeId}" VerticalAlignment="Center"/>
+                    </Grid>
+
+                    <!-- Hours and Description -->
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Hours:" 
+                                   Foreground="{DynamicResource CyberTextBrush}" FontSize="14" 
+                                   FontWeight="Bold" VerticalAlignment="Center"/>
+
+                        <ComboBox Grid.Row="0" Grid.Column="1" Name="HoursComboBox" 
+                                  SelectedItem="{Binding Hours}" Margin="5,0,0,0"/>
+
+                        <TextBlock Grid.Row="0" Grid.Column="3" Text="Description:" 
+                                   Foreground="{DynamicResource CyberTextBrush}" FontSize="14" 
+                                   FontWeight="Bold" VerticalAlignment="Center"/>
+
+                        <TextBox Grid.Row="0" Grid.Column="4" Name="DescriptionTextBox" 
+                                 Text="{Binding Description}" Margin="5,0,0,0" 
+                                 VerticalAlignment="Center"/>
+                    </Grid>
+
+                </StackPanel>
+            </Border>
+        </ScrollViewer>
+
+        <!-- Keyboard Instructions -->
+        <Border Grid.Row="2" Background="{DynamicResource CyberControlBrush}" 
+                BorderBrush="{DynamicResource CyberBorderBrush}" 
+                BorderThickness="0,1,0,0" Padding="20,10">
+            <TextBlock Text="Enter: Add Entry | Escape: Cancel | Tab: Navigate Fields"
+                       Foreground="{DynamicResource CyberTextBrush}"
+                       FontFamily="Consolas, Courier New, monospace"
+                       HorizontalAlignment="Center"/>
+        </Border>
+    </Grid>
+</Window>

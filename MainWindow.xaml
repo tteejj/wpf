@@ -34,16 +34,19 @@
                 
                 <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock Text="Tasks (Esc)" 
-                               Foreground="{DynamicResource CyberAccentBrush}"
+                               Foreground="{DynamicResource CyberTextBrush}"
                                FontFamily="Consolas, Courier New, monospace"
+                               FontWeight="Bold" FontSize="16"
                                Margin="10,0"/>
                     <TextBlock Text="Data (D)" 
-                               Foreground="{DynamicResource CyberAccentBrush}"
+                               Foreground="{DynamicResource CyberTextBrush}"
                                FontFamily="Consolas, Courier New, monospace"
+                               FontWeight="Bold" FontSize="16"
                                Margin="10,0"/>
                     <TextBlock Text="Themes (H)" 
-                               Foreground="{DynamicResource CyberAccentBrush}"
+                               Foreground="{DynamicResource CyberTextBrush}"
                                FontFamily="Consolas, Courier New, monospace"
+                               FontWeight="Bold" FontSize="16"
                                Margin="10,0"/>
                 </StackPanel>
                         
@@ -51,8 +54,9 @@
                            Style="{DynamicResource CyberHeaderText}" HorizontalAlignment="Center"/>
                            
                 <TextBlock Grid.Column="2" Text="Time Entry (T)" 
-                           Foreground="{DynamicResource CyberAccentBrush}"
+                           Foreground="{DynamicResource CyberTextBrush}"
                            FontFamily="Consolas, Courier New, monospace"
+                           FontWeight="Bold" FontSize="16"
                            VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0"/>
             </Grid>
         </Border>
@@ -72,16 +76,16 @@
         <!-- Status bar -->
         <StatusBar Grid.Row="2">
             <StatusBarItem Name="TaskStatusBar">
-                <TextBlock Text="N: New Project | S: New Subtask | E: Edit | O: Notes | Shift+O: Notes2 | T: Time Entry | D: Data Processing | H: Themes | Del: Delete | +/-: Expand/Collapse | Ctrl+S: Save"/>
+                <TextBlock Text="N: New Task | P: New Project | S: Subtask | E: Edit | O: Notes | T: Time | D: Data | H: Themes | ?: Help"/>
             </StatusBarItem>
             <StatusBarItem Name="TimeStatusBar" Visibility="Collapsed">
-                <TextBlock Text="Esc: Back to Tasks | P: Project Time | N: Generic Time | E: Export Weekly Timesheet | H: Themes | Del: Delete | Ctrl+S: Save"/>
+                <TextBlock Text="Esc: Back | P: Project Time | N: Generic Time | E: Export | Del: Delete | H: Themes | ?: Help"/>
             </StatusBarItem>
             <StatusBarItem Name="DataStatusBar" Visibility="Collapsed">
-                <TextBlock Text="N: New Project | S: Save | D: Delete | R: Refresh | H: Themes | Esc: Back to Tasks"/>
+                <TextBlock Text="Esc: Back | N: New | S: Save | D: Delete | R: Refresh | I: Import | T: Template | ?: Help"/>
             </StatusBarItem>
             <StatusBarItem Name="ThemeStatusBar" Visibility="Collapsed">
-                <TextBlock Text="Esc: Back to Tasks | 1-5: Select Theme | A: Apply Theme | R: Refresh | Mouse: Click to Select"/>
+                <TextBlock Text="Esc: Back | 1-6: Select Theme | A: Apply | R: Refresh | ?: Help"/>
             </StatusBarItem>
             
             <!-- Status Message -->
@@ -132,8 +136,8 @@
                     
                     <!-- Loading Message -->
                     <TextBlock Text="{Binding Source={x:Static services:LoadingIndicatorService.Instance}, Path=LoadingMessage}"
-                               Foreground="{DynamicResource CyberAccentBrush}"
-                               FontWeight="Bold"
+                               Foreground="{DynamicResource CyberTextBrush}"
+                               FontWeight="Bold" FontSize="16"
                                TextAlignment="Center"
                                Margin="0,0,0,10"/>
                     

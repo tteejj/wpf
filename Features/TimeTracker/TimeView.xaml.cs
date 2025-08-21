@@ -1,3 +1,5 @@
+using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using PraxisWpf.Services;
@@ -120,6 +122,13 @@ namespace PraxisWpf.Features.TimeTracker
                         }
                         break;
 
+                    case Key.OemQuestion:
+                    case Key.F1:
+                        // ? or F1 key shows help overlay
+                        ShowHelpOverlay();
+                        e.Handled = true;
+                        break;
+
                     case Key.H:
                         // H key opens theme selection screen
                         Logger.Critical("TimeView", "🔥 H KEY - SWITCHING TO THEMES");
@@ -145,6 +154,18 @@ namespace PraxisWpf.Features.TimeTracker
             {
                 Logger.Error("TimeView", "Error handling key down", ex);
             }
+        }
+
+        private void ShowHelpOverlay()
+        {
+            HelpOverlay.HelpText = HotkeyHelper.GetHelpText("Time");
+            HelpOverlay.Visibility = Visibility.Visible;
+        }
+
+        private void HelpOverlay_CloseRequested(object sender, EventArgs e)
+        {
+            HelpOverlay.Visibility = Visibility.Collapsed;
+            Focus(); // Return focus to main control
         }
     }
 }

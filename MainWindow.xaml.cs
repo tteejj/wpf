@@ -8,6 +8,8 @@ using PraxisWpf.Services;
 
 namespace PraxisWpf
 {
+    public enum AppView { Tasks, Time, DataProcessing, Themes }
+
     public partial class MainWindow : Window
     {
         private TaskViewModel? _taskViewModel;
@@ -19,25 +21,18 @@ namespace PraxisWpf
 
         public MainWindow()
         {
-            Logger.TraceEnter();
             try
             {
-                using var perfTracker = Logger.TracePerformance("MainWindow Constructor");
-
-                Logger.Debug("MainWindow", "Initializing WPF components");
                 InitializeComponent();
 
-                Logger.Debug("MainWindow", "Initializing data safety service");
                 _dataSafetyService = new DataSafetyService();
 
-                Logger.Debug("MainWindow", "Creating ViewModels");
                 _taskViewModel = new TaskViewModel();
                 _timeViewModel = new TimeViewModel();
                 _dataProcessingViewModel = new DataProcessingViewModel();
                 _themeViewModel = new ThemeViewModel();
                 
                 // Register ViewModels with action-based auto-save
-                Logger.Debug("MainWindow", "Configuring action-based auto-save");
                 var autoSaveService = _dataSafetyService.GetActionBasedAutoSaveService();
                 _dataSafetyService.RegisterForActionBasedAutoSave("Tasks", _taskViewModel);
                 _dataSafetyService.RegisterForActionBasedAutoSave("TimeTracker", _timeViewModel);
@@ -46,7 +41,6 @@ namespace PraxisWpf
                 _taskViewModel.SetAutoSaveService(autoSaveService);
                 _timeViewModel.SetAutoSaveService(autoSaveService);
                 
-                Logger.Debug("MainWindow", "Starting data safety services");
                 _dataSafetyService.Start();
                 
                 // Create a main view model to hold all ViewModels
@@ -58,145 +52,70 @@ namespace PraxisWpf
                     ThemeViewModel = _themeViewModel
                 };
                 DataContext = _mainViewModel;
-
-                Logger.Info("MainWindow", "MainWindow initialized successfully");
-                Logger.TraceExit();
             }
             catch (Exception ex)
             {
                 Logger.Critical("MainWindow", "Failed to initialize MainWindow", ex);
-                Logger.TraceExit();
                 throw;
             }
         }
 
-        public void ShowTimeEntry()
+        public void ShowView(AppView view)
         {
-            Logger.TraceEnter();
-            
-            TaskViewControl.Visibility = Visibility.Collapsed;
-            DataProcessingViewControl.Visibility = Visibility.Collapsed;
-            ThemeViewControl.Visibility = Visibility.Collapsed;
-            TimeViewControl.Visibility = Visibility.Visible;
-            TaskStatusBar.Visibility = Visibility.Collapsed;
-            DataStatusBar.Visibility = Visibility.Collapsed;
-            ThemeStatusBar.Visibility = Visibility.Collapsed;
-            TimeStatusBar.Visibility = Visibility.Visible;
-            
-            // Focus the time view
-            TimeViewControl.Focus();
-            
-            Logger.Info("MainWindow", "Switched to time entry view");
-            Logger.TraceExit();
-        }
-
-        public void ShowTasks()
-        {
-            Logger.TraceEnter();
-            
-            TimeViewControl.Visibility = Visibility.Collapsed;
-            DataProcessingViewControl.Visibility = Visibility.Collapsed;
-            ThemeViewControl.Visibility = Visibility.Collapsed;
-            TaskViewControl.Visibility = Visibility.Visible;
-            TimeStatusBar.Visibility = Visibility.Collapsed;
-            DataStatusBar.Visibility = Visibility.Collapsed;
-            ThemeStatusBar.Visibility = Visibility.Collapsed;
-            TaskStatusBar.Visibility = Visibility.Visible;
-            
-            // Focus the task view
-            TaskViewControl.Focus();
-            
-            Logger.Info("MainWindow", "Switched to task view");
-            Logger.TraceExit();
-        }
-
-        public void ShowDataProcessing()
-        {
-            Logger.TraceEnter();
-            
-            TaskViewControl.Visibility = Visibility.Collapsed;
-            TimeViewControl.Visibility = Visibility.Collapsed;
-            ThemeViewControl.Visibility = Visibility.Collapsed;
-            DataProcessingViewControl.Visibility = Visibility.Visible;
-            TaskStatusBar.Visibility = Visibility.Collapsed;
-            TimeStatusBar.Visibility = Visibility.Collapsed;
-            ThemeStatusBar.Visibility = Visibility.Collapsed;
-            DataStatusBar.Visibility = Visibility.Visible;
-            
-            // Focus the data processing view
-            DataProcessingViewControl.Focus();
-            
-            Logger.Info("MainWindow", "Switched to data processing view");
-            Logger.TraceExit();
-        }
-
-        public void ShowThemes()
-        {
-            Logger.TraceEnter();
-            
+            // Hide all views
             TaskViewControl.Visibility = Visibility.Collapsed;
             TimeViewControl.Visibility = Visibility.Collapsed;
             DataProcessingViewControl.Visibility = Visibility.Collapsed;
-            ThemeViewControl.Visibility = Visibility.Visible;
+            ThemeViewControl.Visibility = Visibility.Collapsed;
+            
+            // Hide all status bars
             TaskStatusBar.Visibility = Visibility.Collapsed;
             TimeStatusBar.Visibility = Visibility.Collapsed;
             DataStatusBar.Visibility = Visibility.Collapsed;
-            ThemeStatusBar.Visibility = Visibility.Visible;
+            ThemeStatusBar.Visibility = Visibility.Collapsed;
             
-            // Focus the theme view
-            ThemeViewControl.Focus();
-            
-            Logger.Info("MainWindow", "Switched to theme view");
-            Logger.TraceExit();
-        }
-
-
-        protected override void OnSourceInitialized(EventArgs e)
-        {
-            Logger.TraceEnter();
-            try
+            // Show selected view and status bar
+            switch (view)
             {
-                base.OnSourceInitialized(e);
-                Logger.Debug("MainWindow", "Window source initialized");
-                Logger.TraceExit();
-            }
-            catch (Exception ex)
-            {
-                Logger.Error("MainWindow", "Error during source initialization", ex);
-                Logger.TraceExit();
-                throw;
+                case AppView.Tasks:
+                    TaskViewControl.Visibility = Visibility.Visible;
+                    TaskStatusBar.Visibility = Visibility.Visible;
+                    TaskViewControl.Focus();
+                    break;
+                case AppView.Time:
+                    TimeViewControl.Visibility = Visibility.Visible;
+                    TimeStatusBar.Visibility = Visibility.Visible;
+                    TimeViewControl.Focus();
+                    break;
+                case AppView.DataProcessing:
+                    DataProcessingViewControl.Visibility = Visibility.Visible;
+                    DataStatusBar.Visibility = Visibility.Visible;
+                    DataProcessingViewControl.Focus();
+                    break;
+                case AppView.Themes:
+                    ThemeViewControl.Visibility = Visibility.Visible;
+                    ThemeStatusBar.Visibility = Visibility.Visible;
+                    ThemeViewControl.Focus();
+                    break;
             }
         }
 
-        protected override void OnActivated(EventArgs e)
-        {
-            Logger.Trace("MainWindow", "Window activated");
-            base.OnActivated(e);
-        }
+        public void ShowTimeEntry() => ShowView(AppView.Time);
+        public void ShowTasks() => ShowView(AppView.Tasks);
+        public void ShowDataProcessing() => ShowView(AppView.DataProcessing);
+        public void ShowThemes() => ShowView(AppView.Themes);
 
-        protected override void OnDeactivated(EventArgs e)
-        {
-            Logger.Trace("MainWindow", "Window deactivated");
-            base.OnDeactivated(e);
-        }
 
         protected override void OnClosed(EventArgs e)
         {
-            Logger.TraceEnter();
             try
             {
-                Logger.Info("MainWindow", "Window closing - disposing data safety service");
-                
-                // Dispose data safety service to ensure clean shutdown
                 _dataSafetyService?.Dispose();
-                
                 base.OnClosed(e);
-                Logger.TraceExit();
             }
             catch (Exception ex)
             {
                 Logger.Error("MainWindow", "Error during window close", ex);
-                Logger.TraceExit();
             }
         }
     }

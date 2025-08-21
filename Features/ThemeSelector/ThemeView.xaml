@@ -25,9 +25,9 @@
                     <!-- Theme Name -->
                     <TextBlock Grid.Column="0" Grid.Row="0" 
                                Text="{Binding Name}" 
-                               Foreground="{DynamicResource CyberAccentBrush}"
+                               Foreground="{DynamicResource CyberTextBrush}"
                                FontWeight="Bold"
-                               FontSize="14"
+                               FontSize="16"
                                Margin="0,0,0,5"/>
                     
                     <!-- Active Indicator -->
@@ -73,8 +73,8 @@
                 
                 <TextBlock Grid.Column="1" 
                            Text="{Binding CurrentThemeName, StringFormat='Current: {0}'}" 
-                           Foreground="{DynamicResource CyberAccentBrush}"
-                           FontWeight="Bold" 
+                           Foreground="{DynamicResource CyberTextBrush}"
+                           FontWeight="Bold" FontSize="16"
                            VerticalAlignment="Center"/>
             </Grid>
         </Border>
@@ -104,7 +104,7 @@
                         Padding="10">
                     <StackPanel>
                         <TextBlock Text="SELECTED THEME" 
-                                   Foreground="{DynamicResource CyberAccentBrush}"
+                                   Foreground="{DynamicResource CyberTextBrush}"
                                    FontWeight="Bold" 
                                    Margin="0,0,0,10"/>
                         
@@ -116,7 +116,7 @@
                                 Visibility="{Binding SelectedTheme, Converter={StaticResource BoolToVisibilityConverter}}">
                             <StackPanel>
                                 <TextBlock Text="{Binding SelectedTheme.Name}" 
-                                           Foreground="{DynamicResource CyberAccentBrush}"
+                                           Foreground="{DynamicResource CyberTextBrush}"
                                            FontWeight="Bold"
                                            Margin="0,0,0,5"/>
                                 
@@ -129,20 +129,19 @@
                         
                         <!-- No Selection Message -->
                         <TextBlock Text="No theme selected" 
-                                   Foreground="{DynamicResource CyberDimCyanBrush}"
+                                   Foreground="{DynamicResource CyberTextBrush}" FontSize="14"
                                    FontStyle="Italic"
                                    Visibility="{Binding SelectedTheme, Converter={StaticResource InverseBoolToVisibilityConverter}}"
                                    Margin="0,0,0,10"/>
                         
                         <!-- Instructions -->
                         <TextBlock Text="INSTRUCTIONS" 
-                                   Foreground="{DynamicResource CyberAccentBrush}"
+                                   Foreground="{DynamicResource CyberTextBrush}"
                                    FontWeight="Bold" 
                                    Margin="0,20,0,5"/>
                         
-                        <TextBlock Foreground="{DynamicResource CyberDimCyanBrush}"
-                                   TextWrapping="Wrap"
-                                   FontSize="10">
+                        <TextBlock Foreground="{DynamicResource CyberTextBrush}" FontSize="14"
+                                   TextWrapping="Wrap">
                             <Run Text="• Click a theme to select it"/>
                             <LineBreak/>
                             <Run Text="• Press A to apply selected theme"/>

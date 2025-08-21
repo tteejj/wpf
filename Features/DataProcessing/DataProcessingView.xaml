@@ -27,7 +27,8 @@
                     <!-- Field Label -->
                     <TextBlock Grid.Row="0" Grid.Column="0" 
                                Text="{Binding Key}" 
-                               Style="{DynamicResource CyberLabel}"
+                               Foreground="{DynamicResource CyberTextBrush}"
+                               FontWeight="Bold" FontSize="14"
                                Margin="0,0,10,8"
                                VerticalAlignment="Top"/>
                     
@@ -59,8 +60,8 @@
                     <!-- Validation Error Message -->
                     <TextBlock Grid.Row="1" Grid.Column="1" 
                                Text="{Binding ValidationError}"
-                               Style="{DynamicResource CyberCaption}"
                                Foreground="{DynamicResource CyberErrorBrush}"
+                               FontWeight="Bold" FontSize="12"
                                FontStyle="Italic"
                                Margin="0,0,0,8"
                                Visibility="{Binding HasError, Converter={StaticResource BoolToVisConverter}}"/>
@@ -87,12 +88,19 @@
             <!-- Project Selection -->
             <StackPanel Grid.Column="0" Orientation="Horizontal">
                 <TextBlock Text="Project:" 
-                           Style="{DynamicResource CyberLabel}"
+                           Foreground="{DynamicResource CyberTextBrush}"
+                           FontWeight="Bold" FontSize="16"
+                           VerticalAlignment="Center"
                            Margin="0,0,10,0"/>
                 <ComboBox ItemsSource="{Binding ProjectIds}"
                           SelectedItem="{Binding SelectedProjectId}"
                           Margin="0,0,10,0"
                           MinWidth="200"
+                          FontSize="14" FontWeight="Bold"
+                          Foreground="{DynamicResource CyberTextBrush}"
+                          Background="{DynamicResource CyberControlBrush}"
+                          BorderBrush="{DynamicResource CyberBorderBrush}"
+                          BorderThickness="2"
                           TabIndex="1"
                           IsTabStop="True"
                           IsEnabled="{Binding HasProjects}">
@@ -105,19 +113,23 @@
             <!-- Action Buttons -->
             <StackPanel Grid.Column="2" Orientation="Horizontal">
                 <TextBlock Text="[N]ew" 
-                           Style="{DynamicResource CyberLabel}"
+                           Foreground="{DynamicResource CyberTextBrush}"
+                           FontWeight="Bold" FontSize="16"
+                           VerticalAlignment="Center"
                            Margin="0,0,15,0"/>
                 <TextBlock Text="[S]ave" 
-                           Style="{DynamicResource CyberLabel}"
+                           Foreground="{DynamicResource CyberTextBrush}"
+                           FontWeight="Bold" FontSize="16"
+                           VerticalAlignment="Center"
                            Margin="0,0,15,0"/>
                 <TextBlock Text="[D]elete" 
-                           Foreground="{DynamicResource CyberWarningBrush}"
-                           FontWeight="Bold" 
+                           Foreground="{DynamicResource CyberErrorBrush}"
+                           FontWeight="Bold" FontSize="16"
                            VerticalAlignment="Center" 
                            Margin="0,0,15,0"/>
                 <TextBlock Text="[R]efresh" 
-                           Foreground="{DynamicResource CyberInfoBrush}"
-                           FontWeight="Bold" 
+                           Foreground="{DynamicResource CyberTextBrush}"
+                           FontWeight="Bold" FontSize="16"
                            VerticalAlignment="Center"/>
             </StackPanel>
         </Grid>
@@ -201,27 +213,41 @@
                             
                             <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
                                 <TextBlock Text="[I]mport Excel" 
-                                           Style="{DynamicResource CyberLabel}"
+                                           Foreground="{DynamicResource CyberTextBrush}"
+                                           FontWeight="Bold" FontSize="16"
+                                           VerticalAlignment="Center"
                                            Margin="0,0,20,0"/>
                                 <TextBlock Text="[T]emplate" 
-                                           Style="{DynamicResource CyberLabel}"
+                                           Foreground="{DynamicResource CyberTextBrush}"
+                                           FontWeight="Bold" FontSize="16"
+                                           VerticalAlignment="Center"
                                            Margin="0,0,20,0"/>
                                 <TextBlock Text="[E]xport Current" 
-                                           Style="{DynamicResource CyberLabel}"
+                                           Foreground="{DynamicResource CyberTextBrush}"
+                                           FontWeight="Bold" FontSize="16"
+                                           VerticalAlignment="Center"
                                            Margin="0,0,20,0"/>
                                 <TextBlock Text="Export [A]ll" 
-                                           Style="{DynamicResource CyberLabel}"
+                                           Foreground="{DynamicResource CyberTextBrush}"
+                                           FontWeight="Bold" FontSize="16"
+                                           VerticalAlignment="Center"
                                            Margin="0,0,20,0"/>
                                 <TextBlock Text="[M]apping Tool" 
-                                           Style="{DynamicResource CyberLabel}"/>
+                                           Foreground="{DynamicResource CyberTextBrush}"
+                                           FontWeight="Bold" FontSize="16"
+                                           VerticalAlignment="Center"/>
                             </StackPanel>
                             
                             <StackPanel Grid.Row="1" Orientation="Horizontal">
                                 <TextBlock Text="Instructions:" 
-                                           Style="{DynamicResource CyberLabel}"
+                                           Foreground="{DynamicResource CyberTextBrush}"
+                                           FontWeight="Bold" FontSize="14"
+                                           VerticalAlignment="Center"
                                            Margin="0,0,10,0"/>
                                 <TextBlock Text="Use Template to create Excel format, Import to load data, Export to save projects, Mapping Tool for advanced field mapping" 
-                                           Style="{DynamicResource CyberBodyTextSecondary}"/>
+                                           Foreground="{DynamicResource CyberTextBrush}"
+                                           FontWeight="Normal" FontSize="12"
+                                           VerticalAlignment="Center"/>
                             </StackPanel>
                         </Grid>
                     </GroupBox>

@@ -30,8 +30,8 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" Text="Select Project:" 
-                           Foreground="{DynamicResource CyberAccentBrush}" 
-                           FontWeight="Bold" Margin="0,0,0,10"/>
+                           Foreground="{DynamicResource CyberTextBrush}" 
+                           FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
 
                 <ListBox Grid.Row="1" Name="ProjectListBox" 
                          ItemsSource="{Binding AvailableProjects}"
@@ -41,7 +41,7 @@
                          SelectionMode="Single">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Foreground="{DynamicResource CyberAccentBrush}" Padding="5">
+                            <TextBlock Foreground="{DynamicResource CyberTextBrush}" FontSize="14" Padding="5">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{}{0}.{1} - {2}">
                                         <Binding Path="Id1"/>
@@ -68,14 +68,14 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="0" Text="Hours:" 
-                           Foreground="{DynamicResource CyberAccentBrush}" 
+                           Foreground="{DynamicResource CyberTextBrush}" FontSize="14" 
                            FontWeight="Bold" VerticalAlignment="Center"/>
 
                 <ComboBox Grid.Column="1" Name="HoursComboBox" 
                           SelectedItem="{Binding Hours}" Margin="5,0,0,0"/>
 
                 <TextBlock Grid.Column="3" Text="Description:" 
-                           Foreground="{DynamicResource CyberAccentBrush}" 
+                           Foreground="{DynamicResource CyberTextBrush}" FontSize="14" 
                            FontWeight="Bold" VerticalAlignment="Center"/>
 
                 <TextBox Grid.Column="4" Name="DescriptionTextBox" 

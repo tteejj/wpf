@@ -59,21 +59,21 @@
                 <StackPanel Grid.Column="0" Orientation="Vertical">
                     <TextBlock Name="TaskNameTextBlock" 
                                Text="Notes Editor"
-                               FontSize="16" 
+                               FontSize="18" 
                                FontWeight="Bold"
-                               Foreground="{DynamicResource CyberAccentBrush}"
+                               Foreground="{DynamicResource CyberTextBrush}"
                                FontFamily="Consolas, Courier New, monospace"/>
                     <TextBlock Name="FilePathTextBlock"
                                Text=""
-                               FontSize="10"
-                               Foreground="{DynamicResource CyberDimCyanBrush}"
+                               FontSize="12"
+                               Foreground="{DynamicResource CyberTextBrush}"
                                FontFamily="Consolas, Courier New, monospace"
                                Margin="0,2,0,0"/>
                 </StackPanel>
                 
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                     <TextBlock Text="Modified: " 
-                               Foreground="{DynamicResource CyberDimCyanBrush}"
+                               Foreground="{DynamicResource CyberTextBrush}"
                                FontFamily="Consolas, Courier New, monospace"
                                VerticalAlignment="Center"/>
                     <TextBlock Name="ModifiedIndicator" 
@@ -95,7 +95,7 @@
                 Margin="0,0,0,10">
             <TextBlock Text="Ctrl+S: Save | Ctrl+Z: Undo | Ctrl+Y: Redo | Ctrl+A: Select All | Esc: Close"
                        FontSize="10"
-                       Foreground="{DynamicResource CyberDimCyanBrush}"
+                       Foreground="{DynamicResource CyberTextBrush}"
                        FontFamily="Consolas, Courier New, monospace"
                        HorizontalAlignment="Center"/>
         </Border>
@@ -158,7 +158,7 @@
                 <!-- Status Info -->
                 <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock Text="Lines: " 
-                               Foreground="{DynamicResource CyberDimCyanBrush}"
+                               Foreground="{DynamicResource CyberTextBrush}"
                                FontFamily="Consolas, Courier New, monospace"/>
                     <TextBlock Name="LineCountTextBlock" 
                                Text="1"
@@ -166,7 +166,7 @@
                                FontFamily="Consolas, Courier New, monospace"
                                FontWeight="Bold"/>
                     <TextBlock Text=" | Characters: " 
-                               Foreground="{DynamicResource CyberDimCyanBrush}"
+                               Foreground="{DynamicResource CyberTextBrush}"
                                FontFamily="Consolas, Courier New, monospace"
                                Margin="10,0,0,0"/>
                     <TextBlock Name="CharCountTextBlock" 
@@ -179,7 +179,7 @@
                 <!-- Keyboard-only info (no mouse buttons) -->
                 <TextBlock Grid.Column="1" 
                            Text="TUI Mode: All operations via keyboard only"
-                           Foreground="{DynamicResource CyberDimCyanBrush}"
+                           Foreground="{DynamicResource CyberTextBrush}"
                            FontFamily="Consolas, Courier New, monospace"
                            FontSize="10"
                            VerticalAlignment="Center"

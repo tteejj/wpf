@@ -1,0 +1,62 @@
+<UserControl x:Class="PraxisWpf.Controls.HelpOverlay"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Focusable="True" KeyDown="HelpOverlay_KeyDown">
+    
+    <!-- Semi-transparent overlay background -->
+    <Border Background="#AA000000" Opacity="0.9">
+        <Grid>
+            <Border Background="{DynamicResource CyberControlBrush}"
+                    BorderBrush="{DynamicResource CyberBorderBrush}"
+                    BorderThickness="3"
+                    CornerRadius="10"
+                    MaxWidth="600"
+                    MaxHeight="500"
+                    Margin="50"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                
+                <Grid Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <!-- Header -->
+                    <TextBlock Grid.Row="0" 
+                               Text="KEYBOARD SHORTCUTS"
+                               Style="{DynamicResource CyberHeaderText}"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,20"/>
+                    
+                    <!-- Help Content -->
+                    <ScrollViewer Grid.Row="1" 
+                                  VerticalScrollBarVisibility="Auto"
+                                  Background="Transparent">
+                        <TextBlock Name="HelpTextBlock"
+                                   Text="{Binding HelpText}"
+                                   FontFamily="Consolas, Courier New, monospace"
+                                   FontSize="14"
+                                   Foreground="{DynamicResource CyberTextBrush}"
+                                   LineHeight="22"
+                                   TextWrapping="Wrap"/>
+                    </ScrollViewer>
+                    
+                    <!-- Footer -->
+                    <Border Grid.Row="2" 
+                            Background="{DynamicResource CyberControlBrush}"
+                            BorderBrush="{DynamicResource CyberBorderBrush}"
+                            BorderThickness="0,1,0,0"
+                            Margin="-20,10,-20,-20"
+                            Padding="20,10">
+                        <TextBlock Text="Press any key to close this help..."
+                                   Foreground="{DynamicResource CyberTextBrush}"
+                                   FontStyle="Italic"
+                                   HorizontalAlignment="Center"/>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
+</UserControl>

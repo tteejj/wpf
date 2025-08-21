@@ -38,22 +38,22 @@
 
                 <!-- Timecode ID -->
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Timecode ID:" 
-                           Foreground="{DynamicResource CyberAccentBrush}" 
-                           FontWeight="Bold" VerticalAlignment="Center"/>
+                           Foreground="{DynamicResource CyberTextBrush}" 
+                           FontWeight="Bold" FontSize="14" VerticalAlignment="Center"/>
                 <TextBox Grid.Row="0" Grid.Column="2" Name="TimecodeTextBox" 
                          Text="{Binding TimecodeId}" VerticalAlignment="Center"/>
 
                 <!-- Hours -->
                 <TextBlock Grid.Row="2" Grid.Column="0" Text="Hours:" 
-                           Foreground="{DynamicResource CyberAccentBrush}" 
-                           FontWeight="Bold" VerticalAlignment="Center"/>
+                           Foreground="{DynamicResource CyberTextBrush}" 
+                           FontWeight="Bold" FontSize="14" VerticalAlignment="Center"/>
                 <ComboBox Grid.Row="2" Grid.Column="2" Name="HoursComboBox" 
                           SelectedItem="{Binding Hours}" VerticalAlignment="Center"/>
 
                 <!-- Description -->
                 <TextBlock Grid.Row="4" Grid.Column="0" Text="Description:" 
-                           Foreground="{DynamicResource CyberAccentBrush}" 
-                           FontWeight="Bold" VerticalAlignment="Center"/>
+                           Foreground="{DynamicResource CyberTextBrush}" 
+                           FontWeight="Bold" FontSize="14" VerticalAlignment="Center"/>
                 <TextBox Grid.Row="4" Grid.Column="2" Name="DescriptionTextBox" 
                          Text="{Binding Description}" VerticalAlignment="Center"/>
             </Grid>
