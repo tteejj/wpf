@@ -18,7 +18,7 @@
         "runtime": {
           "lib/netstandard2.0/Microsoft.Office.Interop.Excel.dll": {
             "assemblyVersion": "15.0.0.0",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "15.0.4795.1000"
           }
         }
       }
