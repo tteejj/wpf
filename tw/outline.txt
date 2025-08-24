@@ -1,0 +1,1480 @@
+This document contains the complete, consolidated, and unabridged design specification for a taskwarrior-tui clone in PowerShell, developed collaboratively. This version includes added detail and rationale for all design choices.
+
+---
+
+### **The Definitive Blueprint: PowerShell Taskwarrior-TUI**
+
+### **Part 1: Initial High-Level Design**
+
+#### **1.1. High-Level Description**
+The project is a terminal-based user interface (TUI) for the command-line tool `taskwarrior`. It is not a standalone task manager. It acts as a front-end by calling the `task` command, parsing its JSON output, and presenting it in a user-friendly, interactive way.
+
+#### **1.2. Core Components & Design Rationale**
+*   **Data Interaction Layer:** The "backend" that communicates with the `taskwarrior` executable.
+    *   **Rationale:** This separation is critical for maintainability. All UI logic will be completely independent of the Taskwarrior backend, allowing either to be changed without breaking the other.
+*   **Data Structures:** A PowerShell class (`Task`) to represent a task object.
+    *   **Rationale:** Using a strongly-typed class instead of generic `PSCustomObject`s makes the entire application more robust and less prone to bugs, as it enforces a strict data contract.
+*   **User Interface:** The "view" that renders the TUI.
+    *   **Rationale:** The view layer is "dumb." It only knows how to render the current state, not how to change it. This one-way data flow is essential for preventing complex state management bugs.
+*   **User Interaction:** The "controller" that handles keybindings and user input.
+    *   **Rationale:** Centralizing all input logic into a single controller prevents scattering business logic throughout the codebase, making it easier to manage and debug user interactions.
+*   **Configuration:** A parser for the `.taskrc` file.
+    *   **Rationale:** By reading `.taskrc` directly, we respect the user's existing ecosystem and investment in Taskwarrior. It ensures a seamless experience without requiring a separate configuration file.
+
+#### **1.3. Phased Implementation Plan & Rationale**
+1.  **Phase 1: Data Foundation:** Create the `Task` class and a function to fetch and parse tasks.
+    *   **Rationale:** This must be first. No UI can be built without a reliable way to model and retrieve the data it needs to display.
+2.  **Phase 2: Basic UI & Read-Only View:** Implement the main loop and render a navigable task list.
+    *   **Rationale:** This phase focuses on getting data onto the screen and establishing the core rendering engine. It is crucial to have a stable, read-only view before introducing the complexity of data modification.
+3.  **Phase 3: Basic Task Operations:** Implement add, complete, and delete.
+    *   **Rationale:** With a stable view, we can now introduce state changes. These core operations are the primary value of the application.
+4.  **Phase 4: Filtering & Advanced Interaction:** Implement the command bar for live filtering.
+    *   **Rationale:** Filtering is an advanced data-retrieval feature that builds upon the foundational data layer and the interactive command system from Phase 3.
+5.  **Phase 5: Advanced Features & Polish:** Implement theming, custom keybindings, etc.
+    *   **Rationale:** These are "quality of life" features that should only be added once the core application is stable and fully functional.
+
+---
+
+### **Part 2: Ultra-Detailed Phase-by-Phase Specifications**
+
+#### **Phase 1: The Data Foundation**
+
+**Component 1.1: The `Task` Object Model**
+*   **Design Rationale:** The choice of a `[hashtable]` for UDAs ensures the application is forward-compatible with any custom attributes a user might define, preventing crashes if it encounters unexpected data. The use of `[nullable[datetime]]` is a critical defensive measure, as Taskwarrior does not require most date fields, and assuming they exist would lead to frequent errors.
+
+**Component 1.2: The `Get-Tasks` Function**
+*   **Implementation Notes:** The choice to use `Start-Process` with temporary files (instead of `Invoke-Expression` or piping stdout) is a deliberate security and stability decision. It prevents shell injection vulnerabilities and correctly separates the `stdout` and `stderr` streams, which is essential for distinguishing between valid data and error messages from the `task` command. The `try/finally` block guarantees that temp files are cleaned up even if the application crashes, preventing disk pollution.
+
+#### **Phase 2: The UI Engine & Visuals**
+
+**Component 2.1: Visual Design**
+*   **UX Rationale:** The layout is a standard, time-tested TUI pattern. Placing the status bar directly above the command bar keeps essential context (like the current filter or mode) close to the user's input area. The command bar's display of keybinding hints in "TaskList" mode is a core feature for user discoverability, reducing the learning curve.
+
+**Component 2.2: The `$appState` Object**
+*   **State Management Philosophy:** The application will adhere strictly to a "single source of truth" principle. The `$appState` object is the sole authority on the state of the application. The Controller writes to it, the View reads from it. This unidirectional data flow is paramount for preventing a wide class of UI bugs where different parts of the application can get out of sync with each other.
+
+**Component 2.4: `Update-View` & Double-Buffering**
+*   **Performance Rationale:** Terminal emulators are notoriously slow at handling many small, individual write operations. This causes the flickering and "tearing" seen in naive TUIs. The double-buffering strategy—building the entire screen's content in an in-memory `StringBuilder` and then writing it to the console in a single, atomic operation—is the standard, professional solution to this problem. It ensures a smooth, responsive, and professional user experience.
+
+**Component 2.6: The Controller**
+*   **Mode-Driven Design Rationale:** A mode-driven architecture (`viewMode` state) is essential for managing complexity. It allows the same physical keypress (e.g., the `a` key) to perform entirely different logical actions based on the application's context (appending "a" to the `commandBuffer` in "Command" mode vs. triggering the "Add Task" action in "TaskList" mode). This prevents convoluted `if/else` logic.
+
+#### **Phase 3: Interactive Logic Flows**
+
+**Component 3.2: The `Invoke-TaskCommand` Function**
+*   **Design Rationale:** Returning a structured object (`@{Success; Message}`) instead of a simple string or boolean is a key design choice for creating a loosely coupled system. The UI (Controller) layer doesn't need to know *how* `Invoke-TaskCommand` works; it only needs to know that it will receive a predictable object that tells it whether the action succeeded and what message to display to the user.
+
+---
+
+### **Part 3: Ultra-Detailed Advanced Feature Specification (Phase 4 & 5)**
+
+This section provides the complete, granular specification for the application's most powerful features.
+
+#### **Feature 4.1: Advanced Live Filtering**
+
+*   **Objective:** To allow the user to dynamically filter the main task view by applying complex Taskwarrior filter expressions with real-time validation and suggestions.
+
+*   **Supported Filter Syntax:**
+    *   **Basic Filters:** `project:home`, `+urgent`, `-COMPLETED`
+    *   **Logical Operators:** `and`, `or`, `not`, `(`, `)`
+    *   **Date Filters:** `due.before:eom`, `due.after:now`, `entry.before:2024-01-01`
+    *   **Date Math:** `due.before:eom+1d`, `scheduled.after:sow-2d`
+    *   **Regex Matching:** `description~/regex/`, `project~/^work/`
+    *   **Attribute Existence:** `+due`, `-project`
+    *   **Numeric Comparisons:** `urgency.over:5.0`, `urgency.under:2.0`
+    *   **Virtual Tags:** `OVERDUE`, `TODAY`, `TOMORROW`, `WEEK`, `MONTH`
+    *   **Complex Examples:** 
+        - `(project:work or project:personal) and +urgent and -COMPLETED`
+        - `due.before:eom and urgency.over:3.0`
+        - `+OVERDUE or (due.before:3d and priority:H)`
+*   **State Properties Used:**
+    *   `$appState.viewMode`: Switches to `"Command"`.
+    *   `$appState.commandBuffer`: Stores the filter string as it is being typed.
+    *   `$appState.currentFilter`: Stores the currently active filter expression.
+*   **Detailed Logic Trace (Filtering for `proj:Home`):**
+    1.  **User Action:** Presses `/` in `"TaskList"` mode.
+    2.  **`Process-UserInput` (Controller):**
+        a. Detects `/` key.
+        b. Sets `$appState.viewMode = "Command"`.
+        c. Sets `$appState.commandBuffer = "/"`
+        d. Returns `$true` (state changed).
+    3.  **`Update-View` (Renderer):**
+        a. `Format-CommandBar` sees `"Command"` mode and renders `> /`.
+    4.  **User Action:** Types `proj:Home`.
+    5.  **`Process-UserInput` (Controller):** For each keypress, the character is appended to `$appState.commandBuffer`. Each keypress returns `$true`.
+    6.  **`Update-View` (Renderer):** The command bar is re-rendered on each keypress, showing `> /p`, `> /pr`, etc., providing instant feedback.
+    7.  **User Action:** Presses `Enter`.
+    8.  **`Process-UserInput` (Controller):**
+        a. Detects `Enter` key in `"Command"` mode.
+        b. Checks if `$appState.commandBuffer` starts with `/`. It does.
+        c. Extracts the filter: `$newFilter = $appState.commandBuffer.Substring(1)` which results in `"proj:Home"`.
+        d. Updates the persistent filter state: `$appState.currentFilter = $newFilter`.
+        e. Calls `Invoke-And-Refresh -ActionName "Filter"`.
+    9.  **`Invoke-And-Refresh`:**
+        a. The `"Filter"` case calls `$appState.tasks = Get-Tasks -Filter $appState.currentFilter`.
+        b. The task list in the application state is now replaced with only tasks matching `proj:Home`.
+    10. **`Process-UserInput` (Controller):**
+        a. Resets the interaction state: `$appState.commandBuffer = ""`, `$appState.viewMode = "TaskList"`.
+        b. Returns `$true`.
+    11. **`Update-View` (Renderer):**
+        a. `Format-TaskList` renders the new, shorter list of tasks.
+        b. `Format-StatusBar` sees that `$appState.currentFilter` is not empty and renders the filter expression: `Filter: proj:Home | Tasks: ...`.
+
+#### **Feature 4.2: In-Place Task Editing**
+
+*   **Objective:** To allow seamless editing of a task's description without leaving the list view.
+*   **Detailed Logic Trace (Editing a task):**
+    1.  **User Action:** Presses `e` in `"TaskList"` mode on a task with ID 42.
+    2.  **`Process-UserInput` (Controller):**
+        a. Gets the selected task object: `$task = ...`.
+        b. Sets up the editing state:
+            *   `$appState.viewMode = "Edit"`.
+            *   `$appState.editingTaskID = 42`.
+            *   `$appState.editBuffer = $task.description`.
+        c. Returns `$true`.
+    3.  **`Update-View` (Renderer):**
+        a. `Format-TaskList` begins rendering lines. When it gets to the task where `$task.id` equals `$appState.editingTaskID`:
+        b. `Format-TaskLine` executes its special "Edit Mode" logic. Instead of rendering the description column from the task data, it renders the content of `$appState.editBuffer`, followed by a block cursor (`█`). The rest of the line (ID, Project, etc.) is rendered normally.
+    4.  **User Action:** Presses `Backspace`, then types " new text".
+    5.  **`Process-UserInput` (Controller):** In `"Edit"` mode, each keypress modifies the `$appState.editBuffer` string and returns `$true`, causing the view to re-render and show the changes live.
+    6.  **User Action:** Presses `Enter` to save.
+    7.  **`Process-UserInput` (Controller):**
+        a. Detects `Enter` in `"Edit"` mode.
+        b. Constructs the command: `$command = "$($appState.editingTaskID) modify $($appState.editBuffer)"`.
+        c. Calls `Invoke-And-Refresh -ActionName "ShellCommand" -Command $command`.
+        d. Resets the editing state: `$appState.viewMode = "TaskList"`, `$appState.editingTaskID = $null`, `$appState.editBuffer = $null`.
+        e. Returns `$true`.
+    8.  **`Update-View` (Renderer):** Renders the updated task list, now showing the new description for task 42.
+
+#### **Feature 4.4: Configuration Loading (`Get-TaskConfig`)**
+
+*   **Objective:** To correctly parse all `.taskrc` files, respecting includes and precedence.
+*   **Detailed Logic Trace (Recursive Merge):**
+    1.  `Get-TaskConfig` is called on `~/.taskrc`.
+    2.  It reads `~/.taskrc` line by line.
+    3.  Line 1: `color.project.Home=red`. It adds `@{ "color.project.Home" = "red" }` to its local `$config` hashtable.
+    4.  Line 2: `include /path/to/theme.txt`.
+    5.  It **pauses** parsing the current file and calls itself recursively on `/path/to/theme.txt`.
+    6.  **Recursive Call:**
+        a. Reads `theme.txt`.
+        b. Line 1: `color.project.Home=blue`. Adds `@{ "color.project.Home" = "blue" }` to its *own* local `$config`.
+        c. Line 2: `color.due=yellow`. Adds `@{ "color.due" = "yellow" }` to its local `$config`.
+        d. Reaches end of file. Returns its local config: `@{ "color.project.Home" = "blue"; "color.due" = "yellow" }`.
+    7.  **Original Call Resumes:**
+        a. It receives the hashtable from the recursive call.
+        b. It merges this result into its own `$config`. The current state of the main `$config` is now `@{ "color.project.Home" = "blue"; "color.due" = "yellow" }`.
+    8.  It continues reading `~/.taskrc`.
+    9.  Line 3: `color.due=green`.
+    10. It adds this to its `$config`. Because the key `color.due` already exists, its value is **overwritten**. The final state of `$config` is `@{ "color.project.Home" = "blue"; "color.due" = "green" }`.
+    11. This demonstrates the correct precedence: values in the including file override values from the included file.
+
+---
+
+### **Part 4: Complete Application Function Reference (Final)**
+
+This section provides the detailed, step-by-step internal logic for every function in the application, serving as a direct blueprint for implementation.
+
+**1. `Start-Tui`**
+*   **Purpose:** The main entry point. Initializes the application, runs the main loop, and handles final cleanup.
+*   **Core Logic:** Initializes state via `Initialize-AppState`, hides cursor, enters the main `while` loop which checks for input/resize/timeouts, calls `Process-UserInput` and conditionally calls `Update-View`, then cleans up on exit.
+
+**2. `Initialize-AppState`**
+*   **Purpose:** To create, populate with defaults, and return the initial master state object.
+*   **Core Logic:** Creates the `$appState` hashtable, calls `Get-TaskConfig`, calls `Get-Tasks`, builds the keybinding map from defaults and config, and initializes all other state properties.
+
+**3. `Process-UserInput`**
+*   **Purpose:** The "Controller". Takes a keypress, translates it to a logical action, modifies `$appState`, and reports if a redraw is needed.
+*   **Core Logic:** Looks up the action in the keybinding map, then uses a `switch` on the current `viewMode` to handle the action appropriately for the current context.
+
+**4. `Update-View`**
+*   **Purpose:** The master "Renderer". Orchestrates the screen draw using the double-buffering strategy.
+*   **Core Logic:** Uses a `StringBuilder` to compose the output from `Format-*` helper functions into a single string, then writes it to the console.
+
+**5. `Invoke-And-Refresh`**
+*   **Purpose:** Centralizes command execution, status message updates, and data reloading.
+*   **Core Logic:** Takes a logical action name, calls `Invoke-TaskCommand`, updates the status message from the result, and if successful, re-runs `Get-Tasks` to refresh the data.
+
+**6. `Get-Tasks`**
+*   **Purpose:** Low-level data fetching from `task export`.
+*   **Core Logic:** As specified in detail in Part 2, Component 1.2.
+
+**7. `Invoke-TaskCommand`**
+*   **Purpose:** Low-level command execution for modifications.
+*   **Core Logic:** Uses `Start-Process` with temp file redirection. Returns a structured object `@{ Success=[bool]; Message=[string] }`.
+
+**8. `Get-TaskConfig`**
+*   **Purpose:** Parses `.taskrc` file(s).
+*   **Core Logic:** As specified in detail in Part 4, Feature 4.4, including recursive handling of `include` directives.
+
+**9. `Format-StatusBar`**
+*   **Purpose:** Returns the string for the status bar.
+*   **Core Logic:** Builds the status bar string by combining `viewMode`, `currentFilter`, task counts, and any active status message, then wraps it in the configured colors.
+
+**10. `Format-CommandBar`**
+*   **Purpose:** Returns the string for the command bar.
+*   **Core Logic:** A `switch` on `viewMode` returns the appropriate content: keybinding hints, the command buffer, or the confirmation prompt.
+
+**11. `Format-TaskList`**
+*   **Purpose:** Returns the multi-line string for the entire task list viewport.
+*   **Core Logic:** Appends a header, then loops through the visible tasks, calling `Format-TaskLine` for each and appending the result.
+
+**12. `Format-TaskLine`**
+*   **Purpose:** Returns the formatted string for a single task line.
+*   **Core Logic:** As specified in detail in Part 2, Component 2.5.
+
+**13. `Get-AnsiColor`**
+*   **Purpose:** Utility to translate config color names to ANSI codes.
+*   **Core Logic:** Uses a pre-populated hashtable or a large `switch` to map names like "bold red on blue" to their constituent ANSI codes.
+
+**14. `Resolve-TaskDependencies`**
+*   **Purpose:** Validate and resolve task dependencies before operations.
+*   **Core Logic:** Check if all dependency UUIDs exist, detect circular dependencies using graph traversal, return dependency chain for ordering.
+
+**15. `Add-TaskDependency`**
+*   **Purpose:** Add a dependency relationship between two tasks.
+*   **Core Logic:** Validate both tasks exist, check for circular dependency, use `task UUID depends:DEPUUID` command, refresh data.
+
+**16. `Remove-TaskDependency`**
+*   **Purpose:** Remove a dependency relationship.
+*   **Core Logic:** Use `task UUID modify depends:` to clear or `task UUID modify depends:-DEPUUID` to remove specific dependency.
+
+**17. `Get-ReadyTasks`**
+*   **Purpose:** Filter tasks that are ready to work on (no unresolved dependencies).
+*   **Core Logic:** For each task, check all dependencies are completed/deleted, return filtered list.
+
+**18. `Process-RecurringTasks`**
+*   **Purpose:** Check for completed recurring tasks and generate next occurrences.
+*   **Core Logic:** Find completed recurring templates, call `GenerateNextOccurrence()`, add new tasks via TaskWarrior, mark template as processed.
+
+**19. `Generate-RecurringTask`**
+*   **Purpose:** Create a new task instance from recurring template.
+*   **Core Logic:** Copy template properties, calculate next due date, set parent UUID, use `task add` command with all attributes.
+
+**20. `Parse-RecurrencePattern`**
+*   **Purpose:** Validate and parse recurrence strings.
+*   **Core Logic:** Support daily/weekly/monthly/yearly, numeric patterns (3d, 2w, 1m), validate against TaskWarrior format.
+
+**21. `Update-RecurrenceSchedule`**
+*   **Purpose:** Maintain recurring task schedule and cleanup old instances.
+*   **Core Logic:** Remove completed child tasks older than config threshold, ensure future instances exist up to horizon.
+
+**22. `Parse-FilterExpression`**
+*   **Purpose:** Parse and validate complex filter expressions.
+*   **Core Logic:** Tokenize expression, build AST, validate syntax, detect invalid attribute names, return parsed filter object.
+
+**23. `Evaluate-FilterExpression`**
+*   **Purpose:** Apply parsed filter to task list.
+*   **Core Logic:** Walk AST, evaluate each node against task properties, handle logical operators, date math, regex matching.
+
+**24. `Get-FilterSuggestions`**
+*   **Purpose:** Provide auto-completion for filter expressions.
+*   **Core Logic:** Based on current cursor position, suggest attributes, values, operators, from existing task data and config.
+
+**25. `Validate-FilterSyntax`**
+*   **Purpose:** Real-time validation of filter expressions as user types.
+*   **Core Logic:** Parse partial expression, highlight syntax errors, show expected tokens, validate against TaskWarrior rules.
+
+**26. `Calculate-VirtualTags`**
+*   **Purpose:** Generate virtual tags for tasks (OVERDUE, TODAY, etc.).
+*   **Core Logic:** Check task dates against current time, calculate urgency-based tags, project status tags.
+
+**27. `Apply-DateMath`**
+*   **Purpose:** Resolve date expressions like 'eom+1d', 'sow-2d'.
+*   **Core Logic:** Parse date abbreviations (eom, sow, now), apply offsets, return resolved datetime.
+
+**28. `Calculate-TaskUrgency`**
+*   **Purpose:** Calculate urgency score for a task using TaskWarrior algorithm.
+*   **Core Logic:** Apply priority, due date, age, project, tag, and dependency coefficients, return weighted score.
+
+**29. `Update-AllTaskUrgency`**
+*   **Purpose:** Recalculate urgency for all tasks when configuration changes.
+*   **Core Logic:** Iterate through all tasks, call CalculateUrgency(), update task list, trigger sort if needed.
+
+**30. `Get-UrgencyCoefficients`**
+*   **Purpose:** Load urgency calculation coefficients from configuration.
+*   **Core Logic:** Parse .taskrc urgency settings, apply defaults, return coefficient hashtable.
+
+**31. `Sort-TasksByUrgency`**
+*   **Purpose:** Sort task list by urgency score (descending).
+*   **Core Logic:** Use stable sort on urgency field, maintain original order for equal urgencies, update visible task list.
+
+**32. `Manage-TaskAnnotations`**
+*   **Purpose:** Add, edit, or remove task annotations.
+*   **Core Logic:** Use `task UUID annotate "description"` command, parse timestamp, update task data, refresh display.
+
+**33. `Set-TaskUDA`**
+*   **Purpose:** Set or update User Defined Attribute values.
+*   **Core Logic:** Validate UDA attribute against config, use `task UUID modify attribute:value`, handle type conversion.
+
+**34. `Switch-Context`**
+*   **Purpose:** Change active context filter to focus on specific work area.
+*   **Core Logic:** Apply context filter expression, update visible tasks, save context state, update status display.
+
+**35. `Parse-TaskrcConfiguration`**
+*   **Purpose:** Load and parse complete .taskrc configuration with all TaskWarrior settings.
+*   **Core Logic:** Read .taskrc file, handle includes, parse all configuration categories (urgency, color, UDA, context, etc.).
+
+**36. `Get-ProjectHierarchy`**
+*   **Purpose:** Build project hierarchy tree from all task projects.
+*   **Core Logic:** Parse project paths, build tree structure, calculate task counts per project level, support filtering.
+
+**37. `Customize-Columns`**
+*   **Purpose:** Allow user to configure visible columns and their properties.
+*   **Core Logic:** Save column configuration, update display definitions, validate column attributes, apply changes.
+
+**38. `Export-TaskData`**
+*   **Purpose:** Export tasks in various formats (JSON, CSV, XML) with full metadata.
+*   **Core Logic:** Query TaskWarrior with specific format, include UDAs and annotations, handle large datasets efficiently.
+
+**39. `Import-TaskData`**
+*   **Purpose:** Import tasks from external sources with validation.
+*   **Core Logic:** Parse input format, validate against TaskWarrior schema, map fields, use bulk import commands.
+
+---
+
+### **Part 5: Complete Data Model Specifications**
+
+#### **5.1: The Complete Task Class Definition**
+
+```powershell
+class Task {
+    [int] $id                           # TaskWarrior UUID converted to display ID
+    [string] $uuid                      # Original TaskWarrior UUID
+    [string] $description              # Task description/summary
+    [string] $project                  # Project name (can be null/empty)
+    [string] $priority                 # H, M, L, or empty
+    [string] $status                   # pending, completed, deleted, waiting
+    [nullable[datetime]] $due          # Due date
+    [nullable[datetime]] $scheduled    # Scheduled date  
+    [nullable[datetime]] $wait         # Wait until date
+    [nullable[datetime]] $entry        # Creation timestamp
+    [nullable[datetime]] $modified     # Last modification timestamp
+    [nullable[datetime]] $start        # Start date for active tasks
+    [nullable[datetime]] $end          # Completion/deletion date
+    [string[]] $tags                   # Array of tags
+    [string[]] $depends                # Array of dependency UUIDs
+    [System.Collections.Generic.List[hashtable]] $annotations  # Annotations with timestamp and description
+    [hashtable] $uda                   # User Defined Attributes
+    [string] $mask                     # Recurring task mask
+    [string] $parent                   # Parent UUID for recurring tasks
+    [double] $urgency                  # Calculated urgency score
+    [string] $recur                    # Recurrence pattern
+    [nullable[datetime]] $until        # Recurrence end date
+    
+    # Constructor from TaskWarrior JSON
+    Task([PSCustomObject] $jsonTask) {
+        $this.id = [int]$jsonTask.id
+        $this.uuid = $jsonTask.uuid
+        $this.description = $jsonTask.description ?? ""
+        $this.project = $jsonTask.project ?? ""
+        $this.priority = $jsonTask.priority ?? ""
+        $this.status = $jsonTask.status ?? "pending"
+        $this.tags = $jsonTask.tags ?? @()
+        $this.depends = $jsonTask.depends ?? @()
+        # Parse annotations from JSON array to structured list
+        $this.annotations = [System.Collections.Generic.List[hashtable]]::new()
+        if ($jsonTask.annotations) {
+            foreach ($annotation in $jsonTask.annotations) {
+                $this.annotations.Add(@{
+                    entry = $this.ParseTaskDate($annotation.entry)
+                    description = $annotation.description ?? ""
+                })
+            }
+        }
+        $this.uda = @{}
+        $this.mask = $jsonTask.mask ?? ""
+        $this.parent = $jsonTask.parent ?? ""
+        $this.urgency = [double]($jsonTask.urgency ?? 0.0)
+        $this.recur = $jsonTask.recur ?? ""
+        
+        # Parse dates with null safety
+        $this.due = $this.ParseTaskDate($jsonTask.due)
+        $this.scheduled = $this.ParseTaskDate($jsonTask.scheduled)
+        $this.wait = $this.ParseTaskDate($jsonTask.wait)
+        $this.entry = $this.ParseTaskDate($jsonTask.entry)
+        $this.modified = $this.ParseTaskDate($jsonTask.modified)
+        $this.start = $this.ParseTaskDate($jsonTask.start)
+        $this.end = $this.ParseTaskDate($jsonTask.end)
+        $this.until = $this.ParseTaskDate($jsonTask.until)
+        
+        # Extract UDAs (any property not in standard set)
+        $standardProps = @('id','uuid','description','project','priority','status','due','scheduled','wait','entry','modified','start','end','tags','depends','annotations','mask','parent','urgency','recur','until')
+        foreach ($prop in $jsonTask.PSObject.Properties) {
+            if ($prop.Name -notin $standardProps) {
+                $this.uda[$prop.Name] = $prop.Value
+            }
+        }
+    }
+    
+    hidden [nullable[datetime]] ParseTaskDate([string] $dateString) {
+        if ([string]::IsNullOrEmpty($dateString)) { return $null }
+        try {
+            return [datetime]::ParseExact($dateString, "yyyyMMddTHHmmssZ", $null, [System.Globalization.DateTimeStyles]::AssumeUniversal).ToLocalTime()
+        } catch {
+            return $null
+        }
+    }
+    
+    # Formatting helpers
+    [string] GetFormattedDue() {
+        if ($null -eq $this.due) { return "" }
+        $days = ($this.due - [datetime]::Now).Days
+        if ($days -lt 0) { return "OVERDUE" }
+        if ($days -eq 0) { return "TODAY" }
+        if ($days -eq 1) { return "TOMORROW" }
+        if ($days -le 7) { return "${days}d" }
+        return $this.due.ToString("yyyy-MM-dd")
+    }
+    
+    [string] GetAgeString() {
+        if ($null -eq $this.entry) { return "" }
+        $age = [datetime]::Now - $this.entry
+        if ($age.Days -gt 365) { return "$([int]($age.Days/365))y" }
+        if ($age.Days -gt 30) { return "$([int]($age.Days/30))mo" }
+        if ($age.Days -gt 0) { return "$($age.Days)d" }
+        return "$($age.Hours)h"
+    }
+    
+    [bool] IsActive() { return $null -ne $this.start -and $null -eq $this.end }
+    [bool] IsBlocked() { return $this.depends.Count -gt 0 }
+    [bool] IsRecurring() { return -not [string]::IsNullOrEmpty($this.recur) }
+    [bool] IsWaiting() { return $null -ne $this.wait -and $this.wait -gt [datetime]::Now }
+    
+    # Dependency management methods
+    [bool] HasDependencies() { return $this.depends.Count -gt 0 }
+    [bool] DependsOn([string]$uuid) { return $this.depends -contains $uuid }
+    [void] AddDependency([string]$uuid) { 
+        if (-not $this.DependsOn($uuid)) { $this.depends += $uuid }
+    }
+    [void] RemoveDependency([string]$uuid) { 
+        $this.depends = $this.depends | Where-Object { $_ -ne $uuid }
+    }
+    
+    # Get all tasks this task blocks (reverse dependency lookup)
+    [string[]] GetBlockedTasks([Task[]]$allTasks) {
+        return ($allTasks | Where-Object { $_.DependsOn($this.uuid) }).uuid
+    }
+    
+    # Check if task is ready to work on (no unresolved dependencies)
+    [bool] IsReady([Task[]]$allTasks) {
+        if (-not $this.HasDependencies()) { return $true }
+        
+        foreach ($depUuid in $this.depends) {
+            $depTask = $allTasks | Where-Object { $_.uuid -eq $depUuid }
+            if ($depTask -and $depTask.status -notin @('completed', 'deleted')) {
+                return $false
+            }
+        }
+        return $true
+    }
+    
+    # Recurring task management
+    [bool] IsRecurringTemplate() { 
+        return -not [string]::IsNullOrEmpty($this.recur) -and [string]::IsNullOrEmpty($this.parent)
+    }
+    [bool] IsRecurringChild() { 
+        return -not [string]::IsNullOrEmpty($this.parent)
+    }
+    
+    # Generate next occurrence for recurring task
+    [Task] GenerateNextOccurrence() {
+        if (-not $this.IsRecurringTemplate()) { return $null }
+        
+        $nextTask = [Task]::new(@{
+            uuid = [guid]::NewGuid().ToString()
+            description = $this.description
+            project = $this.project
+            priority = $this.priority
+            tags = $this.tags
+            recur = ""  # Child tasks don't recur
+            parent = $this.uuid
+            entry = [datetime]::Now
+        })
+        
+        # Calculate next due date based on recurrence pattern
+        $nextTask.due = $this.CalculateNextDue()
+        return $nextTask
+    }
+    
+    # Calculate next due date based on recurrence pattern
+    [nullable[datetime]] CalculateNextDue() {
+        if ($null -eq $this.due) { return $null }
+        
+        switch -Regex ($this.recur) {
+            '^daily$|^1d$' { return $this.due.AddDays(1) }
+            '^weekly$|^1w$' { return $this.due.AddDays(7) }
+            '^monthly$|^1m$' { return $this.due.AddMonths(1) }
+            '^quarterly$|^3m$' { return $this.due.AddMonths(3) }
+            '^yearly$|^1y$' { return $this.due.AddYears(1) }
+            '^(\d+)d$' { 
+                $days = [int]$matches[1]
+                return $this.due.AddDays($days)
+            }
+            '^(\d+)w$' { 
+                $weeks = [int]$matches[1]
+                return $this.due.AddDays($weeks * 7)
+            }
+            '^(\d+)m$' { 
+                $months = [int]$matches[1]
+                return $this.due.AddMonths($months)
+            }
+            '^(\d+)y$' { 
+                $years = [int]$matches[1]
+                return $this.due.AddYears($years)
+            }
+            default { return $this.due.AddDays(1) }  # Default to daily
+        }
+    }
+    
+    # Check if recurring task should generate next occurrence
+    [bool] ShouldGenerateNext() {
+        if (-not $this.IsRecurringTemplate()) { return $false }
+        if ($this.status -ne 'completed') { return $false }
+        if ($null -ne $this.until -and [datetime]::Now -gt $this.until) { return $false }
+        return $true
+    }
+    
+    # Virtual tag generation for advanced filtering
+    [string[]] GetVirtualTags() {
+        $virtualTags = @()
+        $now = [datetime]::Now
+        
+        # Date-based virtual tags
+        if ($null -ne $this.due) {
+            $daysUntilDue = ($this.due - $now).Days
+            
+            if ($daysUntilDue -lt 0) { $virtualTags += "OVERDUE" }
+            elseif ($daysUntilDue -eq 0) { $virtualTags += "TODAY" }
+            elseif ($daysUntilDue -eq 1) { $virtualTags += "TOMORROW" }
+            elseif ($daysUntilDue -le 7) { $virtualTags += "WEEK" }
+            elseif ($daysUntilDue -le 30) { $virtualTags += "MONTH" }
+        }
+        
+        # Status-based virtual tags  
+        if ($this.status -eq 'pending') { $virtualTags += "PENDING" }
+        if ($this.status -eq 'completed') { $virtualTags += "COMPLETED" }
+        if ($this.status -eq 'deleted') { $virtualTags += "DELETED" }
+        if ($this.status -eq 'waiting') { $virtualTags += "WAITING" }
+        
+        # Attribute-based virtual tags
+        if ($this.IsActive()) { $virtualTags += "ACTIVE" }
+        if ($this.IsBlocked()) { $virtualTags += "BLOCKED" }
+        if ($this.IsRecurring()) { $virtualTags += "RECURRING" }
+        if (-not [string]::IsNullOrEmpty($this.project)) { $virtualTags += "PROJECT" }
+        if ($null -ne $this.due) { $virtualTags += "DUE" }
+        if ($this.tags.Count -gt 0) { $virtualTags += "TAGGED" }
+        
+        # Urgency-based virtual tags
+        if ($this.urgency -ge 10) { $virtualTags += "URGENT" }
+        elseif ($this.urgency -ge 5) { $virtualTags += "MEDIUM" }
+        elseif ($this.urgency -gt 0) { $virtualTags += "LOW" }
+        
+        return $virtualTags
+    }
+    
+    # Enhanced matching for complex filter expressions
+    [bool] MatchesFilter([hashtable]$filterCriteria) {
+        # Get all searchable content including virtual tags
+        $allTags = $this.tags + $this.GetVirtualTags()
+        $searchableText = @(
+            $this.description
+            $this.project
+            $this.priority
+            $this.status
+        ) + $allTags + $this.uda.Values
+        
+        foreach ($criterion in $filterCriteria.GetEnumerator()) {
+            $attribute = $criterion.Key
+            $condition = $criterion.Value
+            
+            $match = switch ($attribute) {
+                "description" { $this.TestStringCondition($this.description, $condition) }
+                "project" { $this.TestStringCondition($this.project, $condition) }
+                "priority" { $this.TestStringCondition($this.priority, $condition) }
+                "status" { $this.TestStringCondition($this.status, $condition) }
+                "tags" { $this.TestTagCondition($allTags, $condition) }
+                "urgency" { $this.TestNumericCondition($this.urgency, $condition) }
+                "due" { $this.TestDateCondition($this.due, $condition) }
+                "scheduled" { $this.TestDateCondition($this.scheduled, $condition) }
+                "entry" { $this.TestDateCondition($this.entry, $condition) }
+                "modified" { $this.TestDateCondition($this.modified, $condition) }
+                default {
+                    # Check UDAs
+                    if ($this.uda.ContainsKey($attribute)) {
+                        $this.TestStringCondition($this.uda[$attribute], $condition)
+                    } else { $false }
+                }
+            }
+            
+            if (-not $match) { return $false }
+        }
+        
+        return $true
+    }
+    
+    # Helper methods for different condition types
+    hidden [bool] TestStringCondition([string]$value, [hashtable]$condition) {
+        switch ($condition.operator) {
+            "equals" { return $value -eq $condition.value }
+            "contains" { return $value -like "*$($condition.value)*" }
+            "startswith" { return $value -like "$($condition.value)*" }
+            "regex" { return $value -match $condition.value }
+            "exists" { return -not [string]::IsNullOrEmpty($value) }
+            default { return $false }
+        }
+    }
+    
+    hidden [bool] TestTagCondition([string[]]$tags, [hashtable]$condition) {
+        switch ($condition.operator) {
+            "contains" { return $condition.value -in $tags }
+            "not_contains" { return $condition.value -notin $tags }
+            "exists" { return $tags.Count -gt 0 }
+            default { return $false }
+        }
+    }
+    
+    hidden [bool] TestNumericCondition([double]$value, [hashtable]$condition) {
+        switch ($condition.operator) {
+            "equals" { return $value -eq $condition.value }
+            "greater" { return $value -gt $condition.value }
+            "less" { return $value -lt $condition.value }
+            "greater_equal" { return $value -ge $condition.value }
+            "less_equal" { return $value -le $condition.value }
+            default { return $false }
+        }
+    }
+    
+    hidden [bool] TestDateCondition([nullable[datetime]]$date, [hashtable]$condition) {
+        if ($null -eq $date -and $condition.operator -eq "exists") { return $false }
+        if ($null -eq $date) { return $condition.operator -eq "not_exists" }
+        
+        switch ($condition.operator) {
+            "before" { return $date -lt $condition.value }
+            "after" { return $date -gt $condition.value }
+            "equals" { return $date.Date -eq $condition.value.Date }
+            "exists" { return $true }
+            default { return $false }
+        }
+    }
+    
+    # Urgency calculation system matching TaskWarrior's algorithm
+    [double] CalculateUrgency([hashtable]$config = @{}) {
+        $urgency = 0.0
+        
+        # Priority-based urgency (TaskWarrior defaults)
+        $priorityConfig = $config.ContainsKey('urgency.priority') ? $config['urgency.priority'] : @{
+            'H' = 6.0
+            'M' = 3.9
+            'L' = 1.8
+        }
+        
+        if ($priorityConfig.ContainsKey($this.priority)) {
+            $urgency += $priorityConfig[$this.priority]
+        }
+        
+        # Project-based urgency
+        if (-not [string]::IsNullOrEmpty($this.project)) {
+            $projectUrgency = $config.ContainsKey('urgency.project') ? $config['urgency.project'] : 1.0
+            $urgency += $projectUrgency
+        }
+        
+        # Tag-based urgency
+        $tagUrgency = $config.ContainsKey('urgency.tags') ? $config['urgency.tags'] : 1.0
+        $urgency += ($this.tags.Count * $tagUrgency)
+        
+        # Due date urgency (most complex calculation)
+        if ($null -ne $this.due) {
+            $urgency += $this.CalculateDueUrgency($config)
+        }
+        
+        # Scheduled date urgency
+        if ($null -ne $this.scheduled) {
+            $urgency += $this.CalculateScheduledUrgency($config)
+        }
+        
+        # Active task urgency
+        if ($this.IsActive()) {
+            $activeUrgency = $config.ContainsKey('urgency.active') ? $config['urgency.active'] : 4.0
+            $urgency += $activeUrgency
+        }
+        
+        # Age-based urgency
+        if ($null -ne $this.entry) {
+            $urgency += $this.CalculateAgeUrgency($config)
+        }
+        
+        # Dependency urgency (blocked tasks have lower urgency)
+        if ($this.HasDependencies()) {
+            $dependencyUrgency = $config.ContainsKey('urgency.blocked') ? $config['urgency.blocked'] : -5.0
+            $urgency += $dependencyUrgency
+        }
+        
+        # Annotation urgency
+        $annotationUrgency = $config.ContainsKey('urgency.annotations') ? $config['urgency.annotations'] : 1.0
+        $urgency += ($this.annotations.Count * $annotationUrgency)
+        
+        # Apply user-defined coefficients from UDAs
+        foreach ($udaKey in $this.uda.Keys) {
+            $configKey = "urgency.uda.$udaKey"
+            if ($config.ContainsKey($configKey)) {
+                $coefficient = $config[$configKey]
+                $value = $this.uda[$udaKey]
+                
+                # Handle different UDA value types
+                if ($value -is [double] -or $value -is [int]) {
+                    $urgency += ($value * $coefficient)
+                } elseif (-not [string]::IsNullOrEmpty($value)) {
+                    $urgency += $coefficient  # Presence bonus for string UDAs
+                }
+            }
+        }
+        
+        # Store calculated urgency
+        $this.urgency = [Math]::Max(0.0, $urgency)
+        return $this.urgency
+    }
+    
+    # Calculate urgency contribution from due date
+    hidden [double] CalculateDueUrgency([hashtable]$config) {
+        $now = [datetime]::Now
+        $daysUntilDue = ($this.due - $now).TotalDays
+        
+        # TaskWarrior's due date urgency algorithm
+        $dueUrgency = $config.ContainsKey('urgency.due') ? $config['urgency.due'] : 12.0
+        
+        if ($daysUntilDue <= 0) {
+            # Overdue tasks get maximum urgency plus penalty
+            return $dueUrgency + ([Math]::Abs($daysUntilDue) * 0.1)
+        } elseif ($daysUntilDue <= 7) {
+            # Tasks due within a week get escalating urgency
+            return $dueUrgency * (7 - $daysUntilDue) / 7
+        } else {
+            # Future tasks get diminishing urgency
+            return $dueUrgency / (1 + ($daysUntilDue - 7) / 30)
+        }
+    }
+    
+    # Calculate urgency contribution from scheduled date
+    hidden [double] CalculateScheduledUrgency([hashtable]$config) {
+        $now = [datetime]::Now
+        $daysUntilScheduled = ($this.scheduled - $now).TotalDays
+        
+        $scheduledUrgency = $config.ContainsKey('urgency.scheduled') ? $config['urgency.scheduled'] : 5.0
+        
+        if ($daysUntilScheduled <= 0) {
+            # Ready to start
+            return $scheduledUrgency
+        } elseif ($daysUntilScheduled <= 1) {
+            # Starting soon
+            return $scheduledUrgency * 0.8
+        } else {
+            # Future scheduled tasks
+            return $scheduledUrgency / (1 + $daysUntilScheduled / 7)
+        }
+    }
+    
+    # Calculate urgency contribution from task age
+    hidden [double] CalculateAgeUrgency([hashtable]$config) {
+        $now = [datetime]::Now
+        $ageInDays = ($now - $this.entry).TotalDays
+        
+        $ageUrgency = $config.ContainsKey('urgency.age') ? $config['urgency.age'] : 2.0
+        $maxAge = $config.ContainsKey('urgency.age.max') ? $config['urgency.age.max'] : 365.0
+        
+        # Age urgency increases slowly over time, capped at maxAge
+        $normalizedAge = [Math]::Min($ageInDays / $maxAge, 1.0)
+        return $ageUrgency * $normalizedAge
+    }
+    
+    # Get urgency level description
+    [string] GetUrgencyLevel() {
+        if ($this.urgency -ge 15.0) { return "CRITICAL" }
+        elseif ($this.urgency -ge 10.0) { return "HIGH" }
+        elseif ($this.urgency -ge 5.0) { return "MEDIUM" } 
+        elseif ($this.urgency -gt 0.0) { return "LOW" }
+        else { return "NONE" }
+    }
+    
+    # Get urgency color based on level
+    [string] GetUrgencyColor([hashtable]$colorConfig = @{}) {
+        $level = $this.GetUrgencyLevel()
+        
+        $colors = $colorConfig.ContainsKey('urgency') ? $colorConfig['urgency'] : @{
+            'CRITICAL' = 'red'
+            'HIGH' = 'yellow'  
+            'MEDIUM' = 'cyan'
+            'LOW' = 'blue'
+            'NONE' = 'white'
+        }
+        
+        return $colors.ContainsKey($level) ? $colors[$level] : 'white'
+    }
+    
+    # Rich metadata system - UDA management
+    [void] SetUDA([string]$attribute, [object]$value) {
+        $this.uda[$attribute] = $value
+    }
+    
+    [object] GetUDA([string]$attribute) {
+        return $this.uda.ContainsKey($attribute) ? $this.uda[$attribute] : $null
+    }
+    
+    [bool] HasUDA([string]$attribute) {
+        return $this.uda.ContainsKey($attribute)
+    }
+    
+    [void] RemoveUDA([string]$attribute) {
+        $this.uda.Remove($attribute)
+    }
+    
+    # Project hierarchy support
+    [string[]] GetProjectPath() {
+        if ([string]::IsNullOrEmpty($this.project)) { return @() }
+        return $this.project -split '\.'
+    }
+    
+    [string] GetRootProject() {
+        $path = $this.GetProjectPath()
+        return $path.Length -gt 0 ? $path[0] : ""
+    }
+    
+    [string] GetLeafProject() {
+        $path = $this.GetProjectPath()
+        return $path.Length -gt 0 ? $path[-1] : ""
+    }
+    
+    [int] GetProjectDepth() {
+        return $this.GetProjectPath().Length
+    }
+    
+    [bool] IsSubprojectOf([string]$parentProject) {
+        return $this.project -like "$parentProject.*"
+    }
+    
+    # Enhanced tag system
+    [void] AddTag([string]$tag) {
+        if ($tag -notin $this.tags) {
+            $this.tags += $tag
+        }
+    }
+    
+    [void] RemoveTag([string]$tag) {
+        $this.tags = $this.tags | Where-Object { $_ -ne $tag }
+    }
+    
+    [bool] HasTag([string]$tag) {
+        return $tag -in $this.tags
+    }
+    
+    [bool] HasAnyTag([string[]]$tags) {
+        foreach ($tag in $tags) {
+            if ($this.HasTag($tag)) { return $true }
+        }
+        return $false
+    }
+    
+    [bool] HasAllTags([string[]]$tags) {
+        foreach ($tag in $tags) {
+            if (-not $this.HasTag($tag)) { return $false }
+        }
+        return $true
+    }
+    
+    # Annotation management
+    [void] AddAnnotation([string]$description) {
+        $this.annotations.Add(@{
+            entry = [datetime]::Now
+            description = $description
+        })
+    }
+    
+    [void] AddAnnotation([datetime]$timestamp, [string]$description) {
+        $this.annotations.Add(@{
+            entry = $timestamp
+            description = $description
+        })
+    }
+    
+    [void] RemoveAnnotation([int]$index) {
+        if ($index -ge 0 -and $index -lt $this.annotations.Count) {
+            $this.annotations.RemoveAt($index)
+        }
+    }
+    
+    [hashtable[]] GetAnnotationsSorted() {
+        return $this.annotations | Sort-Object { $_.entry } | ForEach-Object { $_ }
+    }
+    
+    [string] GetLatestAnnotation() {
+        if ($this.annotations.Count -eq 0) { return "" }
+        $latest = $this.annotations | Sort-Object { $_.entry } | Select-Object -Last 1
+        return $latest.description
+    }
+    
+    # Advanced date/time handling and math
+    [nullable[datetime]] GetNextWorkday([nullable[datetime]]$fromDate = $null) {
+        $date = $fromDate ?? [datetime]::Now
+        do {
+            $date = $date.AddDays(1)
+        } while ($date.DayOfWeek -in @('Saturday', 'Sunday'))
+        return $date
+    }
+    
+    [nullable[datetime]] GetEndOfMonth([nullable[datetime]]$fromDate = $null) {
+        $date = $fromDate ?? [datetime]::Now
+        return [datetime]::new($date.Year, $date.Month, [datetime]::DaysInMonth($date.Year, $date.Month))
+    }
+    
+    [nullable[datetime]] GetStartOfWeek([nullable[datetime]]$fromDate = $null) {
+        $date = $fromDate ?? [datetime]::Now
+        $daysToSubtract = [int]$date.DayOfWeek
+        return $date.AddDays(-$daysToSubtract).Date
+    }
+    
+    [nullable[datetime]] GetEndOfWeek([nullable[datetime]]$fromDate = $null) {
+        $startOfWeek = $this.GetStartOfWeek($fromDate)
+        return $startOfWeek.AddDays(6)
+    }
+    
+    # Date math expression parser (supports eom+1d, sow-2w, etc.)
+    [nullable[datetime]] ParseDateMath([string]$expression) {
+        if ([string]::IsNullOrEmpty($expression)) { return $null }
+        
+        # Handle base date references
+        $baseDate = [datetime]::Now
+        $expression = $expression.ToLower()
+        
+        # Parse base date
+        if ($expression.StartsWith('eom')) {
+            $baseDate = $this.GetEndOfMonth()
+            $expression = $expression.Substring(3)
+        } elseif ($expression.StartsWith('som')) {
+            $baseDate = [datetime]::new([datetime]::Now.Year, [datetime]::Now.Month, 1)
+            $expression = $expression.Substring(3)
+        } elseif ($expression.StartsWith('sow')) {
+            $baseDate = $this.GetStartOfWeek()
+            $expression = $expression.Substring(3)
+        } elseif ($expression.StartsWith('eow')) {
+            $baseDate = $this.GetEndOfWeek()
+            $expression = $expression.Substring(3)
+        } elseif ($expression.StartsWith('now')) {
+            $baseDate = [datetime]::Now
+            $expression = $expression.Substring(3)
+        } elseif ($expression -eq 'today') {
+            return [datetime]::Today
+        } elseif ($expression -eq 'tomorrow') {
+            return [datetime]::Today.AddDays(1)
+        } elseif ($expression -eq 'yesterday') {
+            return [datetime]::Today.AddDays(-1)
+        }
+        
+        # Parse offset if present
+        if (-not [string]::IsNullOrEmpty($expression)) {
+            if ($expression -match '^([+-])(\d+)([dwmy])$') {
+                $sign = if ($matches[1] -eq '+') { 1 } else { -1 }
+                $amount = [int]$matches[2] * $sign
+                $unit = $matches[3]
+                
+                switch ($unit) {
+                    'd' { return $baseDate.AddDays($amount) }
+                    'w' { return $baseDate.AddDays($amount * 7) }
+                    'm' { return $baseDate.AddMonths($amount) }
+                    'y' { return $baseDate.AddYears($amount) }
+                }
+            }
+        }
+        
+        return $baseDate
+    }
+    
+    # Context and workspace support
+    [bool] MatchesContext([string]$context) {
+        # Simple context matching - can be extended for complex rules
+        if ([string]::IsNullOrEmpty($context)) { return $true }
+        
+        # Context rules can match project, tags, or UDAs
+        $contextParts = $context -split ' and ' | ForEach-Object { $_.Trim() }
+        
+        foreach ($part in $contextParts) {
+            $match = $false
+            
+            if ($part.StartsWith('project:')) {
+                $projectFilter = $part.Substring(8)
+                $match = $this.project -like $projectFilter
+            } elseif ($part.StartsWith('+')) {
+                $tag = $part.Substring(1)
+                $match = $this.HasTag($tag)
+            } elseif ($part.StartsWith('-')) {
+                $tag = $part.Substring(1)
+                $match = -not $this.HasTag($tag)
+            } elseif ($part.Contains(':')) {
+                $colonIndex = $part.IndexOf(':')
+                $attribute = $part.Substring(0, $colonIndex)
+                $value = $part.Substring($colonIndex + 1)
+                $match = $this.GetUDA($attribute) -eq $value
+            }
+            
+            if (-not $match) { return $false }
+        }
+        
+        return $true
+    }
+}
+```
+
+#### **5.2: The Complete AppState Object**
+
+```powershell
+$appState = @{
+    # Core Data
+    tasks = [Task[]]@()                    # All loaded tasks
+    visibleTasks = [Task[]]@()             # Tasks after filtering/sorting
+    config = @{}                           # Parsed .taskrc configuration
+    
+    # View State
+    viewMode = "TaskList"                  # TaskList, Command, Edit, Confirm
+    selectedIndex = 0                      # Currently selected task index
+    scrollOffset = 0                       # Top visible task index
+    viewportHeight = 20                    # Number of visible task lines
+    
+    # Filtering & Sorting
+    currentFilter = ""                     # Active filter expression
+    activeContext = ""                     # Active context name
+    sortField = "urgency"                  # Current sort field
+    sortDescending = $true                 # Sort direction
+    
+    # Configuration
+    taskrcConfig = @{}                     # Complete .taskrc configuration
+    urgencyConfig = @{}                    # Urgency calculation coefficients
+    colorConfig = @{}                      # Color theme configuration
+    udaDefinitions = @{}                   # User Defined Attribute definitions
+    contextDefinitions = @{}               # Context filter definitions
+    columnDefinitions = @{}                # Column display configuration
+    
+    # Command/Edit State
+    commandBuffer = ""                     # Command being typed
+    commandHistory = [System.Collections.Generic.List[string]]::new()  # Command history
+    commandHistoryIndex = -1               # Current position in history
+    editBuffer = ""                        # Text being edited
+    editingTaskID = $null                  # ID of task being edited
+    editCursorPos = 0                      # Cursor position in edit buffer
+    
+    # UI State
+    statusMessage = ""                     # Current status/error message
+    statusTimeout = [datetime]::MinValue   # When to clear status message
+    lastRefreshTime = [datetime]::MinValue # Last data refresh timestamp
+    
+    # Confirmation State
+    confirmAction = ""                     # Action awaiting confirmation
+    confirmMessage = ""                    # Confirmation prompt text
+    confirmTaskID = $null                  # Task ID for confirmation
+    
+    # Performance State
+    lastDrawTime = [timespan]::Zero        # Time taken for last render
+    taskCount = 0                          # Total task count
+    filteredCount = 0                      # Filtered task count
+    
+    # Terminal State
+    consoleWidth = 80                      # Current terminal width
+    consoleHeight = 24                     # Current terminal height
+    colorSupport = $true                   # Terminal supports color
+    unicodeSupport = $true                 # Terminal supports Unicode
+    
+    # Keybindings
+    keyMap = @{}                           # Action -> Key mappings
+    reverseKeyMap = @{}                    # Key -> Action mappings
+    
+    # Application State
+    running = $true                        # Main loop control
+    needsRedraw = $true                    # Screen needs refresh
+    dataStale = $false                     # Data needs reload
+}
+```
+
+---
+
+### **Part 6: Platform & Implementation Specifications**
+
+#### **6.1: Platform Requirements**
+*   **Primary Platform:** Windows 10/11 with PowerShell 5.1+ or PowerShell 7+
+*   **Development/Testing Platform:** Linux (for development and testing only)
+*   **Excluded Platforms:** macOS (never supported)
+*   **TaskWarrior Requirement:** taskwarrior 2.6.0+ must be installed and in PATH
+
+#### **6.2: Rendering Implementation Decision**
+*   **IMPLEMENTATION PENDING:** Choice between:
+    1. **Spectre.Console** - Rich terminal UI library with extensive formatting
+    2. **Terminal.Gui** - Cross-platform terminal UI framework  
+    3. **Custom WPF** - Windows-native GUI application
+    4. **Custom PowerShell TUI** - Raw ANSI/console implementation
+*   **Design Constraint:** All specifications must remain implementation-agnostic
+*   **Interface Contract:** Regardless of implementation choice, all `Format-*` functions must return the same logical content structure
+
+#### **6.3: PowerShell Version Compatibility**
+*   **PowerShell 5.1 Requirements:**
+    - Classes supported (minimum requirement)
+    - `Start-Process -NoNewWindow` support required
+    - JSON parsing via `ConvertFrom-Json`
+    - Basic regex support
+*   **PowerShell 7+ Enhancements:**
+    - Improved JSON parsing with `-AsHashtable`
+    - Better Unicode support
+    - Enhanced error handling
+    - Cross-platform file path handling
+
+---
+
+### **Part 7: Complete Error Handling & Recovery Specifications**
+
+#### **7.1: TaskWarrior Integration Error Handling**
+
+**Error Category 1: TaskWarrior Not Found**
+*   **Detection:** `Get-Command task` throws or `task --version` fails
+*   **User Message:** "TaskWarrior not found. Please install TaskWarrior and ensure 'task' is in your PATH."
+*   **Recovery Action:** Exit application with code 1
+*   **Logging:** Write to error log with system PATH information
+
+**Error Category 2: TaskWarrior Data Corruption**
+*   **Detection:** `task export` returns invalid JSON or malformed data
+*   **User Message:** "TaskWarrior data appears corrupted. Run 'task diagnostics' to check your data."
+*   **Recovery Action:** Show empty task list, allow user to exit or retry
+*   **Logging:** Log the invalid JSON/data received
+
+**Error Category 3: TaskWarrior Command Failures**
+*   **Detection:** Non-zero exit code from any `task` command
+*   **User Message:** Display stderr output from task command
+*   **Recovery Action:** Return to previous state, refresh data if needed
+*   **Example:** Task ID not found, invalid filter syntax, etc.
+
+**Error Category 4: Permission Errors**
+*   **Detection:** Access denied errors accessing .taskrc or data files
+*   **User Message:** "Permission denied accessing TaskWarrior files. Check file permissions."
+*   **Recovery Action:** Attempt to continue with read-only mode if possible
+
+#### **7.2: Data Validation Error Handling**
+
+**Input Validation Rules:**
+```powershell
+function Test-TaskFilter {
+    param([string]$Filter)
+    
+    # Validate filter syntax by testing with task command
+    $testResult = & task $Filter count 2>$null
+    return $LASTEXITCODE -eq 0
+}
+
+function Test-TaskDescription {
+    param([string]$Description)
+    
+    # Length validation
+    if ($Description.Length -gt 1000) {
+        throw "Description too long (max 1000 characters)"
+    }
+    
+    # Character validation (prevent control characters)
+    if ($Description -match '[\x00-\x1F\x7F]') {
+        throw "Description contains invalid control characters"
+    }
+    
+    return $true
+}
+
+function Test-TaskDate {
+    param([string]$DateString)
+    
+    if ([string]::IsNullOrEmpty($DateString)) { return $true }
+    
+    # Test with TaskWarrior's date parser
+    $testResult = & task add "test" due:$DateString 2>$null
+    if ($LASTEXITCODE -ne 0) {
+        throw "Invalid date format: $DateString"
+    }
+    
+    # Clean up test task
+    & task "test" delete 2>$null
+    return $true
+}
+```
+
+#### **7.3: Terminal/Console Error Handling**
+
+**Terminal Resize Handling:**
+*   **Detection:** Console buffer size change events
+*   **Action:** Recalculate `$appState.viewportHeight`, trigger full redraw
+*   **Minimum Size:** 80x10 (below this, show size warning)
+
+**Color Support Detection:**
+```powershell
+function Test-ColorSupport {
+    try {
+        $host.UI.RawUI.ForegroundColor = $host.UI.RawUI.ForegroundColor
+        return $true
+    } catch {
+        return $false
+    }
+}
+```
+
+---
+
+### **Part 8: Complete Keybinding & Navigation Specifications**
+
+#### **8.1: Default Keybinding Map**
+
+```powershell
+$defaultKeyBindings = @{
+    # Navigation
+    "j" = "MoveDown"
+    "k" = "MoveUp"  
+    "DownArrow" = "MoveDow"
+    "UpArrow" = "MoveUp"
+    "Home" = "MoveToTop"
+    "End" = "MoveToBottom"
+    "PageDown" = "PageDown"
+    "PageUp" = "PageUp"
+    "Ctrl+d" = "PageDown"
+    "Ctrl+u" = "PageUp"
+    
+    # Task Operations
+    "a" = "AddTask"
+    "A" = "AddTaskAfter"
+    "x" = "CompleteTask"
+    "D" = "DeleteTask"
+    "u" = "UndoTask"
+    "e" = "EditTask"
+    "s" = "StartTask"
+    "S" = "StopTask"
+    "+" = "IncreaseUrgency"
+    "-" = "DecreaseUrgency"
+    
+    # View Operations
+    "/" = "Filter"
+    "c" = "ClearFilter"
+    "r" = "Refresh"
+    "o" = "ToggleSort"
+    "p" = "ToggleProject"
+    "t" = "ToggleTags"
+    "Tab" = "NextView"
+    "Shift+Tab" = "PrevView"
+    
+    # Application
+    "q" = "Quit"
+    "Ctrl+c" = "Quit"
+    "?" = "Help"
+    "Ctrl+l" = "Redraw"
+    "Escape" = "Cancel"
+    "Enter" = "Confirm"
+    
+    # Command Mode (when in Command mode)
+    "Ctrl+w" = "DeleteWord"
+    "Ctrl+k" = "DeleteToEnd"
+    "Ctrl+a" = "MoveToStart"
+    "Ctrl+e" = "MoveToEnd"
+    "UpArrow" = "HistoryUp"
+    "DownArrow" = "HistoryDown"
+    
+    # Edit Mode (when in Edit mode)
+    "Backspace" = "DeleteChar"
+    "Delete" = "DeleteCharForward"
+    "LeftArrow" = "MoveCursorLeft"
+    "RightArrow" = "MoveCursorRight"
+    "Ctrl+LeftArrow" = "MoveWordLeft"
+    "Ctrl+RightArrow" = "MoveWordRight"
+}
+```
+
+#### **8.2: Navigation Behavior Specifications**
+
+**List Navigation Rules:**
+1. **Wraparound:** Up from first item goes to last, down from last goes to first
+2. **Empty List:** All navigation keys do nothing, selection remains at 0
+3. **Page Movement:** PageUp/PageDown move by `viewportHeight - 1` to maintain context
+4. **Smooth Scrolling:** Selection stays centered when possible
+
+**Viewport Management:**
+```powershell
+function Update-ViewportPosition {
+    param([int]$SelectedIndex, [int]$ScrollOffset, [int]$ViewportHeight)
+    
+    $newScrollOffset = $ScrollOffset
+    
+    # If selection above viewport, scroll up
+    if ($SelectedIndex -lt $ScrollOffset) {
+        $newScrollOffset = $SelectedIndex
+    }
+    # If selection below viewport, scroll down  
+    elseif ($SelectedIndex -ge ($ScrollOffset + $ViewportHeight)) {
+        $newScrollOffset = $SelectedIndex - $ViewportHeight + 1
+    }
+    
+    # Ensure we don't scroll past bounds
+    $maxScrollOffset = [Math]::Max(0, $appState.visibleTasks.Count - $ViewportHeight)
+    $newScrollOffset = [Math]::Min($newScrollOffset, $maxScrollOffset)
+    $newScrollOffset = [Math]::Max(0, $newScrollOffset)
+    
+    return $newScrollOffset
+}
+```
+
+---
+
+### **Part 9: Performance & Memory Management Specifications**
+
+#### **9.1: Performance Requirements**
+*   **Startup Time:** < 2 seconds for 10,000 tasks
+*   **Refresh Time:** < 500ms for data reload operations  
+*   **Render Time:** < 50ms for screen updates
+*   **Memory Usage:** < 100MB for 10,000 tasks
+*   **Filter Performance:** < 200ms for complex filters on 10,000 tasks
+
+#### **9.2: Large Dataset Handling**
+
+**Task Loading Strategy:**
+```powershell
+function Get-Tasks {
+    param([string]$Filter = "")
+    
+    # Use streaming for large datasets
+    if ($appState.taskCount -gt 1000) {
+        return Get-TasksStreaming -Filter $Filter
+    } else {
+        return Get-TasksStandard -Filter $Filter
+    }
+}
+
+function Get-TasksStreaming {
+    param([string]$Filter)
+    
+    $tasks = [System.Collections.Generic.List[Task]]::new()
+    $tempFile = [System.IO.Path]::GetTempFileName()
+    
+    try {
+        # Stream JSON objects one per line
+        $process = Start-Process -FilePath "task" -ArgumentList @($Filter, "export") -RedirectStandardOutput $tempFile -Wait -NoNewWindow
+        
+        if ($process.ExitCode -ne 0) {
+            throw "TaskWarrior export failed"
+        }
+        
+        # Process JSON objects in batches of 100
+        $reader = [System.IO.StreamReader]::new($tempFile)
+        $batch = [System.Collections.Generic.List[string]]::new(100)
+        
+        while (-not $reader.EndOfStream) {
+            $line = $reader.ReadLine()
+            $batch.Add($line)
+            
+            if ($batch.Count -eq 100) {
+                $batchJson = "[$($batch -join ',')]"
+                $taskObjects = ConvertFrom-Json $batchJson
+                foreach ($taskObj in $taskObjects) {
+                    $tasks.Add([Task]::new($taskObj))
+                }
+                $batch.Clear()
+            }
+        }
+        
+        # Process remaining items
+        if ($batch.Count -gt 0) {
+            $batchJson = "[$($batch -join ',')]"
+            $taskObjects = ConvertFrom-Json $batchJson
+            foreach ($taskObj in $taskObjects) {
+                $tasks.Add([Task]::new($taskObj))
+            }
+        }
+        
+        $reader.Close()
+        return $tasks.ToArray()
+    }
+    finally {
+        if (Test-Path $tempFile) { Remove-Item $tempFile -Force }
+    }
+}
+```
+
+#### **9.3: Memory Management**
+*   **Task Object Pooling:** Reuse Task objects to reduce GC pressure
+*   **String Interning:** Intern common strings (project names, tags, etc.)
+*   **Lazy Loading:** Load task details only when needed for display
+*   **Cache Management:** Implement LRU cache for formatted strings
+
+---
+
+### **Part 10: Testing Strategy & Validation Specifications**
+
+#### **10.1: Test Categories**
+
+**Unit Tests:**
+*   Task class construction and methods
+*   Date parsing edge cases  
+*   Configuration parsing
+*   Filter validation
+*   Keybinding resolution
+
+**Integration Tests:**
+*   TaskWarrior command integration
+*   File I/O operations
+*   Error handling scenarios
+*   Performance benchmarks
+
+**UI Tests:**
+*   Screen rendering validation
+*   Input handling verification
+*   State transition testing
+*   Terminal compatibility
+
+#### **10.2: Test Data Management**
+```powershell
+# Test fixture for consistent test data
+function New-TestTaskSet {
+    return @(
+        @{ id=1; description="Test task 1"; project="TestProj"; priority="H"; status="pending" }
+        @{ id=2; description="Test task 2"; project=""; priority=""; status="completed" }
+        @{ id=3; description="Test task 3"; project="TestProj"; priority="L"; status="pending"; due="20241225T000000Z" }
+    )
+}
+
+# Mock TaskWarrior for testing
+function Mock-TaskWarriorCommand {
+    param([string[]]$Arguments)
+    
+    switch ($Arguments[0]) {
+        "export" { return (New-TestTaskSet | ConvertTo-Json) }
+        "add" { return @{Success=$true; Message="Task added"} }
+        default { throw "Unknown mock command: $($Arguments[0])" }
+    }
+}
+```
+
+---
+
+### **Part 11: Installation & Distribution Specifications**
+
+#### **11.1: Distribution Format**
+*   **Primary:** Single PowerShell module (.psm1) with manifest (.psd1)
+*   **Installation:** PowerShell Gallery via `Install-Module`
+*   **Alternative:** Standalone .ps1 script for portable use
+*   **Dependencies:** TaskWarrior binary (external requirement)
+
+#### **11.2: Module Structure**
+```
+TaskWarriorTUI/
+├── TaskWarriorTUI.psd1          # Module manifest
+├── TaskWarriorTUI.psm1          # Main module file
+├── Private/                     # Internal functions
+│   ├── Get-Tasks.ps1
+│   ├── Invoke-TaskCommand.ps1
+│   └── Format-Helpers.ps1
+├── Public/                      # Exported functions  
+│   └── Start-TaskUI.ps1
+├── Config/                      # Default configurations
+│   └── DefaultKeyBindings.ps1
+└── Tests/                       # Pester tests
+    ├── Unit/
+    └── Integration/
+```
+
+#### **11.3: Version Management**
+*   **Semantic Versioning:** MAJOR.MINOR.PATCH
+*   **Compatibility:** Maintain backward compatibility within major versions
+*   **Update Mechanism:** Check for updates via PowerShell Gallery API
