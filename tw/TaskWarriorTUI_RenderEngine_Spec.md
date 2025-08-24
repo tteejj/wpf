@@ -9538,6 +9538,706 @@ class InputValidator {
         }, 'Input must be a valid date')
     }
 }
+```
+
+## Threading and Async Operation Patterns
+
+### Async Architecture Overview
+
+```powershell
+# Async operation result
+class AsyncResult {
+    [bool] $IsCompleted = $false
+    [bool] $IsSuccess = $false
+    [object] $Result = $null
+    [System.Exception] $Exception = $null
+    [datetime] $StartTime
+    [datetime] $CompletedTime
+    [string] $OperationId
+    [hashtable] $Metadata = @{}
+    
+    AsyncResult([string]$operationId) {
+        $this.OperationId = $operationId
+        $this.StartTime = Get-Date
+    }
+    
+    [void] SetSuccess([object]$result) {
+        $this.IsCompleted = $true
+        $this.IsSuccess = $true
+        $this.Result = $result
+        $this.CompletedTime = Get-Date
+    }
+    
+    [void] SetError([System.Exception]$exception) {
+        $this.IsCompleted = $true
+        $this.IsSuccess = $false
+        $this.Exception = $exception
+        $this.CompletedTime = Get-Date
+    }
+    
+    [timespan] GetDuration() {
+        if ($this.IsCompleted) {
+            return $this.CompletedTime - $this.StartTime
+        } else {
+            return (Get-Date) - $this.StartTime
+        }
+    }
+}
+
+# Async operation manager
+class AsyncOperationManager {
+    hidden [hashtable] $_operations = @{}
+    hidden [System.Collections.Concurrent.ConcurrentQueue[AsyncResult]] $_completedOperations
+    hidden [IEventPublisher] $_eventPublisher
+    hidden [bool] $_isRunning = $false
+    hidden [System.Threading.CancellationTokenSource] $_cancellationSource
+    hidden [int] $_maxConcurrentOperations = 10
+    hidden [System.Threading.Semaphore] $_semaphore
+    
+    AsyncOperationManager([IEventPublisher]$eventPublisher) {
+        $this._eventPublisher = $eventPublisher
+        $this._completedOperations = [System.Collections.Concurrent.ConcurrentQueue[AsyncResult]]::new()
+        $this._semaphore = [System.Threading.Semaphore]::new($this._maxConcurrentOperations, $this._maxConcurrentOperations)
+    }
+    
+    [AsyncResult] StartOperation([string]$operationName, [scriptblock]$operation, [hashtable]$parameters = @{}, [int]$timeoutMs = 30000) {
+        $operationId = [guid]::NewGuid().ToString()
+        $asyncResult = [AsyncResult]::new($operationId)
+        $asyncResult.Metadata = $parameters
+        
+        $this._operations[$operationId] = $asyncResult
+        
+        # Start operation in background
+        $this.StartBackgroundOperation($operationName, $operation, $asyncResult, $parameters, $timeoutMs)
+        
+        # Publish operation started event
+        $this._eventPublisher.Publish('AsyncOperationStarted', @{
+            OperationId = $operationId
+            OperationName = $operationName
+            StartTime = $asyncResult.StartTime
+            Parameters = $parameters
+        })
+        
+        return $asyncResult
+    }
+    
+    hidden [void] StartBackgroundOperation([string]$operationName, [scriptblock]$operation, [AsyncResult]$asyncResult, [hashtable]$parameters, [int]$timeoutMs) {
+        $operationTask = {
+            param($opName, $op, $result, $params, $timeout, $eventPublisher, $semaphore, $completedQueue)
+            
+            try {
+                # Acquire semaphore (limit concurrent operations)
+                $semaphore.WaitOne()
+                
+                try {
+                    # Create cancellation token for timeout
+                    $cts = [System.Threading.CancellationTokenSource]::new($timeout)
+                    
+                    # Execute operation
+                    $operationResult = & $op $params $cts.Token
+                    
+                    if ($cts.Token.IsCancellationRequested) {
+                        throw [System.TimeoutException]::new("Operation timed out after $timeout ms")
+                    }
+                    
+                    $result.SetSuccess($operationResult)
+                    
+                    # Publish success event
+                    $eventPublisher.Publish('AsyncOperationCompleted', @{
+                        OperationId = $result.OperationId
+                        OperationName = $opName
+                        IsSuccess = $true
+                        Duration = $result.GetDuration()
+                        Result = $operationResult
+                    })
+                    
+                } finally {
+                    $semaphore.Release()
+                }
+                
+            } catch {
+                $result.SetError($_.Exception)
+                
+                # Publish error event
+                $eventPublisher.Publish('AsyncOperationCompleted', @{
+                    OperationId = $result.OperationId
+                    OperationName = $opName
+                    IsSuccess = $false
+                    Duration = $result.GetDuration()
+                    Error = $_.Exception.Message
+                })
+                
+                $semaphore.Release()
+            }
+            
+            # Add to completed queue
+            $completedQueue.Enqueue($result)
+        }
+        
+        # Start in new runspace
+        $runspace = [runspacefactory]::CreateRunspace()
+        $runspace.Open()
+        
+        $powerShell = [powershell]::Create()
+        $powerShell.Runspace = $runspace
+        $powerShell.AddScript($operationTask).AddParameters(@(
+            $operationName, $operation, $asyncResult, $parameters, $timeoutMs,
+            $this._eventPublisher, $this._semaphore, $this._completedOperations
+        ))
+        
+        $asyncResult.Metadata['PowerShell'] = $powerShell
+        $asyncResult.Metadata['Runspace'] = $runspace
+        
+        $null = $powerShell.BeginInvoke()
+    }
+    
+    [AsyncResult] GetOperation([string]$operationId) {
+        return $this._operations[$operationId]
+    }
+    
+    [array] GetActiveOperations() {
+        return $this._operations.Values | Where-Object { -not $_.IsCompleted }
+    }
+    
+    [array] GetCompletedOperations() {
+        $completed = @()
+        while ($this._completedOperations.TryDequeue([ref]$null)) {
+            $completed += $_
+        }
+        return $completed
+    }
+    
+    [void] CancelOperation([string]$operationId) {
+        $operation = $this._operations[$operationId]
+        if ($operation -and -not $operation.IsCompleted) {
+            $powerShell = $operation.Metadata['PowerShell']
+            $runspace = $operation.Metadata['Runspace']
+            
+            if ($powerShell) {
+                $powerShell.Stop()
+                $powerShell.Dispose()
+            }
+            
+            if ($runspace) {
+                $runspace.Close()
+                $runspace.Dispose()
+            }
+            
+            $operation.SetError([System.OperationCanceledException]::new('Operation was cancelled'))
+            
+            $this._eventPublisher.Publish('AsyncOperationCancelled', @{
+                OperationId = $operationId
+                CancelledTime = Get-Date
+            })
+        }
+    }
+    
+    [void] CancelAllOperations() {
+        foreach ($operation in $this.GetActiveOperations()) {
+            $this.CancelOperation($operation.OperationId)
+        }
+    }
+    
+    [void] WaitForCompletion([string]$operationId, [int]$timeoutMs = 30000) {
+        $operation = $this._operations[$operationId]
+        if ($operation) {
+            $startTime = Get-Date
+            while (-not $operation.IsCompleted -and (Get-Date) -lt $startTime.AddMilliseconds($timeoutMs)) {
+                Start-Sleep -Milliseconds 100
+            }
+        }
+    }
+    
+    [void] CleanupCompletedOperations([int]$maxAge = 300000) {  # 5 minutes default
+        $cutoffTime = (Get-Date).AddMilliseconds(-$maxAge)
+        $toRemove = @()
+        
+        foreach ($op in $this._operations.GetEnumerator()) {
+            if ($op.Value.IsCompleted -and $op.Value.CompletedTime -lt $cutoffTime) {
+                $toRemove += $op.Key
+                
+                # Cleanup PowerShell resources
+                $powerShell = $op.Value.Metadata['PowerShell']
+                $runspace = $op.Value.Metadata['Runspace']
+                
+                if ($powerShell) { $powerShell.Dispose() }
+                if ($runspace) { $runspace.Dispose() }
+            }
+        }
+        
+        foreach ($key in $toRemove) {
+            $this._operations.Remove($key)
+        }
+    }
+}
+
+# Background task scheduler
+class BackgroundTaskScheduler {
+    hidden [System.Collections.Generic.PriorityQueue[hashtable, int]] $_taskQueue
+    hidden [hashtable] $_scheduledTasks = @{}
+    hidden [bool] $_isRunning = $false
+    hidden [System.Threading.CancellationTokenSource] $_cancellationSource
+    hidden [IEventPublisher] $_eventPublisher
+    hidden [int] $_workerCount = 3
+    hidden [System.Collections.Generic.List[object]] $_workers = @()
+    
+    BackgroundTaskScheduler([IEventPublisher]$eventPublisher) {
+        $this._eventPublisher = $eventPublisher
+        $this._taskQueue = [System.Collections.Generic.PriorityQueue[hashtable, int]]::new()
+    }
+    
+    [void] Start() {
+        if ($this._isRunning) { return }
+        
+        $this._isRunning = $true
+        $this._cancellationSource = [System.Threading.CancellationTokenSource]::new()
+        
+        # Start worker threads
+        for ($i = 0; $i -lt $this._workerCount; $i++) {
+            $worker = $this.CreateWorker($i, $this._cancellationSource.Token)
+            $this._workers.Add($worker)
+        }
+        
+        $this._eventPublisher.Publish('TaskSchedulerStarted', @{
+            WorkerCount = $this._workerCount
+            StartTime = Get-Date
+        })
+    }
+    
+    [void] Stop() {
+        if (-not $this._isRunning) { return }
+        
+        $this._isRunning = $false
+        
+        if ($this._cancellationSource) {
+            $this._cancellationSource.Cancel()
+        }
+        
+        # Wait for workers to complete
+        foreach ($worker in $this._workers) {
+            if ($worker.PowerShell) {
+                $worker.PowerShell.Stop()
+                $worker.PowerShell.Dispose()
+            }
+            if ($worker.Runspace) {
+                $worker.Runspace.Close()
+                $worker.Runspace.Dispose()
+            }
+        }
+        
+        $this._workers.Clear()
+        
+        if ($this._cancellationSource) {
+            $this._cancellationSource.Dispose()
+            $this._cancellationSource = $null
+        }
+        
+        $this._eventPublisher.Publish('TaskSchedulerStopped', @{
+            StopTime = Get-Date
+        })
+    }
+    
+    [string] ScheduleTask([scriptblock]$task, [int]$priority = 0, [hashtable]$parameters = @{}, [datetime]$scheduledTime = [datetime]::Now) {
+        $taskId = [guid]::NewGuid().ToString()
+        
+        $taskInfo = @{
+            TaskId = $taskId
+            Task = $task
+            Priority = $priority
+            Parameters = $parameters
+            ScheduledTime = $scheduledTime
+            CreatedTime = Get-Date
+            Status = 'Scheduled'
+        }
+        
+        $this._scheduledTasks[$taskId] = $taskInfo
+        
+        # Add to queue if it's time to run
+        if ($scheduledTime -le (Get-Date)) {
+            $this._taskQueue.Enqueue($taskInfo, -$priority)  # Negative for max-heap behavior
+            $taskInfo.Status = 'Queued'
+        }
+        
+        $this._eventPublisher.Publish('TaskScheduled', @{
+            TaskId = $taskId
+            Priority = $priority
+            ScheduledTime = $scheduledTime
+        })
+        
+        return $taskId
+    }
+    
+    [void] ScheduleRecurringTask([scriptblock]$task, [timespan]$interval, [int]$priority = 0, [hashtable]$parameters = @{}) {
+        $recurringTask = {
+            param($originalTask, $interval, $priority, $parameters, $scheduler)
+            
+            # Execute the task
+            & $originalTask $parameters
+            
+            # Reschedule for next execution
+            $nextRun = (Get-Date).Add($interval)
+            $scheduler.ScheduleTask($originalTask, $priority, $parameters, $nextRun)
+        }
+        
+        $this.ScheduleTask($recurringTask, $priority, @{
+            originalTask = $task
+            interval = $interval
+            priority = $priority
+            parameters = $parameters
+            scheduler = $this
+        })
+    }
+    
+    [void] CancelTask([string]$taskId) {
+        if ($this._scheduledTasks.ContainsKey($taskId)) {
+            $this._scheduledTasks[$taskId].Status = 'Cancelled'
+            
+            $this._eventPublisher.Publish('TaskCancelled', @{
+                TaskId = $taskId
+                CancelledTime = Get-Date
+            })
+        }
+    }
+    
+    hidden [hashtable] CreateWorker([int]$workerId, [System.Threading.CancellationToken]$cancellationToken) {
+        $workerScript = {
+            param($id, $token, $taskQueue, $scheduledTasks, $eventPublisher)
+            
+            while (-not $token.IsCancellationRequested) {
+                try {
+                    # Check for scheduled tasks that are ready to run
+                    $currentTime = Get-Date
+                    foreach ($scheduledTask in $scheduledTasks.Values) {
+                        if ($scheduledTask.Status -eq 'Scheduled' -and $scheduledTask.ScheduledTime -le $currentTime) {
+                            $taskQueue.Enqueue($scheduledTask, -$scheduledTask.Priority)
+                            $scheduledTask.Status = 'Queued'
+                        }
+                    }
+                    
+                    # Process queued tasks
+                    $taskInfo = $null
+                    if ($taskQueue.TryDequeue([ref]$taskInfo, [ref]$null)) {
+                        if ($taskInfo.Status -ne 'Cancelled') {
+                            try {
+                                $taskInfo.Status = 'Running'
+                                $taskInfo.StartTime = Get-Date
+                                
+                                $eventPublisher.Publish('TaskStarted', @{
+                                    TaskId = $taskInfo.TaskId
+                                    WorkerId = $id
+                                    StartTime = $taskInfo.StartTime
+                                })
+                                
+                                # Execute the task
+                                $result = & $taskInfo.Task $taskInfo.Parameters
+                                
+                                $taskInfo.Status = 'Completed'
+                                $taskInfo.CompletedTime = Get-Date
+                                $taskInfo.Result = $result
+                                
+                                $eventPublisher.Publish('TaskCompleted', @{
+                                    TaskId = $taskInfo.TaskId
+                                    WorkerId = $id
+                                    CompletedTime = $taskInfo.CompletedTime
+                                    Duration = $taskInfo.CompletedTime - $taskInfo.StartTime
+                                    IsSuccess = $true
+                                })
+                                
+                            } catch {
+                                $taskInfo.Status = 'Failed'
+                                $taskInfo.CompletedTime = Get-Date
+                                $taskInfo.Error = $_.Exception
+                                
+                                $eventPublisher.Publish('TaskCompleted', @{
+                                    TaskId = $taskInfo.TaskId
+                                    WorkerId = $id
+                                    CompletedTime = $taskInfo.CompletedTime
+                                    Duration = $taskInfo.CompletedTime - $taskInfo.StartTime
+                                    IsSuccess = $false
+                                    Error = $_.Exception.Message
+                                })
+                            }
+                        }
+                    }
+                    
+                    # Small sleep to prevent excessive CPU usage
+                    Start-Sleep -Milliseconds 100
+                    
+                } catch {
+                    # Worker error - continue running
+                    Start-Sleep -Milliseconds 1000
+                }
+            }
+        }
+        
+        $runspace = [runspacefactory]::CreateRunspace()
+        $runspace.Open()
+        
+        $powerShell = [powershell]::Create()
+        $powerShell.Runspace = $runspace
+        $powerShell.AddScript($workerScript).AddParameters(@(
+            $workerId, $cancellationToken, $this._taskQueue, $this._scheduledTasks, $this._eventPublisher
+        ))
+        
+        $asyncResult = $powerShell.BeginInvoke()
+        
+        return @{
+            WorkerId = $workerId
+            PowerShell = $powerShell
+            Runspace = $runspace
+            AsyncResult = $asyncResult
+        }
+    }
+    
+    [hashtable] GetTaskStatus([string]$taskId) {
+        return $this._scheduledTasks[$taskId]
+    }
+    
+    [array] GetAllTasks() {
+        return $this._scheduledTasks.Values
+    }
+    
+    [int] GetQueuedTaskCount() {
+        return $this._taskQueue.Count
+    }
+}
+
+# Thread-safe data access layer
+class ThreadSafeDataManager {
+    hidden [System.Collections.Concurrent.ConcurrentDictionary[string, object]] $_cache
+    hidden [System.Threading.ReaderWriterLockSlim] $_rwLock
+    hidden [hashtable] $_subscriptions = @{}
+    hidden [IEventPublisher] $_eventPublisher
+    
+    ThreadSafeDataManager([IEventPublisher]$eventPublisher) {
+        $this._cache = [System.Collections.Concurrent.ConcurrentDictionary[string, object]]::new()
+        $this._rwLock = [System.Threading.ReaderWriterLockSlim]::new()
+        $this._eventPublisher = $eventPublisher
+    }
+    
+    [object] GetData([string]$key) {
+        return $this._cache.GetValueOrDefault($key)
+    }
+    
+    [void] SetData([string]$key, [object]$value) {
+        $oldValue = $this._cache.GetValueOrDefault($key)
+        $this._cache[$key] = $value
+        
+        # Notify subscribers
+        if ($this._subscriptions.ContainsKey($key)) {
+            foreach ($callback in $this._subscriptions[$key]) {
+                try {
+                    & $callback $key $oldValue $value
+                } catch {
+                    Write-Warning "Error in data change callback for key '$key': $($_.Exception.Message)"
+                }
+            }
+        }
+        
+        # Publish change event
+        $this._eventPublisher.Publish('DataChanged', @{
+            Key = $key
+            OldValue = $oldValue
+            NewValue = $value
+            Timestamp = Get-Date
+        })
+    }
+    
+    [bool] TryGetData([string]$key, [ref]$value) {
+        return $this._cache.TryGetValue($key, $value)
+    }
+    
+    [object] GetOrAdd([string]$key, [scriptblock]$valueFactory) {
+        return $this._cache.GetOrAdd($key, {
+            param($k)
+            return & $valueFactory $k
+        })
+    }
+    
+    [void] RemoveData([string]$key) {
+        $removed = $null
+        if ($this._cache.TryRemove($key, [ref]$removed)) {
+            # Notify subscribers
+            if ($this._subscriptions.ContainsKey($key)) {
+                foreach ($callback in $this._subscriptions[$key]) {
+                    try {
+                        & $callback $key $removed $null
+                    } catch {
+                        Write-Warning "Error in data removal callback for key '$key': $($_.Exception.Message)"
+                    }
+                }
+            }
+            
+            # Publish removal event
+            $this._eventPublisher.Publish('DataRemoved', @{
+                Key = $key
+                RemovedValue = $removed
+                Timestamp = Get-Date
+            })
+        }
+    }
+    
+    [void] SubscribeToChanges([string]$key, [scriptblock]$callback) {
+        $this._rwLock.EnterWriteLock()
+        try {
+            if (-not $this._subscriptions.ContainsKey($key)) {
+                $this._subscriptions[$key] = @()
+            }
+            $this._subscriptions[$key] += $callback
+        } finally {
+            $this._rwLock.ExitWriteLock()
+        }
+    }
+    
+    [void] UnsubscribeFromChanges([string]$key, [scriptblock]$callback) {
+        $this._rwLock.EnterWriteLock()
+        try {
+            if ($this._subscriptions.ContainsKey($key)) {
+                $this._subscriptions[$key] = $this._subscriptions[$key] | Where-Object { $_ -ne $callback }
+                if ($this._subscriptions[$key].Count -eq 0) {
+                    $this._subscriptions.Remove($key)
+                }
+            }
+        } finally {
+            $this._rwLock.ExitWriteLock()
+        }
+    }
+    
+    [void] BatchUpdate([scriptblock]$updateBlock) {
+        $this._rwLock.EnterWriteLock()
+        try {
+            $changes = @{}
+            
+            # Capture original values
+            $originalNotifications = $this._subscriptions
+            $this._subscriptions = @{}  # Temporarily disable notifications
+            
+            try {
+                # Execute updates
+                & $updateBlock $this
+                
+                # Restore notifications and notify all at once
+                $this._subscriptions = $originalNotifications
+                
+                # Batch notify all changes
+                $this._eventPublisher.Publish('BatchDataChanged', @{
+                    Changes = $changes
+                    Timestamp = Get-Date
+                })
+                
+            } finally {
+                $this._subscriptions = $originalNotifications
+            }
+            
+        } finally {
+            $this._rwLock.ExitWriteLock()
+        }
+    }
+    
+    [array] GetAllKeys() {
+        return $this._cache.Keys
+    }
+    
+    [void] Clear() {
+        $this._rwLock.EnterWriteLock()
+        try {
+            $this._cache.Clear()
+            $this._subscriptions.Clear()
+            
+            $this._eventPublisher.Publish('DataCleared', @{
+                Timestamp = Get-Date
+            })
+        } finally {
+            $this._rwLock.ExitWriteLock()
+        }
+    }
+    
+    [void] Dispose() {
+        if ($this._rwLock) {
+            $this._rwLock.Dispose()
+        }
+    }
+}
+
+# Async TaskWarrior operations
+class AsyncTaskWarriorOperations {
+    hidden [AsyncOperationManager] $_asyncManager
+    hidden [IDataProvider] $_dataProvider
+    hidden [BackgroundTaskScheduler] $_scheduler
+    
+    AsyncTaskWarriorOperations([AsyncOperationManager]$asyncManager, [IDataProvider]$dataProvider, [BackgroundTaskScheduler]$scheduler) {
+        $this._asyncManager = $asyncManager
+        $this._dataProvider = $dataProvider
+        $this._scheduler = $scheduler
+    }
+    
+    [AsyncResult] LoadTasksAsync([string]$filter = '', [int]$timeoutMs = 30000) {
+        return $this._asyncManager.StartOperation('LoadTasks', {
+            param($params, $cancellationToken)
+            
+            $filter = $params.Filter
+            return $this._dataProvider.GetTasks($filter)
+            
+        }, @{ Filter = $filter }, $timeoutMs)
+    }
+    
+    [AsyncResult] SaveTaskAsync([hashtable]$task, [int]$timeoutMs = 10000) {
+        return $this._asyncManager.StartOperation('SaveTask', {
+            param($params, $cancellationToken)
+            
+            $task = $params.Task
+            return $this._dataProvider.SaveTask($task)
+            
+        }, @{ Task = $task }, $timeoutMs)
+    }
+    
+    [AsyncResult] SyncTasksAsync([int]$timeoutMs = 60000) {
+        return $this._asyncManager.StartOperation('SyncTasks', {
+            param($params, $cancellationToken)
+            
+            # Perform TaskWarrior sync
+            $result = & task sync
+            return @{
+                Success = $LASTEXITCODE -eq 0
+                Output = $result
+                ExitCode = $LASTEXITCODE
+            }
+            
+        }, @{}, $timeoutMs)
+    }
+    
+    [void] SchedulePeriodicSync([int]$intervalMinutes = 30) {
+        $syncInterval = [timespan]::FromMinutes($intervalMinutes)
+        
+        $this._scheduler.ScheduleRecurringTask({
+            param($params)
+            
+            $asyncOps = $params.AsyncOps
+            $result = $asyncOps.SyncTasksAsync(60000)
+            $asyncOps._asyncManager.WaitForCompletion($result.OperationId, 60000)
+            
+            if ($result.IsSuccess) {
+                Write-Host "Periodic sync completed successfully"
+            } else {
+                Write-Warning "Periodic sync failed: $($result.Exception.Message)"
+            }
+            
+        }, 1, @{ AsyncOps = $this })
+    }
+    
+    [void] SchedulePeriodicDataRefresh([int]$intervalSeconds = 30) {
+        $refreshInterval = [timespan]::FromSeconds($intervalSeconds)
+        
+        $this._scheduler.ScheduleRecurringTask({
+            param($params)
+            
+            $asyncOps = $params.AsyncOps
+            $result = $asyncOps.LoadTasksAsync('status:pending', 15000)
+            $asyncOps._asyncManager.WaitForCompletion($result.OperationId, 15000)
+            
+        }, 2, @{ AsyncOps = $this })
+    }
+}
                     Success = $false
                     Error = $_.Exception.Message
                     Command = $command
