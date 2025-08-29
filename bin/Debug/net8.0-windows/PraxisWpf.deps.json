@@ -6,26 +6,26 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v8.0": {
-      "PraxisWpf/1.0.0": {
+      "PraxisWPF/1.0.0": {
         "dependencies": {
           "Microsoft.Office.Interop.Excel": "15.0.4795.1001"
         },
         "runtime": {
-          "PraxisWpf.dll": {}
+          "PraxisWPF.dll": {}
         }
       },
       "Microsoft.Office.Interop.Excel/15.0.4795.1001": {
         "runtime": {
           "lib/netstandard2.0/Microsoft.Office.Interop.Excel.dll": {
             "assemblyVersion": "15.0.0.0",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "15.0.4795.1000"
           }
         }
       }
     }
   },
   "libraries": {
-    "PraxisWpf/1.0.0": {
+    "PraxisWPF/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

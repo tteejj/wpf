@@ -34,19 +34,19 @@
     ]
   },
   "packageFolders": {
-    "/home/teej/.nuget/packages/": {}
+    "C:\\Users\\jhnhe\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/teej/projects/github/wpf/PraxisWpf.csproj",
-      "projectName": "PraxisWpf",
-      "projectPath": "/home/teej/projects/github/wpf/PraxisWpf.csproj",
-      "packagesPath": "/home/teej/.nuget/packages/",
-      "outputPath": "/home/teej/projects/github/wpf/obj/",
+      "projectUniqueName": "C:\\Users\\jhnhe\\OneDrive\\Documents\\GitHub\\wpf\\PraxisWPF.csproj",
+      "projectName": "PraxisWPF",
+      "projectPath": "C:\\Users\\jhnhe\\OneDrive\\Documents\\GitHub\\wpf\\PraxisWPF.csproj",
+      "packagesPath": "C:\\Users\\jhnhe\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\jhnhe\\OneDrive\\Documents\\GitHub\\wpf\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/teej/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\jhnhe\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0-windows"
@@ -91,12 +91,6 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.WindowsDesktop.App.Ref",
-            "version": "[8.0.19, 8.0.19]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
@@ -105,7 +99,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "/home/teej/.dotnet/sdk/8.0.413/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.413/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
